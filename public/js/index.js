@@ -90,7 +90,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const check = document.querySelector('#js-check');
   const $needElements = document.querySelectorAll(".need.js-need");
   const $submit = document.querySelector('#js-submit');
-  $submit.style.opacity = '60%';
+
+  if ($submit) {
+
+    $submit.style.opacity = '60%';
+  }
 
   if (check) {
     if (!check.checked) {
@@ -128,10 +132,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //** ============ form ==================*/
   //テキストのname値を取得
   const form = document.querySelector('form');
-  form.addEventListener('submit', (e) => {
-    // e.preventDefault();
-    console.log(form.elements.text.value);
-  });
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      // e.preventDefault();
+      console.log(form.elements.text.value);
+    });
+  }
+
+
 
   //** ============ バリデーションチェック ==================*/
   // $submit.addEventListener('click', (event) => {

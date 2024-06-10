@@ -1,11 +1,14 @@
 <?php
-require_once('../lib/functions.php');
 session_start();
+require_once('../lib/functions.php');
+require_once('DataAccessAdmin.php');
+require_once("../includes/admin_header.php");
+
+
 // CSRFトークンを生成
 $csrf_token = setToken();
 
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
-// メッセージを一度表示したらセッションから削除
 unset($_SESSION['error']);
 
 $error = [];
@@ -21,12 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 
   $error = validateUserSignupFormData($data);
-  error_log("バリデーション結果: " . print_r($error, true)); // デバッグメッセージ
 
   // エラーがなければ確認ページに遷移
   if (empty($error)) {
-    //$_SESSION["name"] = $data["name"];
-    // 入力値をセッションに保存
+    $admin = new Admin();
+    $result = $admin->AdminCreate($data);
+    
+    if (!$result) {
+      header('Location: user_signup.php');
+      exit();
+    }
     $_SESSION['data'] = $data;
     header("Location: user_signup_thanks.php");
     exit;
@@ -41,10 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 }
 
-
 ?>
-
-<?php require_once("../includes/admin_header.php"); ?>
 
 <main class="">
   <h2 class="contents-title">contact</h2>

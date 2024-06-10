@@ -46,49 +46,49 @@ body {
 .ly_header {
     padding-top: 20px;
     border-bottom: 1px solid #ddd;
-  }
-  
-  .ly_header_inner {
+}
+
+.ly_header_inner {
     max-width: 1230px;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-  }
-  
-  .bl_headerUtils {
+}
+
+.bl_headerUtils {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 4px;
-  }
-  
-  .bl_headerUtils_logo {
+}
+
+.bl_headerUtils_logo {
     width: 150px;
-  }
-  
-  .bl_headerUtils .el_btn {
+}
+
+.bl_headerUtils .el_btn {
     width: auto;
     padding: 10px 20px;
     box-shadow: none;
     color: #ffffff;
-  }
-  
-  .bl_headerNav {
+}
+
+.bl_headerNav {
     display: flex;
     justify-content: space-around;
-  }
-  
-  .bl_headerNav_item {
+}
+
+.bl_headerNav_item {
     flex-grow: 1;
     text-align: center;
-  }
-  
-  .bl_headerNav_item:last-child .bl_headerNav_link::after {
+}
+
+.bl_headerNav_item:last-child .bl_headerNav_link::after {
     content: none;
-  }
-  
-  .bl_headerNav_link {
+}
+
+.bl_headerNav_link {
     position: relative;
     display: block;
     padding: 15px 5px;
@@ -97,14 +97,14 @@ body {
     text-decoration: none;
     transition: .25s;
     font-size: 1.6rem;
-  }
-  
-  .bl_headerNav_link:focus,
-  .bl_headerNav_link:hover {
+}
+
+.bl_headerNav_link:focus,
+.bl_headerNav_link:hover {
     border-bottom-color: #e25c00;
-  }
-  
-  .bl_headerNav_link::after {
+}
+
+.bl_headerNav_link::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -113,7 +113,7 @@ body {
     height: 20px;
     background-color: #ddd;
     transform: translateY(-50%);
-  }
+}
 
 
 /* コンテンツ */
@@ -131,7 +131,7 @@ h1 {
 /* コンテンツ */
 /* ============================================ */
 
-form {
+.form {
     padding: 30px;
     position: relative;
     z-index: 1000;
@@ -177,6 +177,7 @@ input[type="time"],
 input[type="datetime-local"],
 input[type="password"],
 input[list="browsers"],
+input[type="search"],
 select,
 textarea {
     background: rgba(255, 255, 255, .5);
@@ -211,6 +212,11 @@ textarea {
 .form_input_link:hover {
     font-weight: 700;
     text-decoration: none;
+}
+
+input[type="search"] {
+    width: 20%;
+    margin: 10px;
 }
 
 input[type="radio"],
@@ -256,8 +262,21 @@ textarea:invalid {
     margin-bottom: 24px;
 }
 
+.el_btn_top {
+    background-color: #ca4d4d;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 30px;
+}
+
 .el_btn_back {
     background-color: #ca4d4d;
+}
+
+.el_btn_search {
+    background-color: #686464;
+    width: 5%;
+    font-size: 1rem;
 }
 
 /* disabled属性がない場合にホバー効果を適用する（JSでdisableを切り替え） */
@@ -269,6 +288,10 @@ input[type="submit"]:not([disabled]):hover,
     transform: scale(1.1);
     box-shadow: 0 0 rgba(0, 0, 0, .3);
     color: rgb(178, 189, 207);
+}
+
+.adminName {
+    font-size: 1.4rem;
 }
 
 .form_input_error_message,
@@ -294,7 +317,7 @@ input[type="submit"]:not([disabled]):hover,
     margin-bottom: 14px;
 }
 
-.form_input_dberror_message{
+.form_input_dberror_message {
     margin-bottom: 20px;
 }
 
@@ -344,6 +367,14 @@ input[type="submit"]:not([disabled]):hover,
 .form_confirm_btn_block {
     display: flex;
     justify-content: space-around;
+}
+
+.form_search_btn_block {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 40px;
+    align-items: center;
+    margin: 10px 0;
 }
 
 legend {
@@ -397,6 +428,15 @@ legend {
 
 .table tbody:nth-child(even) {
     background: #FBFBF6;
+}
+
+/* thanks.php.php */
+/* ============================================ */
+.thanks_message {
+    font-size: 3rem;
+    text-align: center;
+    color: #fff;
+    margin: 60px 0;
 }
 
 /* レスポンス */

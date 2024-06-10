@@ -1,11 +1,8 @@
-<?php require_once("../includes/header.php"); ?>
-
 <?php
-
 session_start();
 require_once('../lib/functions.php');
-require_once('DataAccessUser.php');
-
+require_once('DataAccessAdmin.php');
+require_once("../includes/admin_header.php");
 
 $token = filter_input(INPUT_POST, 'csrf_token');
 
@@ -15,36 +12,6 @@ $token = filter_input(INPUT_POST, 'csrf_token');
 //     header('Location: user_signup.php');
 //     exit();
 // }
-
-
-// if (!isset($_POST["csrf_token"]) || $_POST["csrf_token"] != $_SESSION['csrf_token']) {
-//   echo "不正なリクエストです";
-//   exit();
-// }
-
-
-$data = isset($_SESSION['data']) ? $_SESSION['data'] : [
-    'name' => '',
-    'email' => '',
-    'password' => '',
-];
-
-$admin = new Admin();
-$admin->AdminCreate($data);
-
-$message = isset($_SESSION['message']) ? $_SESSION['message'] : '';
-unset($_SESSION['message']);
-
-if ($admin) {
-    echo '登録成功';
-} else {
-    echo '登録失敗';
-}
-
-
-
-
-
 
 ?>
 

@@ -8,7 +8,7 @@
     <title>admin.html | ◯◯フォーム</title>
     <link rel="stylesheet" href="../../public/css/destyle.css" />
     <link rel="stylesheet" href="../../public/css/admin.css" />
-    <!-- <script src="../../public/js/index.js" defer></script> -->
+    <script src="../../public/js/index.js" defer></script>
 </head>
 
 <body>

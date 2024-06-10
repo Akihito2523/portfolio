@@ -1,15 +1,12 @@
 <?php
+session_start();
 require_once('../lib/functions.php');
-require_once("../config.php");
-require_once("dbc.php");
-
-require_once("../header.php");
+require_once('../config/env.php');
+require_once("DataAccessUser.php");
+require_once("../includes/admin_header.php");
 
 $form = new Dbc();
-// $formData = $form->dbConnect();
 $result = $form->Detail($_GET['id']);
-
-
 
 $id = $result['id'];
 $name = $result['name'];
@@ -71,8 +68,7 @@ $name = $result['name'];
     </dl>
 
     <div class="form_confirm_btn_block">
-      <input type="submit" value="削除" class="el_btn el_btn_submit" id="js-submit">
-      <a class="el_btn el_btn_back" href="/php/table/update.php">編集</a>
+      <a class="el_btn el_btn_top" href="top.php">Topに戻る</a>
     </div>
 
     <!-- hiddenパラメータ -->
@@ -83,4 +79,3 @@ $name = $result['name'];
   </form>
 </main>
 
-<?php require_once("../footer.php"); ?>
