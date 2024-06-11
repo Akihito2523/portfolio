@@ -47,7 +47,7 @@ require_once("../includes/admin_header.php");
 
 <main class="">
 
-  <form action="" method="post" name="demoForm" class="form_input">
+  <form action="" method="post" name="demoForm" class="form">
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
@@ -68,12 +68,14 @@ require_once("../includes/admin_header.php");
     </div>
 
     <?php if ($error_message) : ?>
-      <div class="form_input_dberror_message"><?php echo h($error_message); ?></div>
+      <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <input type="submit" value="ログイン" class="el_btn el_btn_submit" id="js-submit">
-    <p class="form_input_link"><a href="">パスワードを忘れた場合はこちら</a></p>
-    <p class="form_input_link"><a href="user_signup.php">アカウント新規登録</a></p>
+    <div class="form_login_btn_block">
+      <input type="submit" value="ログイン" class="el_btn el_btn_submit">
+      <p class="form_input_link"><a href="">パスワードを忘れた場合はこちら</a></p>
+      <p class="form_input_link"><a href="user_signup.php">アカウント新規登録</a></p>
+    </div>
 
   </form>
 

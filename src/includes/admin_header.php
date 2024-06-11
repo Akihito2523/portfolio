@@ -7,7 +7,7 @@
     <link rel="icon" type="/image/png" href="image/CSS.svg" />
     <title>admin.html | ◯◯フォーム</title>
     <link rel="stylesheet" href="../../public/css/destyle.css" />
-    <link rel="stylesheet" href="../../public/css/admin.css" />
+    <link rel="stylesheet" href="../../public/css/style.css" />
     <script src="../../public/js/index.js" defer></script>
 </head>
 
@@ -17,7 +17,7 @@
         <div class="ly_header_inner">
             <div class="bl_headerUtils">
                 <a class="bl_headerUtils_logo" href="#"><img src="/image/ピカチュウ.png" alt=""></a>
-                <a class="el_btn" href="#">お問い合わせ</a>
+                <!-- <a class="el_btn" href="#">お問い合わせ</a> -->
             </div>
             <!-- /.bl_headerUtils -->
             <nav>

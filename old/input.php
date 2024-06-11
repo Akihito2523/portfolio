@@ -57,11 +57,11 @@ echo '都道府県は' . h($data['pref']);
 <main class="">
   <h2 class="contents-title">contact</h2>
 
-  <form action="" method="post" name="demoForm" class="form_input">
+  <form action="" method="post" name="demoForm" class="form">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?php echo $error['name']; ?></p>
@@ -71,7 +71,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-tel" class="form_input_title">電話番号</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="tel" name="tel" class="form_input_value" id="js-tel" placeholder="例）09012345678" value="<?php echo h($data['tel']); ?>">
       <?php if (isset($error['tel'])) : ?>
         <p class="form_input_error_message"><?php echo $error['tel']; ?></p>
@@ -81,7 +81,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
@@ -91,7 +91,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-email-confirm" class="form_input_title">メールアドレス(確認用)</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
@@ -102,7 +102,7 @@ echo '都道府県は' . h($data['pref']);
     <div id="js-radio">
       <fieldset>
         <legend class="form_input_title">性別</legend>
-        <span class="need js-need">必須</span>
+        <span class="need form_input_need">必須</span>
         <label class="form_input_label"><input type="radio" name="gender" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
         <label class="form_input_label"><input type="radio" name="gender" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
         <label class="form_input_label"><input type="radio" name="gender" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
@@ -126,7 +126,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-select" class="form_input_title">都道府県</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <select name="pref" id="js-select" class="form_input_value">
         <option value="">▼都道府県を選択</option>
         <optgroup label="北海道・東北">
@@ -217,7 +217,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
       <?php if (isset($error['password'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password']; ?></p>
@@ -228,7 +228,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-password-confirm" class="form_input_title">パスワード確認</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
       <?php if (isset($error['password_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
@@ -242,7 +242,7 @@ echo '都道府県は' . h($data['pref']);
 
     <div class="form_input_block">
       <label for="js-check" class="form_input_title">利用規約</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <label class="form_input_label">
         <input type="checkbox" name="checkbox_name" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>
         同意
@@ -253,7 +253,7 @@ echo '都道府県は' . h($data['pref']);
     </div <div class="form_input_block">
 
 
-    <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
+    <input type="submit" value="確認" class="el_btn el_btn_submit" disabled>
     </div>
 
   </form>

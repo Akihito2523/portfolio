@@ -3,46 +3,11 @@ html {
 }
 
 body {
-  background-color: #001923;
   background-color: #71a9d7;
-}
-
-/* モジュール */
-/* ============================================ */
-.contents-title {
-  font-size: 2.2rem;
-  text-align: center;
-  margin: 10px auto;
-  padding: 10px;
-  white-space: normal;
-  text-align: center;
-  color: #000000;
-  font-weight: 600;
-  color: #5d627b;
-  background: white;
-  border-top: solid 5px #31354a;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-  max-width: 1200px;
-}
-
-.el_btn {
-  display: inline-block;
-  width: 20%;
-  max-width: 100%;
-  padding: 20px 10px;
-  border: 2px solid transparent;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
-  color: #fff;
-  font-size: 2.2rem;
-  font-weight: bold;
-  text-align: center;
-  transition: .25s;
-  cursor: pointer;
 }
 
 /* header */
 /* ============================================ */
-
 .ly_header {
   padding-top: 20px;
   border-bottom: 1px solid #ddd;
@@ -142,59 +107,107 @@ body {
   text-align: center;
 }
 
+/* モジュール */
+/* ============================================ */
+.contents-title {
+  font-size: clamp(1.8rem, 2vw, 2.8rem);
+  text-align: center;
+  margin: 10px auto;
+  padding: 10px;
+  white-space: normal;
+  text-align: center;
+  color: #000000;
+  font-weight: 600;
+  color: #5d627b;
+  background: white;
+  border-top: solid 5px #31354a;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+  max-width: 1200px;
+}
+
+/* モジュール（ボタン） */
+/* ============================================ */
+.el_btn {
+  /* display: inline-block; */
+  display: block;
+  width: 40%;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 30px auto;
+  border: 2px solid transparent;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  transition: .25s;
+  cursor: pointer;
+}
+
+/* disabled属性がない場合にホバー効果を適用する（JSでdisableを切り替え） */
+.el_btn:not([disabled]):focus,
+.el_btn:not([disabled]):hover {
+  color: rgb(53, 58, 67);
+  transform: scale(1.1);
+  box-shadow: 0 0 rgba(0, 0, 0, .3);
+}
+
+.el_btn_submit {
+  background-color: #5250e0;
+}
+
+.el_btn_top {
+  background-color: #ca4d4d;
+}
+
+.el_btn_back {
+  background-color: #ca4d4d;
+}
+
+.el_btn_search {
+  max-width: 100%;
+  padding: 20px 10px;
+  background-color: #686464;
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  width: 6%;
+}
+
 /* コンテンツ */
 /* ============================================ */
-main {
-  /* width: calc(100% - 40px);
-  height: calc(100% - 40px);
-  background-color: rgba(255, 255, 255, 0.7);
-  display: grid;
-  grid-template: 'header' auto 'table' 1fr / 100%;
-  min-height: 100vh; */
-  width: min(100% - 2rem 640px);
+
+.adminName {
+  font-size: 1.6rem;
+}
+
+/* フォーム */
+/* ============================================ */
+.form {
+  position: relative;
+  z-index: 1000;
+  max-width: 1000px;
+  padding: 50px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-inline: auto;
-  margin-block: auto;
-}
-
-.main::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -40%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  pointer-events: none;
-  transform: skewX(-15deg);
-}
-
-h1 {
-  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
   margin: 0 auto;
-  color: #fff;
-  /* 1.8rem最小値、2.8rem最大値 */
-  font-size: clamp(1.8rem, 2vw, 2.8rem);
-}
-
-/* コンテンツ */
-/* ============================================ */
-
-form {
-  padding: 30px;
 }
 
 .form_input_block {
   margin-bottom: 20px;
+  text-align: center;
 }
 
-.form_input_title,
-.form_confirm_title {
+.form_input_title {
   font-size: 1.6rem;
+  text-align: center;
   margin: 0 8px 14px 0;
   display: inline-block;
   color: #fff;
@@ -207,99 +220,97 @@ form {
     -3px 1px #000, -3px -1px #000;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="tel"],
-input[type="time"],
-input[type="datetime-local"],
-input[type="password"],
-input[list="browsers"],
-select,
-textarea {
+.form_input_value {
   background: rgba(255, 255, 255, .5);
   border: 1px #fff solid;
   border-radius: 5px;
   padding: 6px;
-  margin-bottom: 10px;
-  font-size: 1.3rem;
-  width: 50%;
-  height: 3rem;
+  font-size: 1.6rem;
+  width: 80%;
+  height: 5rem;
   display: block;
+  margin: 0 auto 10px;
 }
 
-.form_input_value:focus {
-  background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+.form_input_search {
+  width: 20%;
+  margin: 10px;
 }
 
-input[type="radio"],
-input[type="checkbox"] {
-  width: 30px;
-  height: 20px;
-}
-
-input[type="radio"]:checked,
-input[type="checkbox"]:checked {
-  box-shadow: 0 0 0 3px rgb(118, 85, 101);
-}
-
-.form_input_label {
-  margin:8px 6px 12px 0;
-  font-size: 1.4rem;
-  display: flex;
-  align-items: center;
-}
-
-.form_input_label:first-of-type{
-  margin-top: 4px;
-}
-.form_input_label:last-of-type{
-  margin-bottom:14px;
-}
-
-textarea {
+.form_input_value_textarea {
   width: 80%;
   height: 100px;
   padding: 10px;
 }
 
 /* 20文字以上の場合、背景が#ffd3d3（薄い赤 */
-textarea:invalid {
+.form_input_value_textarea:invalid {
   background: #7b6969;
   border: 2px solid #ff0000;
 }
 
-input[type="submit"] {
-  background-color: #5250e0;
+.form_input_value:focus {
+  background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
 }
 
-.el_btn_back {
-  background-color: #ca4d4d;
+.form_input_label {
+  margin: 8px 6px 12px 0;
+  font-size: 1.4rem;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+
 }
 
-.el_btn_top {
-  background-color: #ca4d4d;
-  margin: 0 auto;
-  display: block;
-  margin-bottom: 30px;
+.form_input_label:first-of-type {
+  /* margin-top: 4px; */
 }
 
-/* disabled属性がない場合にホバー効果を適用する（JSでdisableを切り替え） */
-input[type="submit"]:not([disabled]):focus,
-input[type="submit"]:not([disabled]):hover,
-.el_btn:focus,
-.el_btn:hover {
-  opacity: 0.9;
-  transform: scale(1.1);
-  box-shadow: 0 0 rgba(0, 0, 0, .3);
-  color: rgb(53, 58, 67);
+.form_input_label:last-of-type {
+  /* margin-bottom: 14px; */
 }
 
-.form_input_error_message,
-.form_input_textarea_message,
+.form_input_value_radio,
+.form_input_value_checkbox {
+  width: 30px;
+  height: 20px;
+}
+
+.form_input_value_radio:checked,
+.form_input_value_checkbox:checked {
+  box-shadow: 0 0 0 3px rgb(118, 85, 101);
+}
+
+fieldset {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #ccc;
+}
+
+legend {
+  /* display: inline-block;
+  padding: 0 10px;
+  font-weight: bold; */
+}
+
+
+.form_input_privacy_policy {
+  color: #555;
+  font-size: 1.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 100%;
+  height: 200px;
+  overflow-y: scroll;
+  padding: 6px 12px;
+  margin: 0px auto 30px;
+}
+
 .form_input_caution,
-.form_input_any,
-.js-need {
+.form_input_textarea_message,
+.form_input_error_message,
+.form_input_need,
+.form_input_any {
   font-size: 1.4rem;
   font-weight: bold;
   text-shadow:
@@ -311,34 +322,18 @@ input[type="submit"]:not([disabled]):hover,
     -1px 1px #fff, -1px -1px #fff;
   margin: 0;
   color: #DD0000;
-}
-
-.radio_error_message {
-  margin-bottom: 14px;
-}
-
-.privacy-policy {
-  color: #555;
-  font-size: 1.4rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-width: 100%;
-  height: 200px;
-  overflow-y: scroll;
-  padding: 6px 12px;
-}
-
-
-.form_input_textarea_message {
-  color: #f4a004;
+  margin-bottom: 10px;
 }
 
 .form_input_caution {
   color: #0d3657;
 }
 
-.js-need {
-  color: #DD0000;
+.form_input_textarea_message {
+  color: #4b9ec1;
+}
+
+.form_input_need {
   display: inline;
   font-weight: bold;
 }
@@ -347,17 +342,44 @@ input[type="submit"]:not([disabled]):hover,
   color: #095695;
 }
 
+.radio_error_message {
+  margin-bottom: 14px;
+}
+
+.dberror_message {
+  margin-bottom: 20px;
+}
+
+.form_input_link {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  color: #333;
+  text-decoration: underline;
+}
+
+.form_input_link:active,
+.form_input_link:hover {
+  font-weight: 700;
+  text-decoration: none;
+}
+
 /* form_confirm.php */
 /* ============================================ */
-
 .form_confirm_block {
   border-bottom: 1px solid #42557b;
-  padding: 10px 30px;
+  color: #fff;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+
+.form_confirm_title {
+  margin-bottom: 20px;
 }
 
 .form_confirm_value {
-  color: #fff;
-  font-size: 1.6rem;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 .form_confirm_btn_block {
@@ -365,18 +387,69 @@ input[type="submit"]:not([disabled]):hover,
   justify-content: space-around;
 }
 
-legend {
-  display: inline;
-  color: red;
-}
-
-/* thanks.php.php */
+/* thanks.php */
 /* ============================================ */
 .thanks_message {
   font-size: 3rem;
   text-align: center;
   color: #fff;
-  margin: 60px 0;
+  margin: 60px 0 20px;
+}
+
+/* top.php */
+/* ============================================ */
+.form_search_btn_block {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 40px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+/* テーブル */
+.table {
+  table-layout: fixed;
+  width: 100%;
+  padding: 10px;
+}
+
+.table .table_thead .table_tr {
+  height: 60px;
+}
+
+.table .table_thead th {
+  background: rgb(49, 75, 126);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: rgb(235, 229, 229);
+  text-align: center;
+  padding: 20px 10px 0;
+}
+
+.table .table_thead th:nth-child(1) {
+  /* width: 8%; */
+}
+
+.table .table_thead th:nth-child(6) {
+  /* width: 32%; */
+}
+
+.table .table_tbody {
+  background: #E5E2E4;
+}
+
+.table .table_tbody:nth-child(even) {
+  background: #FBFBF6;
+}
+
+.table .table_tbody td {
+  font-size: 1.2rem;
+  padding: 10px;
+  text-align: center;
+  height: 20px;
+  line-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

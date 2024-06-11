@@ -66,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">contact</h2>
 
-  <form action="" method="post" name="demoForm" class="form_input">
+  <form action="" method="post" name="demoForm" class="form">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-tel" class="form_input_title">電話番号</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="tel" name="tel" class="form_input_value" id="js-tel" placeholder="例）09012345678" value="<?php echo h($data['tel']); ?>">
       <?php if (isset($error['tel'])) : ?>
         <p class="form_input_error_message"><?php echo $error['tel']; ?></p>
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-email-confirm" class="form_input_title">メールアドレス(確認用)</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
@@ -112,18 +112,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="js-radio">
       <fieldset>
         <legend class="form_input_title">性別</legend>
-        <span class="need js-need">必須</span>
-        <label class="form_input_label"><input type="radio" name="gender" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
-        <label class="form_input_label"><input type="radio" name="gender" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
-        <label class="form_input_label"><input type="radio" name="gender" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
+        <!-- <span class="need form_input_need">必須</span> -->
+        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
+        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
+        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
         <?php if (isset($error['gender'])) : ?>
           <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
         <?php endif; ?>
       </fieldset>
       <fieldset>
         <legend class="form_input_title">ラジオボタン（ドリンク）</legend>
-        <label class="form_input_label"><input type="radio" name="drink" value="coke" checked />Coke</label>
-        <label class="form_input_label"><input type="radio" name="drink" value="wine" />Wine</label>
+        <label class="form_input_label"><input type="radio" name="drink" class="form_input_value_radio" value="coke" checked />Coke</label>
+        <label class="form_input_label"><input type="radio" name="drink" class="form_input_value_radio" value="wine" />Wine</label>
       </fieldset>
     </div>
 
@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <label for="js-checkbox" class="form_input_title">チェックボックス</label>
       <?php foreach ($genre as $item) : ?>
         <label class="form_input_label">
-          <input type="checkbox" name="genre[]" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
+          <input type="checkbox" name="genre[]" class="form_input_value_checkbox" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
           <?= h($item) ?>
         </label>
       <?php endforeach; ?>
@@ -139,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-select" class="form_input_title">都道府県</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <select name="pref" id="js-select" class="form_input_value">
         <option value="">▼選択してください</option>
         <?php foreach ($prefectures as $region => $prefs) : ?>
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>
       <span class="need form_input_any">任意</span>
-      <textarea name="textarea" id="js-textarea" class="form_input_value" maxlength="20"><?php echo $data['textarea']; ?></textarea>
+      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="20"><?php echo $data['textarea']; ?></textarea>
       <p class="form_input_textarea_message">現在
         <span id="js-textareaCount">0</span>文字入力中です。
       </p>
@@ -177,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
       <?php if (isset($error['password'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password']; ?></p>
@@ -188,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-password-confirm" class="form_input_title">パスワード確認</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
       <?php if (isset($error['password_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
@@ -196,22 +196,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="form_input_error_message" id="js-passwordConfirmMessage"></p>
     </div>
 
-    <div id="privacyPolicy" class="privacy-policy">
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil minus excepturi harum, labore earum odio. Minima itaque sit labore, nostrum earum eaque, debitis qui sunt molestias, voluptas accusamus veritatis minus quidem sint cumque inventore eligendi! Suscipit, dolores sed numquam ex eum minus esse, rerum harum accusantium cumque animi commodi ipsa ullam nulla quibusdam? Quis magni, doloribus amet commodi ratione quibusdam nam nobis tempore excepturi laboriosam molestias nulla enim deleniti! Sed impedit ducimus deserunt sunt, tempora amet, temporibus unde reiciendis, animi veritatis a ut aperiam in aspernatur earum. Iusto ipsa aperiam ex eveniet earum similiqueur quos asperiores eius nobis totam error mollitia rem dolor excepturi doloremque molestiae magni porro id exercitationem, sunt fuga minus modi cupiditate quidem? Molestias autem quos voluptates accusantium quod alias distinctio illum nulla. Quis accusamus ipsa obcaecati tempora necessitatibus error qui ipsam eum eveniet delectus placeat animi quo sunt earum, atque numquam tenetur est molestias quas fugit praesentium voluptatibus alias ducimus! Soluta officia sunt at id illo? Commodi optio dolores dolore ducimus unde nobis necessitatibus temporibus doloribus corrupti velit distinctio maiores nulla, cum molestias accusamus, qui sapiente suscipit neque labore ratione quos a eaque error. Provident vel debitis dolores, necessitatibus non in quam fugiat et excepturi a esse? Iusto facere porro inventore deleniti, repellendus eum in voluptatibus odio nulla, officiis magni suscipit distinctio essetate quae aliquam quia amet excepturi dolores ullam provident illum, ad exercitationem expedita sed non impedit, dolor quod natus voluptatem consequuntur incidunt officiis sapiente iure. Libero, explicabo. Modi possimus ab repellendus? Consectetur nihil, aperiam beatae earum fugiat asperiores mollitia modi molestias distinctio harum excepturi sit necessitatibus minima accusamus ullam doloremque officiis. Aspernatur, eius consequatur. Voluptas nobis maxime saepe ipsum fuga voluptatem est ex molestias reiciendis temporibus. Similique, quibusdam beatae esse magni consequatur cum vero, ab ad ullam, facere provident? Ullam, consequatur! Eum nostrum incidunt tempora. Dolore sit veritatis, asperiores numquam iste debitis vel.
+    <div class="form_input_block">
+      <p class="form_input_title">プライバシーポリシー</p>
+      <div id="privacyPolicy" class="form_input_privacy_policy">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil minus excepturi harum, labore earum odio. Minima itaque sit labore, nostrum earum eaque, debitis qui sunt molestias, voluptas accusamus veritatis minus quidem sint cumque inventore eligendi! Suscipit, dolores sed numquam ex eum minus esse, rerum harum accusantium cumque animi commodi ipsa ullam nulla quibusdam? Quis magni, doloribus amet commodi ratione quibusdam nam nobis tempore excepturi laboriosam molestias nulla enim deleniti! Sed impedit ducimus deserunt sunt, tempora amet, temporibus unde reiciendis, animi veritatis a ut aperiam in aspernatur earum. Iusto ipsa aperiam ex eveniet earum similiqueur quos asperiores eius nobis totam error mollitia rem dolor excepturi doloremque molestiae magni porro id exercitationem, sunt fuga minus modi cupiditate quidem? Molestias autem quos voluptates accusantium quod alias distinctio illum nulla. Quis accusamus ipsa obcaecati tempora necessitatibus error qui ipsam eum eveniet delectus placeat animi quo sunt earum, atque numquam tenetur est molestias quas fugit praesentium voluptatibus alias ducimus! Soluta officia sunt at id illo? Commodi optio dolores dolore ducimus unde nobis necessitatibus temporibus doloribus corrupti velit distinctio maiores nulla, cum molestias accusamus, qui sapiente suscipit neque labore ratione quos a eaque error. Provident vel debitis dolores, necessitatibus non in quam fugiat et excepturi a esse? Iusto facere porro inventore deleniti, repellendus eum in voluptatibus odio nulla, officiis magni suscipit distinctio essetate quae aliquam quia amet excepturi dolores ullam provident illum, ad exercitationem expedita sed non impedit, dolor quod natus voluptatem consequuntur incidunt officiis sapiente iure. Libero, explicabo. Modi possimus ab repellendus? Consectetur nihil, aperiam beatae earum fugiat asperiores mollitia modi molestias distinctio harum excepturi sit necessitatibus minima accusamus ullam doloremque officiis. Aspernatur, eius consequatur. Voluptas nobis maxime saepe ipsum fuga voluptatem est ex molestias reiciendis temporibus. Similique, quibusdam beatae esse magni consequatur cum vero, ab ad ullam, facere provident? Ullam, consequatur! Eum nostrum incidunt tempora. Dolore sit veritatis, asperiores numquam iste debitis vel.
+      </div>
     </div>
 
     <div class="form_input_block">
       <label for="js-check" class="form_input_title">利用規約</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <label class="form_input_label">
-        <input type="checkbox" name="checkbox_name" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>
+        <input type="checkbox" name="checkbox_name" class="form_input_value_checkbox" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>
         同意
       </label>
       <?php if (isset($error['checkbox_name'])) : ?>
         <p class="form_input_error_message"><?php echo $error['checkbox_name']; ?></p>
       <?php endif; ?>
     </div>
-
 
     <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
 

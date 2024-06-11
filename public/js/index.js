@@ -88,11 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //** ============ 利用規約（チェックボックス） ==================*/
   const check = document.querySelector('#js-check');
-  const $needElements = document.querySelectorAll(".need.js-need");
+  const $needElements = document.querySelectorAll(".need.form_input_need");
   const $submit = document.querySelector('#js-submit');
 
   if ($submit) {
-
     $submit.style.opacity = '60%';
   }
 

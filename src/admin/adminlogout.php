@@ -16,6 +16,4 @@ Admin::logout();
 
 
 <div class="thanks_message">ログアウトしました</div>
-<div class="form_confirm_btn_block">
-    <a class="el_btn el_btn_top" href="login.php">ログインページに戻る</a>
-</div>
+<a class="el_btn el_btn_top" href="login.php">ログインページに戻る</a>

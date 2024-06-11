@@ -72,11 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">contact</h2>
 
-  <form action="" method="post" name="demoForm" class="form_input">
+  <form action="" method="post" name="demoForm" class="form">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-tel" class="form_input_title">電話番号</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="tel" name="tel" class="form_input_value" id="js-tel" placeholder="例）09012345678" value="<?php echo h($data['tel']); ?>">
       <?php if (isset($error['tel'])) : ?>
         <p class="form_input_error_message"><?php echo $error['tel']; ?></p>
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-email-confirm" class="form_input_title">メールアドレス(確認用)</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="js-radio">
       <fieldset>
         <legend class="form_input_title">性別</legend>
-        <span class="need js-need">必須</span>
+        <span class="need form_input_need">必須</span>
         <label class="form_input_label"><input type="radio" name="gender" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
         <label class="form_input_label"><input type="radio" name="gender" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
         <label class="form_input_label"><input type="radio" name="gender" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
@@ -145,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-select" class="form_input_title">都道府県</label>
-      <span class="need js-need">必須</span>
+      <span class="need form_input_need">必須</span>
       <select name="pref" id="js-select" class="form_input_value">
         <option value="">▼選択してください</option>
         <?php foreach ($prefectures as $region => $prefs) : ?>
@@ -162,10 +162,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endif; ?>
     </div>
 
-   
-
-
-    <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
+    <input type="submit" value="確認" class="el_btn el_btn_submit">
     </div>
 
   </form>
