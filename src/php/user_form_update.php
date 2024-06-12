@@ -1,13 +1,16 @@
 <?php
 session_start();
+require_once("../config/variable.php");
 require_once('../lib/functions.php');
-require_once("../config.php");
-require_once("dbc.php");
+require_once('../admin/DataAccessUser.php');
+require_once("../includes/header.php");
 
-$form = new Dbc();
-// $formData = $form->dbConnect();
-$form->Update($form);
 
+// CSRFトークンを生成
+$csrf_token = setToken();
+
+$error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+unset($_SESSION['error']);
 
 $error = [];
 
@@ -37,11 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // エラーがなければ確認ページに遷移
   if (empty($error)) {
-    //$_SESSION["name"] = $data["name"];
-    // 入力値をセッションに保存
+    $user = new User();
+    $result = $user->UserDbDetail($data['id']);
+
+    // $result = $user->UserDbUpdate($data);
+
+    if (!$result) {
+      header('Location: user_form_update.php');
+      exit();
+    }
     $_SESSION['data'] = $data;
-    header("Location: confirm.php");
-    // リダイレクト後にスクリプトの実行を終了する
+    header("Location: user_form_thanks.php");
     exit;
   }
 } else {
@@ -66,13 +75,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // var_dump($data);
 ?>
 
-
-<?php require_once("../header.php"); ?>
-
 <main class="">
-  <h2 class="contents-title">contact</h2>
+  <h2 class="contents-title">ユーザー情報更新</h2>
 
   <form action="" method="post" name="demoForm" class="form">
+
+    <!-- CSRFトークンをフォームに埋め込む -->
+    <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
@@ -118,29 +127,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="js-radio">
       <fieldset>
         <legend class="form_input_title">性別</legend>
-        <span class="need form_input_need">必須</span>
-        <label class="form_input_label"><input type="radio" name="gender" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
-        <label class="form_input_label"><input type="radio" name="gender" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
-        <label class="form_input_label"><input type="radio" name="gender" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
+        <!-- <span class="need form_input_need">必須</span> -->
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
+        </label>
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性
+        </label>
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他
+        </label>
         <?php if (isset($error['gender'])) : ?>
           <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
         <?php endif; ?>
       </fieldset>
-      <fieldset>
-        <legend class="form_input_title">ラジオボタン（ドリンク）</legend>
-        <label class="form_input_label"><input type="radio" name="drink" value="coke" checked />Coke</label>
-        <label class="form_input_label"><input type="radio" name="drink" value="wine" />Wine</label>
-      </fieldset>
-    </div>
-
-    <div id="js-checkbox">
-      <label for="js-checkbox" class="form_input_title">チェックボックス</label>
-      <?php foreach ($genre as $item) : ?>
-        <label class="form_input_label">
-          <input type="checkbox" name="genre[]" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre']) ? 'checked' : ''; ?>>
-          <?= h($item) ?>
-        </label>
-      <?php endforeach; ?>
     </div>
 
     <div class="form_input_block">
@@ -157,16 +157,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </optgroup>
         <?php endforeach; ?>
       </select>
+
       <?php if (isset($error['pref'])) : ?>
         <p class="form_input_error_message radio_error_message"><?php echo $error['pref']; ?></p>
       <?php endif; ?>
     </div>
 
-    <input type="submit" value="確認" class="el_btn el_btn_submit">
-    </div>
+    <?php if ($error_message) : ?>
+      <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
+    <?php endif; ?>
+
+    <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit">
 
   </form>
 </main>
 
-
-<?php require_once("../footer.php"); ?>
+<?php require_once("../includes/footer.php"); ?>

@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //$_SESSION["name"] = $data["name"];
     // 入力値をセッションに保存
     $_SESSION['data'] = $data;
-    header("Location: confirm.php");
+    header("Location: user_form_confirm.php");
     // リダイレクト後にスクリプトの実行を終了する
     exit;
   }

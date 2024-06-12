@@ -6,11 +6,29 @@ insert into form values(1 , 'テスト名前');
 
 
 
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    tel VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    gender VARCHAR(255) NOT NULL,
+    genre VARCHAR(255) NOT NULL,
+    pref VARCHAR(255) NOT NULL,
+    datetimelocal DATETIME NULL,
+    textarea TEXT NULL,
+    password VARCHAR(191) NOT NULL,
+    checkbox_name VARCHAR(50) NOT NULL,
+    user_agent VARCHAR(255),
+    ip_address VARCHAR(45) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
 
 
 -- アドミンユーザー
 -- ユーザーエージェント、IPアドレス、最終ログイン日時、登録日時、更新日時、パスワード変更日時、パスワード再登録依頼日時、名前、メールアドレス、パスポート
-CREATE TABLE admins (
+CREATE TABLE admin (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,

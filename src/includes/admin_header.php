@@ -23,14 +23,18 @@
             <nav>
                 <ul class="bl_headerNav">
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="../admin/login.php">ログイン</a>
+                        <a class="bl_headerNav_link" href="../admin/admin_login.php">ログイン</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="table/table.php">テーブル情報</a>
+                        <a class="bl_headerNav_link" href="../admin/admin_top.php">トップ</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">制作実績</a>
+                        <a class="bl_headerNav_link" href="../admin/admin_update.php?id=<?php echo h($id); ?>">会員情報</a>
                     </li>
+
+                    <!-- <td><a href="/src/admin/detail.php?id=<?php echo h($column["id"]); ?>"><?php echo h($column["id"]); ?></a></td> -->
+
+
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="#">会社情報</a>
                     </li>

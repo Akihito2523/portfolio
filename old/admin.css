@@ -378,7 +378,7 @@ input[type="submit"]:not([disabled]):hover,
     color: #095695;
 }
 
-/* form_confirm.php */
+/* form_user_form_confirm.php */
 /* ============================================ */
 
 .form_confirm_block {
@@ -457,7 +457,7 @@ legend {
     background: #FBFBF6;
 }
 
-/* thanks.php.php */
+/* user_form_thanks.php.php */
 /* ============================================ */
 .thanks_message {
     font-size: 3rem;

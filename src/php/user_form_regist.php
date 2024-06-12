@@ -1,13 +1,19 @@
 <?php
 session_start();
-require_once('../lib/functions.php');
 require_once("../config/variable.php");
+require_once('../lib/functions.php');
+require_once('../admin/DataAccessUser.php');
+require_once("../includes/header.php");
+
+// CSRFトークンを生成
+$csrf_token = setToken();
+
+$error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+unset($_SESSION['error']);
 
 $error = [];
 
-// POSTリクエストの場合、フォームが送信されたとして処理
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
     'tel' => h($_POST['tel'] ?? ''),
@@ -24,22 +30,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-  // var_dump($data);
-  // バリデーション関数を呼び出し
   $error = validateInputFormData($data);
-  // var_dump($error);
 
-  // エラーがなければ確認ページに遷移
   if (empty($error)) {
-    //$_SESSION["name"] = $data["name"];
-    // 入力値をセッションに保存
     $_SESSION['data'] = $data;
-    header("Location: confirm.php");
-    // リダイレクト後にスクリプトの実行を終了する
+    header("Location: user_form_confirm.php");
     exit;
   }
 } else {
-  // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'name' => '',
     'tel' => '',
@@ -57,16 +55,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 }
 
-// var_dump($data);
 ?>
 
-
-<?php require_once("../includes/header.php"); ?>
-
 <main class="">
-  <h2 class="contents-title">contact</h2>
+  <h2 class="contents-title">ユーザー登録</h2>
 
   <form action="" method="post" name="demoForm" class="form">
+
+    <!-- CSRFトークンをフォームに埋め込む -->
+    <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
@@ -113,9 +110,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <fieldset>
         <legend class="form_input_title">性別</legend>
         <!-- <span class="need form_input_need">必須</span> -->
-        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性</label>
-        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性</label>
-        <label class="form_input_label"><input type="radio" name="gender" class="form_input_value_radio"" value=" others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他</label>
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
+        </label>
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性
+        </label>
+        <label class="form_input_label">
+          <input type="radio" name="gender" class="form_input_value_radio" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他
+        </label>
         <?php if (isset($error['gender'])) : ?>
           <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
         <?php endif; ?>

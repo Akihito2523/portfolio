@@ -21,18 +21,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   if (empty($error)) {
     $admin = new Admin();
-    $result = $admin->login($data);
+    $result = $admin->AdminDbLogin($data);
 
-    // var_dump($result);
-    // exit('exitを実行中') . '<br>';
     if (!$result) {
       $_SESSION['error'] = 'ログイン認証に失敗しました';
-      header('Location: login.php');
+      header('Location: admin_login.php');
       exit();
     }
     // 成功した場合の処理
     $_SESSION['data'] = $data;
-    header('Location: top.php');
+    header('Location: admin_top.php');
     exit();
   }
 } else {
@@ -74,7 +72,7 @@ require_once("../includes/admin_header.php");
     <div class="form_login_btn_block">
       <input type="submit" value="ログイン" class="el_btn el_btn_submit">
       <p class="form_input_link"><a href="">パスワードを忘れた場合はこちら</a></p>
-      <p class="form_input_link"><a href="user_signup.php">アカウント新規登録</a></p>
+      <p class="form_input_link"><a href="admin_signup.php">アカウント新規登録</a></p>
     </div>
 
   </form>

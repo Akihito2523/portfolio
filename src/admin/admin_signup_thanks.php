@@ -18,6 +18,6 @@ $token = filter_input(INPUT_POST, 'csrf_token');
 <!-- <div class="thanks_message"><?php echo h($_SESSION['message']); ?></div> -->
 
 <div class="thanks_message">ユーザー登録完了しました。</div>
-<a class="el_btn el_btn_top" href="login.php">ログインページ</a>
+<a class="el_btn el_btn_top" href="admin_login.php">ログインページ</a>
 
 <?php require_once("../includes/footer.php"); ?>

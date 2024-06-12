@@ -67,6 +67,20 @@ function getUserAgent()
     return $userAgent;
 }
 
+/**
+ * 現在日時を取得
+ * @param
+ * return string $todayFormatted
+ */
+function getDateTime()
+{
+    date_default_timezone_set('Asia/Tokyo');
+    $today = new DateTime();
+    $todayFormatted = $today->format("Y-m-d H:i");
+    return $todayFormatted;
+}
+
+
 ?>
 <?php
 /*
@@ -126,16 +140,18 @@ function validateUserSignupFormData($data)
         $error['email_confirm'] = 'メールアドレスが一致しません。';
     }
 
-    if (empty($password)) {
-        $error['password'] = 'パスワードを入力してください。';
-    } elseif (strlen($password) < 8 || strlen($password) > 16) {
-        $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
-    } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
-        $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
-    } elseif (empty($password_confirm)) {
-        $error['password_confirm'] = '確認用パスワードを入力してください。';
-    } elseif ($password !== $password_confirm) {
-        $error['password_confirm'] = 'パスワードが一致しません。';
+    if ($password) {
+        if (empty($password)) {
+            $error['password'] = 'パスワードを入力してください。';
+        } elseif (strlen($password) < 8 || strlen($password) > 16) {
+            $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
+        } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
+            $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
+        } elseif (empty($password_confirm)) {
+            $error['password_confirm'] = '確認用パスワードを入力してください。';
+        } elseif ($password !== $password_confirm) {
+            $error['password_confirm'] = 'パスワードが一致しません。';
+        }
     }
 
     return $error;

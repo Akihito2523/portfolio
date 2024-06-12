@@ -22,10 +22,10 @@
             <nav>
                 <ul class="bl_headerNav">
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="../input.php">トップ</a>
+                        <a class="bl_headerNav_link" href="/src/php/user_top.php">トップ</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="table/table.php">テーブル情報</a>
+                        <a class="bl_headerNav_link" href="/src/php/user_form_update.php">ユーザー情報変更</a>
                     </li>
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="#">制作実績</a>

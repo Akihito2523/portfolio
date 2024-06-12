@@ -1,5 +1,6 @@
 <?php
 session_start();
+$id = $_SESSION['id'];
 require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
@@ -14,44 +15,47 @@ unset($_SESSION['error']);
 $error = [];
 
 // POSTリクエストの場合、フォームが送信されたとして処理
+// $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $id = $_GET['id'];
   $data = [
+    'id' => $id,
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
     'email' => h($_POST['email'] ?? ''),
     'email_confirm' => h($_POST['email_confirm'] ?? ''),
-    'password' => h($_POST['password'] ?? ''),
-    'password_confirm' => h($_POST['password_confirm'] ?? ''),
   ];
 
+  // $id = $data['id'];
   $error = validateUserSignupFormData($data);
 
-  // エラーがなければ確認ページに遷移
   if (empty($error)) {
     $admin = new Admin();
-    $result = $admin->AdminCreate($data);
-    
+    $result = $admin->AdminDbUpdate($data);
+
     if (!$result) {
-      header('Location: user_signup.php');
+      header('Location: admin_update.php');
       exit();
     }
     $_SESSION['data'] = $data;
-    header("Location: user_signup_thanks.php");
+    header("Location: admin_signup_thanks.php");
     exit;
   }
 } else {
-  $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
-    'name' => '',
-    'email' => '',
-    'email_confirm' => '',
-    'password' => '',
-    'password_confirm' => '',
-  ];
+  $admin = new Admin();
+  $result = $admin->AdminDbDetail($_GET['id']);
+  // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
+  // $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
+  //   'id' => '',
+  //   'name' => '',
+  //   'email' => '',
+  //   'email_confirm' => '',
+  // ];
 }
-
 ?>
 
+<?php echo h($id); ?>
 <main class="">
-  <h2 class="contents-title">contact</h2>
+  <h2 class="contents-title">会員情報変更</h2>
 
   <form action="" method="post" name="demoForm" class="form">
 
@@ -61,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
       <span class="need form_input_need">必須</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($result['name']); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
       <?php endif; ?>
@@ -71,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
       <span class="need form_input_need">必須</span>
-      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
+      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($result['email']); ?>">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
       <?php endif; ?>
@@ -88,35 +92,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="form_input_error_message" id="js-emailMessage-confirm"></p>
     </div>
 
-    <div class="form_input_block">
-      <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need form_input_need">必須</span>
-      <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
-      <?php if (isset($error['password'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['password']; ?></p>
-      <?php endif; ?>
-      <p class="form_input_error_message" id="js-passwordMessage"></p>
-      <span class="form_input_caution">※半角英数記号8文字以上16文字以下</span>
-    </div>
-
-    <div class="form_input_block">
-      <label for="js-password-confirm" class="form_input_title">パスワード確認</label>
-      <span class="need form_input_need">必須</span>
-      <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
-      <?php if (isset($error['password_confirm'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
-      <?php endif; ?>
-      <p class="form_input_error_message" id="js-passwordConfirmMessage"></p>
-    </div>
-
     <?php if ($error_message) : ?>
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <input type="submit" value="アカウント新規作成" class="el_btn el_btn_submit">
+    <div class="form_confirm_btn_block">
+      <a class="el_btn el_btn_back" href="admin_top.php">戻る</a>
+      <input type="submit" value="更新" class="el_btn el_btn_submit">
+    </div>
 
   </form>
 </main>
-
 
 <?php require_once("../includes/footer.php"); ?>
