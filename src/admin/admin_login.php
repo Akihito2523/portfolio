@@ -2,8 +2,7 @@
 session_start();
 require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
-
-
+require_once("../includes/admin_header.php");
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 // メッセージを一度表示したらセッションから削除
 unset($_SESSION['error']);
@@ -23,15 +22,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $admin = new Admin();
     $result = $admin->AdminDbLogin($data);
 
-    if (!$result) {
+    if ($result) {
+      $_SESSION['data'] = $data;
+      header('Location: admin_top.php');
+      exit();
+    } else {
       $_SESSION['error'] = 'ログイン認証に失敗しました';
       header('Location: admin_login.php');
       exit();
     }
-    // 成功した場合の処理
-    $_SESSION['data'] = $data;
-    header('Location: admin_top.php');
-    exit();
   }
 } else {
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
@@ -40,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 }
 
-require_once("../includes/admin_header.php");
 ?>
 
 <main class="">
@@ -71,13 +69,12 @@ require_once("../includes/admin_header.php");
 
     <div class="form_login_btn_block">
       <input type="submit" value="ログイン" class="el_btn el_btn_submit">
-      <p class="form_input_link"><a href="">パスワードを忘れた場合はこちら</a></p>
-      <p class="form_input_link"><a href="admin_signup.php">アカウント新規登録</a></p>
+      <p class="form_input_link"><a href="admin_password_reset.php" ontouchstart="">パスワードを忘れた場合はこちら</a></p>
+      <p class="form_input_link"><a href="admin_signup.php" ontouchstart="">アカウント新規登録</a></p>
     </div>
 
   </form>
 
 </main>
 
-<?php //require_once("../includes/footer.php"); 
-?>
+<?php require_once("../includes/footer.php"); ?>

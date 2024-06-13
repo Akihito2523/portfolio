@@ -53,8 +53,6 @@ class Admin
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
             error_log('AdminDbCreateエラー: ' . $e->getMessage());
-            header('Location: admin_signup.php');
-            exit();
         }
     }
 
@@ -75,14 +73,10 @@ class Admin
             $stmt->bindValue(':updated_at', getDateTime(), PDO::PARAM_STR);
             $stmt->execute();
             $_SESSION['message'] = 'ユーザー登録完了しました。';
-
             return true;
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
-
             error_log('AdminDbCreateエラー: ' . $e->getMessage());
-            header('Location: admin_update.php');
-            exit();
         }
     }
 
@@ -118,8 +112,6 @@ class Admin
         } catch (Exception $e) {
             error_log('Loginエラー: ' . $e->getMessage());
             $_SESSION['error'] = 'ログイン認証に失敗しました';
-            header('Location: admin_login.php');
-            exit();
         }
     }
 
@@ -153,5 +145,58 @@ class Admin
         session_destroy();
         header('Location: admin_login.php');
         exit();
+    }
+
+    /**
+     * パスワード再登録
+     */
+    public function AdminDbPassReset($email)
+    {
+
+        $sql = "SELECT * FROM $this->table_name WHERE email = :email";
+        $dbh = $this->AdminDbConnect();
+
+        try {
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+            // メールアドレスに一致するエントリがあるかどうかを確認
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (Exception $e) {
+            error_log('AdminDbPassResetエラー: ' . $e->getMessage());
+            throw new Exception('登録に失敗しました');
+        }
+    }
+
+    /**
+     * パスワード再登録
+     */
+    public function AdminDbEmail($email)
+    {
+        // 以下、mail関数でパスワードリセット用メールを送信
+        mb_language("Japanese");
+        mb_internal_encoding("UTF-8");
+
+        // URLはご自身の環境に合わせてください
+        $url = "http://localhost:1515";
+
+        $subject =  'パスワードリセット用URLをお送りします';
+
+        $body = <<<EOD
+      24時間以内に下記URLへアクセスし、パスワードの変更を完了してください。
+      {$url}
+      EOD;
+
+        // Fromはご自身の環境に合わせてください
+        $headers = "From : http://localhost:1515\n";
+        // text/htmlを指定し、html形式で送ることも可能
+        $headers .= "Content-Type : text/plain";
+
+        // mb_send_mailは成功したらtrue、失敗したらfalseを返す
+        $isSent = mb_send_mail($email, $subject, $body, $headers);
+
+        return $isSent;
+        // if (!$isSent) throw new \Exception('メール送信に失敗しました。');
     }
 };

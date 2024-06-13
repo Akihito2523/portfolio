@@ -32,13 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $admin = new Admin();
     $result = $admin->AdminDbUpdate($data);
 
-    if (!$result) {
+    if ($result) {
+      $_SESSION['data'] = $data;
+      header("Location: admin_signup_thanks.php");
+      exit;
+    } else {
       header('Location: admin_update.php');
       exit();
     }
-    $_SESSION['data'] = $data;
-    header("Location: admin_signup_thanks.php");
-    exit;
   }
 } else {
   $admin = new Admin();

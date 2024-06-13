@@ -33,10 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-  // var_dump($data);
   // バリデーション関数を呼び出し
   $error = validateInputFormData($data);
-  // var_dump($error);
 
   // エラーがなければ確認ページに遷移
   if (empty($error)) {
@@ -72,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 }
 
-// var_dump($data);
 ?>
 
 <main class="">

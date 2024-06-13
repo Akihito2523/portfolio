@@ -24,15 +24,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
+    'image_path' => $_FILES['image_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-  $error = validateInputFormData($data);
+  //  var_dump($_FILES['image_path']);
+  //  var_dump($data['image_path']);
 
-  if (empty($error)) {
+  $error = validateInputFormData($data);
+  $imageError = validateImage($_FILES['image_path']);
+
+  //  var_dump($imageError);
+  // exit('exitを実行中') . '<br>';
+  if (empty($error) && empty($imageError)) {
     $_SESSION['data'] = $data;
     header("Location: user_form_confirm.php");
     exit;
@@ -48,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'checkbox' => '',
     'pref' => '',
     'datetimelocal' => '',
+    'image_path' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',
@@ -60,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">ユーザー登録</h2>
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
@@ -108,8 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- $data配列内に'gender'キーが存在しかつvalue値と等しければ、trueを返しchecked属性を出力 -->
     <div id="js-radio">
       <fieldset>
-        <legend class="form_input_title">性別</legend>
-        <!-- <span class="need form_input_need">必須</span> -->
+        <legend class="form_input_title">性別<span class="need form_input_need"> 必須</span></legend>
         <label class="form_input_label">
           <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
         </label>
@@ -119,19 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label class="form_input_label">
           <input type="radio" name="gender" class="form_input_value_radio" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他
         </label>
-        <?php if (isset($error['gender'])) : ?>
-          <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
-        <?php endif; ?>
       </fieldset>
-      <fieldset>
-        <legend class="form_input_title">ラジオボタン（ドリンク）</legend>
-        <label class="form_input_label"><input type="radio" name="drink" class="form_input_value_radio" value="coke" checked />Coke</label>
-        <label class="form_input_label"><input type="radio" name="drink" class="form_input_value_radio" value="wine" />Wine</label>
-      </fieldset>
+      <?php if (isset($error['gender'])) : ?>
+        <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
+      <?php endif; ?>
     </div>
 
     <div id="js-checkbox">
-      <label for="js-checkbox" class="form_input_title">チェックボックス</label>
+      <label for="js-checkbox" class="form_input_title form_input_title_checkbox">チェックボックス</label>
       <?php foreach ($genre as $item) : ?>
         <label class="form_input_label">
           <input type="checkbox" name="genre[]" class="form_input_value_checkbox" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
@@ -160,19 +162,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-start-time" class="form_input_title">開始時間</label>
-      <input type="time" id="js-start-time" name="start-time" class="form_input_value">
-    </div>
-
-    <div class="form_input_block">
       <label for="js-datetime" class="form_input_title">日時</label>
       <input type="datetime-local" name="datetimelocal" class="form_input_value" id="js-datetime" value="<?php echo $data['datetimelocal']; ?>">
     </div>
 
     <div class="form_input_block">
+      <label for="js-image" class="form_input_title">写真アップロード</label>
+      <span class="need form_input_need">必須</span>
+      <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+      <input type="file" name="image_path" class="form_input_value" id="" accept="image/*" value="">
+      <span class="form_input_caution">※JPEG、PNG、FIFのみ</span>
+    </div>
+    <?php if (isset($imageError['image_path'])) : ?>
+      <p class="form_input_error_message"><?php echo $imageError['image_path']; ?></p>
+    <?php endif; ?>
+
+    <?php //if (isset($_FILES['image']['tmp_name'])) : 
+    ?>
+    <img src="../../public/image/<?php //echo $_FILES['image']['name']; 
+                                  ?>" alt="">
+    <?php //endif; 
+    ?>
+
+    <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>
       <span class="need form_input_any">任意</span>
-      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="20"><?php echo $data['textarea']; ?></textarea>
+      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="100" placeholder="140文字以下"><?php echo $data['textarea']; ?></textarea>
       <p class="form_input_textarea_message">現在
         <span id="js-textareaCount">0</span>文字入力中です。
       </p>
@@ -207,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-check" class="form_input_title">利用規約</label>
+      <label for="js-check" class="form_input_title">個人情報保護方針に同意する</label>
       <span class="need form_input_need">必須</span>
       <label class="form_input_label">
         <input type="checkbox" name="checkbox_name" class="form_input_value_checkbox" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>

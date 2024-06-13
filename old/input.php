@@ -48,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 echo '都道府県は' . h($data['pref']);
-// var_dump($data);
 ?>
 
 
@@ -130,7 +129,9 @@ echo '都道府県は' . h($data['pref']);
       <select name="pref" id="js-select" class="form_input_value">
         <option value="">▼都道府県を選択</option>
         <optgroup label="北海道・東北">
-          <option value="北海道" <?php if(isset($data['pref']) && $data['pref'] === "北海道") { echo "selected";} ?> >北海道</option>
+          <option value="北海道" <?php if (isset($data['pref']) && $data['pref'] === "北海道") {
+                                echo "selected";
+                              } ?>>北海道</option>
           <option value="青森県">青森県</option>
           <option value="岩手県">岩手県</option>
           <option value="宮城県">宮城県</option>
@@ -261,3 +262,16 @@ echo '都道府県は' . h($data['pref']);
 
 
 <?php require_once("footer.php"); ?>
+
+
+
+<dl class="form_confirm_block">
+  <dt class="form_input_title form_confirm_title">写真</dt>
+  <dd class="form_confirm_value">
+    <?php if (!empty($data['image_path']) && is_array($data['image_path']) && isset($data['image_path']['name'])) : ?>
+      <?php echo $data['image_path']['name']; ?>
+    <?php else : ?>
+      画像がアップロードされていません
+    <?php endif; ?>
+  </dd>
+</dl>

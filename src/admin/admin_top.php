@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php if ($formData) : ?>
             <?php foreach ($formData as $column) : ?>
                 <tr class="table_tr">
-                    <td><a href="/src/admin/detail.php?id=<?php echo h($column["id"]); ?>"><?php echo h($column["id"]); ?></a></td>
+                    <td><a href="/src/admin/detail.php?id=<?php echo h($column["id"]); ?>" class="form_input_link" ontouchstart=""><?php echo h($column["id"]); ?></a></td>
                     <td><?php echo h($column["name"]); ?></td>
                     <td><?php echo h($column["tel"]); ?></td>
                     <td><?php echo h($column["email"]); ?></td>
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td><?php echo h($column["textarea"]); ?></td>
                     <td><?php echo h($column["created_at"]); ?></td>
                     <td>
-                        <a href="/src/admin/user_delete.php?id=<?php echo $column['id']; ?>" class="el_btn_delete">削除</a>
+                        <a href="/src/admin/user_delete.php?id=<?php echo $column['id']; ?>" class="el_btn_delete form_input_link" ontouchstart="">削除</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

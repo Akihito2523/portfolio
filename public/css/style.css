@@ -85,7 +85,7 @@ body {
 .ly_footer {
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color: #222;
+  background-color: #4156bc;
 }
 
 .hp_btGray {
@@ -120,8 +120,8 @@ body {
   font-weight: 600;
   color: #5d627b;
   background: white;
-  border-top: solid 5px #31354a;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
+  border-top: solid 5px #4156bc;
+  box-shadow: 0 3px 5px rgba(42, 82, 119, 0.22);
   max-width: 1200px;
 }
 
@@ -187,7 +187,7 @@ body {
 .form {
   position: relative;
   z-index: 1000;
-  max-width: 1000px;
+  max-width: 1200px;
   padding: 50px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
@@ -254,12 +254,9 @@ body {
 }
 
 .form_input_label {
-  margin: 8px 6px 12px 0;
+  margin: 0px 10px 20px 0;
   font-size: 1.4rem;
-  /* display: flex; */
-  justify-content: center;
-  align-items: center;
-
+  display: inline-block;
 }
 
 .form_input_label:first-of-type {
@@ -268,6 +265,10 @@ body {
 
 .form_input_label:last-of-type {
   /* margin-bottom: 14px; */
+}
+
+.form_input_title_checkbox {
+  display: block;
 }
 
 .form_input_value_radio,
@@ -279,18 +280,6 @@ body {
 .form_input_value_radio:checked,
 .form_input_value_checkbox:checked {
   box-shadow: 0 0 0 3px rgb(118, 85, 101);
-}
-
-fieldset {
-  display: flex;
-  justify-content: center;
-  border: 1px solid #ccc;
-}
-
-legend {
-  /* display: inline-block;
-  padding: 0 10px;
-  font-weight: bold; */
 }
 
 
@@ -354,7 +343,7 @@ legend {
   font-size: 1.4rem;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  color: #333;
+  color: #104e6a;
   text-decoration: underline;
 }
 

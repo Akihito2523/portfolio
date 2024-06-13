@@ -230,6 +230,69 @@ function validateInputFormData($data)
 }
 
 
+function validateImage($image)
+{
+    $error = [];
+
+    // 一時ファイルのパスとファイル名を取得
+    $tmpfile = $image["tmp_name"];
+    $imageName = $image["name"]; //リザードン
+
+    // 画像のMIMEタイプを取得
+    $imageType = $image["type"];
+    $allowedTypes = array('image/png', 'image/jpeg', 'image/gif');
+
+    // ファイルがアップロードされているかを確認
+    if (!is_uploaded_file($tmpfile)) {
+        $error['image_path'] = '画像がアップロードされていません';
+        return $error;
+    }
+
+    // アップロードされた画像が許可された形式かを確認
+    if (!in_array($imageType, $allowedTypes)) {
+        $error['image_path'] = 'ファイルは画像形式のみアップロードできます';
+        return $error;
+    }
+
+    // ファイルを一時的なディレクトリから保存先ディレクトリに移動
+    $uploadDir = __DIR__ . '/../../public/image/';
+    $filename = date('YmdHis') . $imageName;
+    $savePath = $uploadDir . $filename;
+
+    // ファイルの移動を試みる
+    if (!move_uploaded_file($tmpfile, $savePath)) {
+        $error['image_path'] = 'ファイルの保存に失敗しました';
+        return $error;
+    }
+
+    // エラーがない場合は空の配列を返す
+    return $error;
+}
+
+// uploadImage.php
+
+function uploadImage($image)
+{
+    // $image_path = $data['image_path'] ?? '';
+    // var_dump($image_path);
+    // exit('exitを実行中') . '<br>';
+
+    if (!empty($image)) {
+        $uploadDir = '/../../public/image/';
+        $filename = date('YmdHis') . '_' . $image;
+        $savePath = $uploadDir . $filename;
+      
+        if (!$savePath) {
+            return false; // アップロードに失敗した場合
+        }
+        return $savePath; // 画像の相対パスを返す
+    }
+    return false; // ファイルがアップロードされていない場合
+}
+
+
+
+
 /*
     引数のバリデーション処理を実行する
     引数：任意のバリデーションパラメータ
@@ -255,3 +318,5 @@ function validateStaffID($param)
     // すべての検証を通過した場合はtrueを返す
     return $param;
 }
+?>
+

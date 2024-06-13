@@ -12,8 +12,10 @@ unset($_SESSION['error']);
 
 $error = [];
 
+
 // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
     'tel' => h($_POST['tel'] ?? ''),
@@ -24,24 +26,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
+    'image_path' => $_POST['image_path'] ?? '',
+    // 'image_path' => $_FILES['image_path']['name'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
+
+
   $user = new User();
   $result = $user->UserDbCreate($data);
-  // var_dump($stmt);
-  // exit('exitを実行中') . '<br>';
-  if (!$result) {
+
+  if ($result) {
+    $_SESSION['data'] = $data;
+    header("Location: user_form_thanks.php");
+    exit;
+  } else {
     header('Location: user_form_confirm.php');
     exit();
   }
-  $_SESSION['data'] = $data;
-  header("Location: user_form_thanks.php");
-  exit;
 } else {
+
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'name' => '',
     'tel' => '',
@@ -51,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => [],
     'pref' => '',
     'datetimelocal' => '',
+    'image_path' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',
@@ -70,11 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 }
-
+// $image_path = $data['image_path'] ?? '';
+// var_dump($image_path);
+// exit('exitを実行中') . '<br>';
 ?>
 
 <main class="">
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
       <dd class="form_confirm_value"><?php echo h($data['name']); ?></dd>
@@ -103,6 +113,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <dt class="form_input_title form_confirm_title">日時</dt>
       <dd class="form_confirm_value"><?php echo h($data['datetimelocal']); ?></dd>
     </dl>
+
+    <dl class="form_confirm_block">
+      <dt class="form_input_title form_confirm_title">写真</dt>
+      <dd class="form_confirm_value">
+        <?php if (!empty($data['image_path']['name'])) : ?>
+          <?php echo $data['image_path']['name']; ?>
+        <?php else : ?>
+          画像がアップロードされていません
+        <?php endif; ?>
+      </dd>
+    </dl>
+
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">テキストエリア</dt>
       <dd class="form_confirm_value"><?php echo h($data['textarea']); ?></dd>
@@ -132,6 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="hidden" name="genre" value="<?php echo $genreInfo; ?>">
     <input type="hidden" name="pref" value="<?php echo h($data['pref']); ?>">
     <input type="hidden" name="datetimelocal" value="<?php echo h($data['datetimelocal']); ?>">
+    <input type="hidden" name="image_path" value="<?php echo h($data['image_path']['name']); ?>">
     <input type="hidden" name="textarea" value="<?php echo h($data['textarea']); ?>">
     <input type="hidden" name="password" value="<?php echo h($data['password']); ?>">
     <input type="hidden" name="checkbox_name" value="<?php echo h($data['checkbox_name']); ?>">
@@ -139,5 +162,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </main>
 
 <?php require_once("../includes/footer.php"); ?>
-
-

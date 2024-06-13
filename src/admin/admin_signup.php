@@ -13,7 +13,7 @@ unset($_SESSION['error']);
 $error = [];
 
 // POSTリクエストの場合、フォームが送信されたとして処理
- // $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
+// $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
@@ -28,17 +28,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($error)) {
     $admin = new Admin();
     $result = $admin->AdminDbCreate($data);
-    
-    if (!$result) {
+
+    if ($result) {
+      $_SESSION['data'] = $data;
+      header("Location: admin_signup_thanks.php");
+      exit;
+    } else {
       header('Location: admin_signup.php');
       exit();
     }
-    $_SESSION['data'] = $data;
-    header("Location: admin_signup_thanks.php");
-    exit;
   }
 } else {
-    // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
+  // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'name' => '',
     'email' => '',
@@ -53,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">会員登録</h2>
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
