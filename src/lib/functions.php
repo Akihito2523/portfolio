@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * 各種関数
  *
@@ -88,8 +89,6 @@ function getDateTime()
     引数：任意のバリデーションパラメータ
     戻り値：数字・記号・アルファベット(32 bytes)の文字列であればその文字列、そうでなければ空文字列
 */
-
-
 function validateLogin($data)
 {
     $error = [];
@@ -235,53 +234,71 @@ function validateImage($image)
     $error = [];
 
     // 一時ファイルのパスとファイル名を取得
-    $tmpfile = $image["tmp_name"];
-    $imageName = $image["name"]; //リザードン
+    $tmp_path = $image["tmp_name"];
+    $imageName = $image["name"];
+
+    // ファイルがアップロードされているかを確認
+    if (is_uploaded_file($tmp_path)) {
+        echo "一時ファイルが存在します。";
+        // exit('成功');
+    } else {
+        echo "一時ファイルが存在しません。";
+        exit('失敗');
+        $error['image_path'] = '画像がアップロードされていません';
+        return $error;
+    }
 
     // 画像のMIMEタイプを取得
     $imageType = $image["type"];
     $allowedTypes = array('image/png', 'image/jpeg', 'image/gif');
-
-    // ファイルがアップロードされているかを確認
-    if (!is_uploaded_file($tmpfile)) {
-        $error['image_path'] = '画像がアップロードされていません';
-        return $error;
-    }
 
     // アップロードされた画像が許可された形式かを確認
     if (!in_array($imageType, $allowedTypes)) {
         $error['image_path'] = 'ファイルは画像形式のみアップロードできます';
         return $error;
     }
-
-    // ファイルを一時的なディレクトリから保存先ディレクトリに移動
-    $uploadDir = __DIR__ . '/../../public/image/';
-    $filename = date('YmdHis') . $imageName;
-    $savePath = $uploadDir . $filename;
-
-    // ファイルの移動を試みる
-    if (!move_uploaded_file($tmpfile, $savePath)) {
-        $error['image_path'] = 'ファイルの保存に失敗しました';
-        return $error;
-    }
+    $_SESSION['tmp_path'] = $tmp_path;
+    // echo '<pre>';
+    // var_dump($_SESSION['tmp_path']);
+    // echo '</pre>';
+    // echo '<br>';
+    // exit('exitを実行中');
 
     // エラーがない場合は空の配列を返す
     return $error;
 }
 
-// uploadImage.php
 
-function uploadImage($image)
+function uploadImage($image_path)
 {
-    // $image_path = $data['image_path'] ?? '';
-    // var_dump($image_path);
-    // exit('exitを実行中') . '<br>';
 
-    if (!empty($image)) {
-        $uploadDir = '/../../public/image/';
-        $filename = date('YmdHis') . '_' . $image;
+    if (!empty($image_path)) {
+        $imageName = $image_path["name"];
+
+
+        $tmp_path = $_SESSION['tmp_path'] ?? '';
+
+        $filename = date('YmdHis') . '_' . $imageName;
+
+        $uploadDir = __DIR__ . '/../../public/image/';
+        if (file_exists($uploadDir)) {
+            echo "ディレクトリが存在します。";
+        } else {
+            echo "ディレクトリが存在しません。";
+        }
+
         $savePath = $uploadDir . $filename;
-      
+
+        // ファイルの移動を試みる
+        if (move_uploaded_file($tmp_path, $savePath)) {
+            exit('成功');
+        } else {
+            echo "移動に失敗: " . $image_path['error'];
+            $error['image_path'] = 'ファイルの保存に失敗しました';
+            exit('失敗');
+            return $error;
+        }
+
         if (!$savePath) {
             return false; // アップロードに失敗した場合
         }
@@ -289,8 +306,6 @@ function uploadImage($image)
     }
     return false; // ファイルがアップロードされていない場合
 }
-
-
 
 
 /*

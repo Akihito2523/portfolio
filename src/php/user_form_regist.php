@@ -25,24 +25,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
     'image_path' => $_FILES['image_path'] ?? '',
+    // 'image_path_name' => $_FILES['image_path']['tmp_name'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-  //  var_dump($_FILES['image_path']);
-  //  var_dump($data['image_path']);
-
   $error = validateInputFormData($data);
   $imageError = validateImage($_FILES['image_path']);
 
-  //  var_dump($imageError);
-  // exit('exitを実行中') . '<br>';
   if (empty($error) && empty($imageError)) {
-    $_SESSION['data'] = $data;
     header("Location: user_form_confirm.php");
     exit;
+  } else {
+    // エラーがある場合はエラーメッセージをセッションに保存して再度フォームを表示する
+    // $_SESSION['error'] = '入力内容に誤りがあります。';
+    // header('Location: user_form.php');
   }
 } else {
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
@@ -56,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'pref' => '',
     'datetimelocal' => '',
     'image_path' => '',
+    // 'image_path_name' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',

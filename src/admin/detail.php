@@ -37,8 +37,10 @@ $result = $user->UserDbDetail($_GET['id']);
       <dd class="form_confirm_value"><?php echo h($result['pref']); ?></dd>
     </dl>
     <dl class="form_confirm_block">
-      <dt class="form_input_title form_confirm_title">日時</dt>
-      <dd class="form_confirm_value"><?php echo h($result['datetimelocal']); ?></dd>
+      <dt class="form_input_title form_confirm_title">写真</dt>
+      <dd class="form_confirm_value">
+        <img src="<?php echo h($result['image_path']); ?>" alt="">
+      </dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">テキストエリア</dt>

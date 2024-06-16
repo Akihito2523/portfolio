@@ -40,7 +40,6 @@ class User
 
         $sql = "INSERT INTO $this->table_name (name, tel, email, gender, genre, pref, datetimelocal, image_path, textarea, password, checkbox_name, user_agent, ip_address) VALUES (:name, :tel, :email, :gender, :genre, :pref, :datetimelocal, :image_path, :textarea, :password, :checkbox_name, :user_agent, :ip_address)";
 
-       
         $dbh = $this->UserDbConnect();
         try {
             $stmt = $dbh->prepare($sql);

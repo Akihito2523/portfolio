@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <th>性別</th>
             <th>チェックボックス</th>
             <th>都道府県</th>
-            <th>時間</th>
+            <th>写真</th>
             <th>テキストエリア</th>
             <th>登録日時</th>
             <th></th>
@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td><?php echo h($column["gender"]); ?></td>
                     <td><?php echo h($column["genre"]); ?></td>
                     <td><?php echo h($column["pref"]); ?></td>
-                    <td><?php echo h($column["datetimelocal"]); ?></td>
+                    <td><?php echo h($column["image_path"]); ?></td>
                     <td><?php echo h($column["textarea"]); ?></td>
                     <td><?php echo h($column["created_at"]); ?></td>
                     <td>
