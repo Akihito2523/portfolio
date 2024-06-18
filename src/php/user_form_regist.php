@@ -5,6 +5,7 @@ require_once('../lib/functions.php');
 require_once('../admin/DataAccessUser.php');
 require_once("../includes/header.php");
 
+
 // CSRFトークンを生成
 $csrf_token = setToken();
 
@@ -14,6 +15,14 @@ unset($_SESSION['error']);
 $error = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $user = $_POST;
+  var_dump($user);
+
+  // POSTデータがなければトップページに戻す
+  if (!$user) {
+    header('Location: user_form_regist.php');
+  }
+
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
     'tel' => h($_POST['tel'] ?? ''),
@@ -25,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
     'image_path' => $_FILES['image_path'] ?? '',
-    // 'image_path_name' => $_FILES['image_path']['tmp_name'] ?? '',
+    // 'tmp_path' => $_FILES['image_path']['tmp_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
@@ -35,7 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $error = validateInputFormData($data);
   $imageError = validateImage($_FILES['image_path']);
 
+
   if (empty($error) && empty($imageError)) {
+    $_SESSION['data'] = $data;
+
     header("Location: user_form_confirm.php");
     exit;
   } else {
@@ -55,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'pref' => '',
     'datetimelocal' => '',
     'image_path' => '',
-    // 'image_path_name' => '',
+    // 'tmp_path' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',
@@ -169,20 +181,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-image" class="form_input_title">写真アップロード</label>
       <span class="need form_input_need">必須</span>
-      <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
-      <input type="file" name="image_path" class="form_input_value" id="" accept="image/*" value="">
+      <input type="file" name="image_path" class="form_input_value" id="js-image" accept="image/*" value="">
       <span class="form_input_caution">※JPEG、PNG、FIFのみ</span>
     </div>
+    <img src="<?php echo $result['image_path']; ?>" alt="" id="js-imagePreview">
     <?php if (isset($imageError['image_path'])) : ?>
-      <p class="form_input_error_message"><?php echo $imageError['image_path']; ?></p>
+      <p class="form_input_error_message image_path_error"><?php echo $imageError['image_path']; ?></p>
     <?php endif; ?>
 
-    <?php //if (isset($_FILES['image']['tmp_name'])) : 
-    ?>
-    <img src="../../public/image/<?php //echo $_FILES['image']['name']; 
-                                  ?>" alt="">
-    <?php //endif; 
-    ?>
 
     <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>

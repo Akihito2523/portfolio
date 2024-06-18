@@ -140,6 +140,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+  const image = document.querySelector('#js-image');
+  const imagePreview = document.querySelector('#js-imagePreview');
+
+  if (image && imagePreview) {
+    const imageChange = (event) => {
+      const file = event.target.files[0];
+
+      // ファイルが存在しないか、画像形式でない場合のエラーチェック
+      if (!file || !file.type.match(/^image\//)) {
+        alert('画像ファイルを選択してください。');
+        return false;
+      }
+
+      // FileReaderのインスタンスを生成
+      const reader = new FileReader();
+
+      // 読み込みが完了したら画像をプレビューとして表示する
+      reader.addEventListener('load', (event) => {
+        imagePreview.setAttribute('src', event.target.result);
+        // ファイルがアップロードしたら、画像のエラーメッセージを空にする
+        const imagePathError = document.querySelector('.image_path_error');
+        if (imagePathError.innerText !== '') {
+          imagePathError.innerText = '';
+        }
+      });
+      // ファイルを読み込む
+      reader.readAsDataURL(file);
+    };
+
+    // input要素にchangeイベントを設定
+    image.addEventListener('change', imageChange);
+  }
+
+
+
+
   //** ============ バリデーションチェック ==================*/
   // $submit.addEventListener('click', (event) => {
 

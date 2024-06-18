@@ -49,16 +49,15 @@ class User
             $stmt->bindValue(':gender', $data['gender'], PDO::PARAM_STR);
             $stmt->bindValue(':genre', $data['genre'], PDO::PARAM_STR);
             $stmt->bindValue(':pref', $data['pref'], PDO::PARAM_STR);
-            $stmt->bindValue(':datetimelocal', $data['datetimelocal'], PDO::PARAM_INT);
-            $stmt->bindValue(':image_path', uploadImage($data['image_path']) ?? null, PDO::PARAM_STR);
+            $stmt->bindValue(':datetimelocal', $data['datetimelocal'], PDO::PARAM_STR);
+            $stmt->bindValue(':image_path', uploadImage($_SESSION['savePath']) ?? null, PDO::PARAM_STR);
             $stmt->bindValue(':textarea', $data['textarea'], PDO::PARAM_STR);
             $stmt->bindValue(':password', password_hash($data['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
             $stmt->bindValue(':checkbox_name', $data['checkbox_name'], PDO::PARAM_STR);
             $stmt->bindValue(':user_agent', getUserAgent(), PDO::PARAM_STR);
             $stmt->bindValue(':ip_address', getIpAddress(), PDO::PARAM_STR);
-            // var_dump($stmt);
-            // exit('exitを実行中です') . '<br>';
             $stmt->execute();
+          
             $_SESSION['message'] = 'ユーザー登録完了しました。';
             return true;
         } catch (PDOException $e) {
@@ -173,6 +172,21 @@ class User
             throw new Exception('データの検索に失敗しました');
         }
     }
+
+    // public function UserDbDetailImage()
+    // {
+        
+    //     $sql = "SELECT image_path FROM $this->table_name ORDER BY created_at DESC LIMIT 1;";
+    //     $dbh = $this->UserDbConnect();
+    //     $stmt = $dbh->prepare($sql);
+    //     $stmt->execute();
+    //     $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+    //     $dbh = null;
+    //     if (!$result) {
+    //         throw new Exception('データが見つかりません');
+    //     }
+    //     return $result;
+    // }
 
     // /**
     //  * ファイルデータを保存

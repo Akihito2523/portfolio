@@ -125,7 +125,7 @@ class Admin
         }
 
         $dbh = $this->AdminDbConnect();
-        $stmt = $dbh->prepare("SELECT * FROM $this->table_name where id = :id");
+        $stmt = $dbh->prepare("SELECT * FROM $this->table_name where id = :id Limit 1");
         $stmt->bindValue(':id', (int)$id, \PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);

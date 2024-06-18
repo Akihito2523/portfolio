@@ -14,7 +14,6 @@ $formData = $form->UserDbConnect();
 $formData = $form->UserDbRead();
 
 
-
 // ユーザーがログインしているか確認
 if (!$id) {
     header('Location: admin_login.php');
@@ -29,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php echo h($id); ?>
+<?php //echo h($id); ?>
 
 <form action="admin_top.php" method="post" class="">
     <div class="form_search_btn_block">
@@ -67,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <td><?php echo h($column["gender"]); ?></td>
                     <td><?php echo h($column["genre"]); ?></td>
                     <td><?php echo h($column["pref"]); ?></td>
-                    <td><?php echo h($column["image_path"]); ?></td>
+                    <td><img src="<?php echo h($column["image_path"]); ?>" alt=""></td>
                     <td><?php echo h($column["textarea"]); ?></td>
                     <td><?php echo h($column["created_at"]); ?></td>
                     <td>

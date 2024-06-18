@@ -9,10 +9,11 @@ $csrf_token = setToken();
 
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']);
-$error_message_image_path = isset($_SESSION['image_path']) ? $_SESSION['image_path'] : '';
-unset($_SESSION['image_path']);
+// $error_message_image_path = isset($_SESSION['image_path']) ? $_SESSION['image_path'] : '';
+// unset($_SESSION['image_path']);
 
 $error = [];
+
 
 // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,30 +28,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
-    'image_path' => $_FILES['data']['image_path'] ?? '',
-    // 'image_path' => $_SESSION['data']['image_path'] ?? '',
-    // 'image_path_name' => $_SESSION['data']['image_path']['tmp_name'] ?? '',
+    // 'image_path' => $_POST['image_path'] ?? '',
+    'image_path' => $_SESSION['data']['image_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
-
-
+  // echo '<pre>';
+  // var_dump($data);
+  // echo '</pre>';
+  // echo '<br>';
+  // exit('exitを実行中');
 
   $user = new User();
   $result = $user->UserDbCreate($data);
 
   if ($result) {
     $_SESSION['data'] = $data;
-    echo '<pre>';
-    var_dump($data);
-    echo '</pre>';
-    echo '<pre>';
-    var_dump($_SESSION['data'] );
-    echo '</pre>';
-    echo '<br>';
-    exit('exitを実行中');
     header("Location: user_form_thanks.php");
     exit;
   } else {
@@ -59,7 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 } else {
 
+
+
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
+
     'name' => '',
     'tel' => '',
     'email' => '',
@@ -120,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">日時</dt>
-      <dd class="form_confirm_value"><?php echo h($data['datetimelocal']); ?></dd>
+      <dd class="form_confirm_value"><?php echo $data['datetimelocal']; ?></dd>
     </dl>
 
     <dl class="form_confirm_block">
@@ -150,9 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if ($error_message) : ?>
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
-    <?php if ($error_message_image_path) : ?>
-      <div class="form_input_error_message dberror_message"><?php echo h($$error_message_image_path); ?></div>
-    <?php endif; ?>
+    <?php //if ($error_message_image_path) : 
+    ?>
+    <div class="form_input_error_message dberror_message"><?php //echo h($$error_message_image_path); 
+                                                          ?></div>
+    <?php //endif; 
+    ?>
     <div class="form_confirm_btn_block">
       <a class="el_btn el_btn_back" href="user_form_regist.php">戻る</a>
       <input type="submit" value="送信" class="el_btn el_btn_submit">

@@ -28,7 +28,7 @@
                         <a class="bl_headerNav_link" href="/src/php/user_form_update.php">ユーザー情報変更</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">制作実績</a>
+                        <a class="bl_headerNav_link" href="/src/php/user_form_regist.php">投稿</a>
                     </li>
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="#">会社情報</a>
@@ -37,7 +37,7 @@
                         <a class="bl_headerNav_link" href="#">採用情報</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">ブログ</a>
+                        <a class="bl_headerNav_link" href="/src/php/counter.php">カウンター</a>
                     </li>
                 </ul>
             </nav>

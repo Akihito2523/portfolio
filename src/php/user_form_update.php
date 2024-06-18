@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit">
+    <input type="submit" value="確認" class="el_btn el_btn_submit">
 
   </form>
 </main>

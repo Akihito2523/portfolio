@@ -44,7 +44,7 @@ $result = $user->UserDbDetail($_GET['id']);
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">テキストエリア</dt>
-      <dd class="form_confirm_value"><?php echo h($result['textarea']); ?></dd>
+      <dd class="form_confirm_value"><?php echo nl2br(h($result['textarea'])); ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">パスワード</dt>
