@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       exit();
     } else {
       $_SESSION['error'] = 'ログイン認証に失敗しました';
-      header('Location: admin_login.php');
+      header('Location: admin_signin.php');
       exit();
     }
   }

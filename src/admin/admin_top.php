@@ -8,15 +8,13 @@ require_once('../includes/admin_header.php');
 require_once('DataAccessUser.php');
 require_once('DataAccessAdmin.php');
 
-
-$form = new User();
-$formData = $form->UserDbConnect();
-$formData = $form->UserDbRead();
-
+$user = new User();
+$userDb = $user->UserDbRead();
+$userDbResults = $userDb['result'];
 
 // ユーザーがログインしているか確認
 if (!$id) {
-    header('Location: admin_login.php');
+    header('Location: admin_signin.php');
     exit();
 }
 
@@ -56,8 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </thead>
 
     <tbody class="table_tbody">
-        <?php if ($formData) : ?>
-            <?php foreach ($formData as $column) : ?>
+        <?php if ($userDbResults) : ?>
+            <?php foreach ($userDbResults as $column) : ?>
                 <tr class="table_tr">
                     <td><a href="/src/admin/detail.php?id=<?php echo h($column["id"]); ?>" class="form_input_link" ontouchstart=""><?php echo h($column["id"]); ?></a></td>
                     <td><?php echo h($column["name"]); ?></td>
@@ -88,6 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     });
 </script> -->
 
-<form action="admin_logout.php" method="post">
+<form action="admin_signout.php" method="post">
     <input type="submit" name="logout" value="ログアウト" class="el_btn el_btn_top">
 </form>

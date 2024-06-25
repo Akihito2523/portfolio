@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-email-confirm" class="form_input_title">メールアドレス(確認用)</label>
+      <label for="js-email-confirm" class="form_input_title">メールアドレス (確認用)</label>
       <span class="need form_input_need">必須</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-password-confirm" class="form_input_title">パスワード確認</label>
+      <label for="js-password-confirm" class="form_input_title">パスワード (確認用)</label>
       <span class="need form_input_need">必須</span>
       <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
       <?php if (isset($error['password_confirm'])) : ?>

@@ -20,8 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     radio.addEventListener('change', radioChange);
-  } else {
-    console.log('ラジオボタンがNULL');
   }
   //** ============ セレクト ==================*/
   const select = document.querySelector('#js-select');
@@ -34,6 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(`セレクトの中身は ${selectOptions} です`);
     }
     select.addEventListener('change', selectChange);
+  }
+
+  const selectImageGallery = document.querySelector('#js-select_image_gallery');
+  const selectImageGalleryForm = document.querySelector('#js-select_image_gallery_form');
+  // 変更を監視
+  if (selectImageGallery) {
+    const selectImageGalleryChange = (event) => {
+      selectImageGalleryForm.submit();
+      console.log(parseInt(event.target.value));
+    }
+    selectImageGallery.addEventListener('change', selectImageGalleryChange);
   }
   //** ============ チェックボックス ==================*/
   const checkboxes = document.querySelectorAll('#js-checkbox input[type="checkbox"]');
@@ -64,17 +73,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //** ============ テキストエリア ==================*/
   const textarea = document.querySelector('#js-textarea');
-  /** 入力中の文字数 */
   const textareaCount = document.querySelector('#js-textareaCount');
-  //  テキストを入力する度にonKeyUp()を実行する
-  if (textarea) {
+
+  if (textarea && textareaCount) {
+    textareaCount.innerText = textarea.value.length;
     const onKeyUp = () => {
-      // 入力されたテキスト
-      const inputText = textarea.value;
-      // 文字数を反映
-      textareaCount.innerText = inputText.length;
+      const textareaValue = textarea.value;
+      textareaCount.innerText = textareaValue.length;
     }
-    textarea.addEventListener('keyup', onKeyUp);
+    textarea.addEventListener('input', onKeyUp);
+  } else {
+    console.error('Error: #js-textarea not found.');
   }
   //** ============ カレンダー ==================*/
   const datetime = document.querySelector('#js-datetime');
@@ -138,8 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-
+  //** ============ ファイル ==================*/
   const image = document.querySelector('#js-image');
   const imagePreview = document.querySelector('#js-imagePreview');
 
@@ -173,6 +181,40 @@ document.addEventListener("DOMContentLoaded", () => {
     image.addEventListener('change', imageChange);
   }
 
+
+  const btnDelete = document.querySelectorAll('.el_btn_delete');
+  if (btnDelete) {
+    btnDelete.forEach((btnDelete) => {
+      btnDelete.addEventListener('click', (e) => {
+        const result = confirm('削除しますか');
+        if (!result) {
+          e.preventDefault();
+        }
+      })
+    })
+  }
+
+  const tel = document.querySelector('#js-tel');
+  const telMessage = document.querySelector('#js-telMessage');
+  if (tel) {
+    const telChange = (e) => {
+      console.log(e.target.value);
+      const telValue = e.target.value;
+      // 入力が空白または許可されている文字以外を含んでいるかをチェック
+      if (!telValue.trim()) {
+        telMessage.innerText = '電話番号を入力してください';
+        tel.style.border = '2px solid red';
+      } else if (!/^[0-9+\-]+$/.test(telValue)) {
+        telMessage.innerText = '半角数字と + - のみ利用できます';
+      } else if (!/^(0\d{9,10}|\d{1,4}-\d{1,4}-\d{4})$/.test(telValue)) {
+        telMessage.innerText = '正しい電話番号の形式で入力してください';
+      } else {
+        telMessage.innerText = '';
+        tel.style.border = '';
+      }
+    }
+    tel.addEventListener('blur', telChange);
+  }
 
 
 

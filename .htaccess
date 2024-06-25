@@ -1,0 +1,6 @@
+# .htaccess
+
+# カスタム404エラーページを使用する
+ErrorDocument 404 /error404.html
+
+

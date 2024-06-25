@@ -22,4 +22,4 @@ session_destroy();
 ?>
 
 <div class="thanks_message">ログアウトしました</div>
-<a class="el_btn el_btn_top" href="admin_login.php">ログインページに戻る</a>
+<a class="el_btn el_btn_top" href="admin_signin.php">ログインページに戻る</a>

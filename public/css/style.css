@@ -66,7 +66,7 @@ body {
 
 .bl_headerNav_link:focus,
 .bl_headerNav_link:hover {
-  border-bottom-color: #e25c00;
+  border-bottom-color: #095695;
 }
 
 .bl_headerNav_link::after {
@@ -167,13 +167,13 @@ body {
 .el_btn_search {
   max-width: 100%;
   padding: 16px 10px;
-  background-color: #8b8787;
+  background-color: #0e4c9d;
   color: #fff;
-  font-size: 1.3rem;
   text-align: center;
   cursor: pointer;
   width: 6%;
   border-radius: 4px;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
 }
 
 /* コンテンツ */
@@ -252,6 +252,7 @@ body {
 
 .form_input_value:focus {
   background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+  /* background-image: linear-gradient(to right, #2b618b 0%, #b6bcc1 100%); */
 }
 
 .form_input_label {
@@ -444,11 +445,9 @@ body {
 
 }
 
-
 /* user_top.php */
 /* ============================================ */
-.image_gallery {
-}
+.image_gallery {}
 
 .image_gallery_container {
   display: grid;
@@ -474,8 +473,7 @@ body {
   transition: .2s linear;
 }
 
-.image_gallery_box::before
- {
+.image_gallery_box::before {
   content: '';
   position: absolute;
   width: 0%;
@@ -558,7 +556,7 @@ body {
 }
 
 .image_gallery_icons a {
-  font-size: 2rem;
+  font-size: 1.2rem;
   margin: .5rem 1rem;
   color: #fff;
   transition: color .2s linear;
@@ -573,6 +571,49 @@ body {
   /* filter: grayscale();
   text-transform: capitalize; */
 }
+
+/* 表示件数 */
+#js-select_image_gallery_form {
+  padding: 0 40px;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.image_gallery_perPage {
+  width: 50px;
+  margin: 0;
+  padding: 1px;
+  height: 26px;
+  font-size: 1.2rem;
+}
+
+/* ページネーション */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 10px 10px 0;
+}
+
+.pagination_link {
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background .3s;
+  background: #fdfeff;
+  margin: 0 4px;
+}
+
+.pagination_link_active {
+  color: #fff;
+  background: #095695;
+}
+
+.pagination .pagination_link:hover:not(.active) {
+  color: #fff;
+  background: #8cacc6;
+}
+
 
 
 /* レスポンス */

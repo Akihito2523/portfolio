@@ -153,10 +153,15 @@ function validateInputFormData($data)
         $error['name'] = '氏名を入力してください。';
     }
 
+    // 電話番号が空かどうかをチェック
     if (empty($data['tel'])) {
-        $error['tel'] = '電話番号を入力してください。';
-    } elseif (!preg_match('/^[0][0-9]{9,10}$/', str_replace('-', '', $data['tel']))) {
-        $error['tel'] = '電話番号を正しく入力してください。';
+        $error['tel'] = '電話番号を入力してください';
+    } else {
+        // ハイフンを除去してから正規表現でバリデーション
+        $telWithoutHyphen = str_replace('-', '', $data['tel']);
+        if (!preg_match('/^(0\d{9,10}|\d{1,4}-\d{1,4}-\d{4})$/', $telWithoutHyphen)) {
+            $error['tel'] = '正しい電話番号の形式で入力してください';
+        }
     }
 
     if (empty($data['email'])) {
@@ -273,6 +278,38 @@ function setCategoryName($category)
         return 'その他';
     }
 }
+
+
+/**
+ * 各ページごとにタイトルを動的に変更
+ * @param
+ * @return string タイトル
+ */
+function getPageTitle()
+{
+    $pageTitle = '';
+
+    // PHP_SELF から現在のファイル名を取得
+    $currentPage = basename($_SERVER['PHP_SELF']);
+
+    // 各ページごとにタイトルを設定
+    switch ($currentPage) {
+        case 'user_form_regist.php':
+        case 'user_form_confirm.php':
+        case 'user_form_thanks.php':
+            $pageTitle = 'ユーザー登録';
+            break;
+        case 'user_top.php':
+            $pageTitle = 'ユーザートップページ';
+            break;
+            // 追加のページがあればここに追加
+        default:
+            $pageTitle = 'デフォルトタイトル';
+            break;
+    }
+    return $pageTitle;
+}
+
 
 ?>
 

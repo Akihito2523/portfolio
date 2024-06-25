@@ -23,7 +23,7 @@
             <nav>
                 <ul class="bl_headerNav">
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="../admin/admin_login.php">ログイン</a>
+                        <a class="bl_headerNav_link" href="../admin/admin_signin.php">ログイン</a>
                     </li>
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="../admin/admin_top.php">トップ</a>

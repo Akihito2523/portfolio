@@ -2,7 +2,7 @@
 session_start();
 require_once('../lib/functions.php');
 require_once('../admin/DataAccessUser.php');
-require_once("../includes/admin_header.php");
+require_once("../includes/header.php");
 
 // CSRFトークンを生成
 $csrf_token = setToken();
@@ -14,13 +14,15 @@ unset($_SESSION['error']);
 
 $error = [];
 
-
 // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $tel =  h($_POST['tel'] ?? '');
+  // 電話番号のハイフンと空白文字を取り除く
+  $tel_without_hyphen = preg_replace('/[\-\s]+/', '', $tel);
 
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
-    'tel' => h($_POST['tel'] ?? ''),
+    'tel' => $tel_without_hyphen,
     'email' => h($_POST['email'] ?? ''),
     'email_confirm' => h($_POST['email_confirm'] ?? ''),
     'gender' => h($_POST['gender'] ?? ''),
@@ -28,24 +30,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
     'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
-    // 'image_path' => $_POST['image_path'] ?? '',
     'image_path' => $_SESSION['data']['image_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
-  // echo '<pre>';
-  // var_dump($data);
-  // echo '</pre>';
-  // echo '<br>';
-  // exit('exitを実行中');
 
   $user = new User();
   $result = $user->UserDbCreate($data);
 
   if ($result) {
-    $_SESSION['data'] = $data;
+    unset($_SESSION['data']);
     header("Location: user_form_thanks.php");
     exit;
   } else {
@@ -53,11 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
   }
 } else {
-
-
-
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
-
     'name' => '',
     'tel' => '',
     'email' => '',
@@ -67,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'pref' => '',
     'datetimelocal' => '',
     'image_path' => '',
-    // 'image_path_name' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',

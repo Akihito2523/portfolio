@@ -4,9 +4,11 @@ require_once("../config/variable.php");
 require_once('../lib/functions.php');
 require_once('../admin/DataAccessUser.php');
 require_once("../includes/header.php");
-
+// ページネーションのセッションを削除
+unset($_SESSION['$imagePerPage']);
 
 // CSRFトークンを生成
+unset($_SESSION['csrf_token']);
 $csrf_token = setToken();
 
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
@@ -15,13 +17,13 @@ unset($_SESSION['error']);
 $error = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $user = $_POST;
-  var_dump($user);
-
-  // POSTデータがなければトップページに戻す
-  if (!$user) {
-    header('Location: user_form_regist.php');
-  }
+  // POSTリクエストの場合のみチェックを行う
+  // if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+  //   // CSRFトークンが一致しない場合は処理を中断するなどの対応を行う
+  //   die("CSRFトークンが正しくありません。");
+  // }
+  // // チェックが通ったらセッションからトークンを削除する（一度きりの使用）
+  // unset($_SESSION['csrf_token']);
 
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
@@ -43,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $error = validateInputFormData($data);
   $imageError = validateImage($_FILES['image_path']);
-
 
   if (empty($error) && empty($imageError)) {
     $_SESSION['data'] = $data;
@@ -81,14 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2 class="contents-title">ユーザー登録</h2>
 
   <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
-
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
-      <span class="need form_input_need">必須</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
+      <span class="need form_input_need">(必須)</span>
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>" tabindex="1" autocomplete="name">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
       <?php endif; ?>
@@ -97,18 +97,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-tel" class="form_input_title">電話番号</label>
-      <span class="need form_input_need">必須</span>
-      <input type="tel" name="tel" class="form_input_value" id="js-tel" placeholder="例）09012345678" value="<?php echo h($data['tel']); ?>">
+      <span class="need form_input_need">(必須)</span>
+      <input type="tel" name="tel" class="form_input_value" id="js-tel" value="<?php echo h($data['tel']); ?>" autocomplete="tel">
       <?php if (isset($error['tel'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['tel']; ?></p>
+        <p class="form_input_error_message" id="js-telMessage"><?php echo $error['tel']; ?></p>
+      <?php else : ?>
+        <p class="form_input_error_message" id="js-telMessage"></p>
       <?php endif; ?>
-      <p class="form_input_error_message" id="js-telMessage"></p>
+      <span class="form_input_caution">例：09012345678</span>
     </div>
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <span class="need form_input_need">必須</span>
-      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
+      <span class="need form_input_need">(必須)</span>
+      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>" autocomplete="email">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
       <?php endif; ?>
@@ -116,19 +118,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-email-confirm" class="form_input_title">メールアドレス(確認用)</label>
-      <span class="need form_input_need">必須</span>
+      <label for="js-email-confirm" class="form_input_title">メールアドレス (確認用)</label>
+      <span class="need form_input_need">(必須)</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage-confirm"></p>
+      <span class="form_input_caution">上記と同じメールアドレスを入力してください</span>
     </div>
 
     <!-- $data配列内に'gender'キーが存在しかつvalue値と等しければ、trueを返しchecked属性を出力 -->
     <div id="js-radio">
       <fieldset>
-        <legend class="form_input_title">性別<span class="need form_input_need"> 必須</span></legend>
+        <legend class="form_input_title">性別<span class="need form_input_need"> (必須)</span></legend>
         <label class="form_input_label">
           <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
         </label>
@@ -156,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-select" class="form_input_title">都道府県</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">(必須)</span>
       <select name="pref" id="js-select" class="form_input_value">
         <option value="">▼選択してください</option>
         <?php foreach ($prefectures as $region => $prefs) : ?>
@@ -180,9 +183,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-image" class="form_input_title">写真アップロード</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">(必須)</span>
       <input type="file" name="image_path" class="form_input_value" id="js-image" accept="image/*" value="">
-      <span class="form_input_caution">※JPEG、PNG、FIFのみ</span>
+      <span class="form_input_caution">※ JPEG、PNG、FIFのみ</span>
     </div>
     <img src="<?php echo $result['image_path']; ?>" alt="" id="js-imagePreview">
     <?php if (isset($imageError['image_path'])) : ?>
@@ -193,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>
       <span class="need form_input_any">任意</span>
-      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="100" placeholder="140文字以下"><?php echo $data['textarea']; ?></textarea>
+      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="10" placeholder="140文字以下"><?php echo $data['textarea']; ?></textarea>
       <p class="form_input_textarea_message">現在
         <span id="js-textareaCount">0</span>文字入力中です。
       </p>
@@ -201,7 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">(必須)</span>
       <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
       <?php if (isset($error['password'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password']; ?></p>
@@ -211,8 +214,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-password-confirm" class="form_input_title">パスワード確認</label>
-      <span class="need form_input_need">必須</span>
+      <label for="js-password-confirm" class="form_input_title">パスワード (確認用)</label>
+      <span class="need form_input_need">(必須)</span>
       <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
       <?php if (isset($error['password_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
@@ -228,8 +231,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="form_input_block">
-      <label for="js-check" class="form_input_title">個人情報保護方針に同意する</label>
-      <span class="need form_input_need">必須</span>
+      <label for="js-check" class="form_input_title">プライバシーポリシーの内容を確認し同意します</label>
+      <span class="need form_input_need">(必須)</span>
       <label class="form_input_label">
         <input type="checkbox" name="checkbox_name" class="form_input_value_checkbox" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>
         同意

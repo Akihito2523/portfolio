@@ -57,7 +57,7 @@ class User
             $stmt->bindValue(':user_agent', getUserAgent(), PDO::PARAM_STR);
             $stmt->bindValue(':ip_address', getIpAddress(), PDO::PARAM_STR);
             $stmt->execute();
-          
+
             $_SESSION['message'] = 'ユーザー登録完了しました。';
             return true;
         } catch (PDOException $e) {
@@ -78,9 +78,14 @@ class User
         $dbh = $this->UserDbConnect();
         $sql = "SELECT * FROM $this->table_name";
         $stmt = $dbh->query($sql);
+        $count = $stmt->rowCount();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $dbh = null;
-        return $result;
+
+        return [
+            'result' => $result,
+            'count' => $count
+        ];
     }
 
     // //============================================
@@ -175,7 +180,7 @@ class User
 
     // public function UserDbDetailImage()
     // {
-        
+
     //     $sql = "SELECT image_path FROM $this->table_name ORDER BY created_at DESC LIMIT 1;";
     //     $dbh = $this->UserDbConnect();
     //     $stmt = $dbh->prepare($sql);

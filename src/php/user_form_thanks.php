@@ -1,3 +1,4 @@
+
 <?php require_once("../includes/header.php"); ?>
 
 <div class="thanks_message">ご登録完了しました。</div>

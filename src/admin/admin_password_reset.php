@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="form_confirm_btn_block">
-            <a class="el_btn el_btn_back" href="admin_login.php">戻る</a>
+            <a class="el_btn el_btn_back" href="admin_signin.php">戻る</a>
             <input type="submit" value="パスワードリセット" class="el_btn el_btn_submit">
         </div>
 
