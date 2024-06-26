@@ -1,15 +1,46 @@
-
-
+// DOMの読み込み完了後に処理を開始
 document.addEventListener("DOMContentLoaded", () => {
 
-  //** ============ ハンバーガーメニュー ==================*/
+  //** ============ form ==================*/
+  // フォームの送信処理
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      // e.preventDefault();
+      console.log(form.elements.text.value);
+    });
+  }
+
+  //** ============ バリデーションチェック ==================*/
+  // 電話番号フィールドのバリデーションとメッセージの設定
+  const tel = document.querySelector('#js-tel');
+  const telMessage = document.querySelector('#js-telMessage');
+  if (tel) {
+    const validateTel = (e) => {
+      console.log(e.target.value);
+      const telValue = e.target.value;
+      // 入力が空白または許可されている文字以外を含んでいるかをチェック
+      if (!telValue.trim()) {
+        telMessage.innerText = '電話番号を入力してください';
+        tel.style.border = '2px solid red';
+      } else if (!/^[0-9+\-]+$/.test(telValue)) {
+        telMessage.innerText = '半角数字と + - のみ利用できます';
+      } else if (!/^(0\d{9,10}|\d{1,4}-\d{1,4}-\d{4})$/.test(telValue)) {
+        telMessage.innerText = '正しい電話番号の形式で入力してください';
+      } else {
+        telMessage.innerText = '';
+        tel.style.border = '';
+      }
+    }
+    // フォーカスアウト時にバリデーションを実行
+    tel.addEventListener('blur', validateTel);
+  }
 
   //** ============ ラジオボタン ==================*/
+  // ラジオボタンの選択状態監視
   const radio = document.querySelector('#js-radio');
   if (radio) {
-    // 変更を監視
     const radioChange = (event) => {
-      // イベントのターゲットから値を取得
       const target = event.target;
       if (target.name === 'gender') {
         const fruitValue = target.value;
@@ -21,9 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     radio.addEventListener('change', radioChange);
   }
+
   //** ============ セレクト ==================*/
+  // セレクトボックスの選択状態監視
   const select = document.querySelector('#js-select');
-  // 変更を監視
   if (select) {
     const selectChange = (event) => {
       console.log(event.target.value);
@@ -34,17 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
     select.addEventListener('change', selectChange);
   }
 
-  const selectImageGallery = document.querySelector('#js-select_image_gallery');
-  const selectImageGalleryForm = document.querySelector('#js-select_image_gallery_form');
-  // 変更を監視
-  if (selectImageGallery) {
-    const selectImageGalleryChange = (event) => {
-      selectImageGalleryForm.submit();
-      console.log(parseInt(event.target.value));
-    }
-    selectImageGallery.addEventListener('change', selectImageGalleryChange);
-  }
   //** ============ チェックボックス ==================*/
+  // チェックボックスの選択状態監視
   const checkboxes = document.querySelectorAll('#js-checkbox input[type="checkbox"]');
   let checkbox_output = '';
   if (checkboxes) {
@@ -71,21 +94,25 @@ document.addEventListener("DOMContentLoaded", () => {
       checkbox.addEventListener('change', checkboxChange);
     });
   }
+
   //** ============ テキストエリア ==================*/
+  // テキストエリアの文字数カウント
   const textarea = document.querySelector('#js-textarea');
   const textareaCount = document.querySelector('#js-textareaCount');
 
   if (textarea && textareaCount) {
     textareaCount.innerText = textarea.value.length;
-    const onKeyUp = () => {
+    const textareaInput = () => {
       const textareaValue = textarea.value;
       textareaCount.innerText = textareaValue.length;
     }
-    textarea.addEventListener('input', onKeyUp);
+    textarea.addEventListener('input', textareaInput);
   } else {
     console.error('Error: #js-textarea not found.');
   }
+
   //** ============ カレンダー ==================*/
+  // カレンダーの選択日時のログ出力
   const datetime = document.querySelector('#js-datetime');
   if (datetime) {
     const datetimeChange = (e) => {
@@ -96,8 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
     datetime.addEventListener('change', datetimeChange);
   }
   //** ============ 利用規約（チェックボックス） ==================*/
+  // 利用規約に同意した場合の送信ボタンの操作
   const check = document.querySelector('#js-check');
-  const $needElements = document.querySelectorAll(".need.form_input_need");
   const $submit = document.querySelector('#js-submit');
 
   if ($submit) {
@@ -123,31 +150,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if ($submit.disabled) {
         $submit.style.opacity = '60%';
         $submit.style.cursor = 'default';
-        // $needElements.forEach(($element) => {
-        //   $element.style.display = "inline";
-        // });
       } else {
         $submit.style.opacity = '100%';
         $submit.style.cursor = 'pointer';
-        // $needElements.forEach(($element) => {
-        //   $element.style.display = "none";
-        // });
       }
     }
     check.addEventListener('change', checkChange);
   }
 
-  //** ============ form ==================*/
-  //テキストのname値を取得
-  const form = document.querySelector('form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      // e.preventDefault();
-      console.log(form.elements.text.value);
-    });
-  }
-
   //** ============ ファイル ==================*/
+  // ファイルの選択とプレビュー表示
   const image = document.querySelector('#js-image');
   const imagePreview = document.querySelector('#js-imagePreview');
 
@@ -166,23 +178,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 読み込みが完了したら画像をプレビューとして表示する
       reader.addEventListener('load', (event) => {
+        // 読み込み完了後に画像をプレビュー
         imagePreview.setAttribute('src', event.target.result);
-        // ファイルがアップロードしたら、画像のエラーメッセージを空にする
         const imagePathError = document.querySelector('.image_path_error');
         if (imagePathError.innerText !== '') {
           imagePathError.innerText = '';
         }
       });
-      // ファイルを読み込む
+      // ファイル読み込み開始
       reader.readAsDataURL(file);
     };
 
-    // input要素にchangeイベントを設定
+    // 変更時に画像をプレビュー
     image.addEventListener('change', imageChange);
   }
 
+  //** ============ チェックボックス（user_top.php） ==================*/
+  // 変更時にフォームを送信
+  const selectImageGallery = document.querySelector('#js-select-image-gallery');
+  const selectImageGalleryForm = document.querySelector('#js-select-image-gallery-form');
+  if (selectImageGallery) {
+    const selectImageGalleryChange = (event) => {
+      selectImageGalleryForm.submit();
+      console.log(parseInt(event.target.value));
+    }
+    selectImageGallery.addEventListener('change', selectImageGalleryChange);
+  }
 
-  const btnDelete = document.querySelectorAll('.el_btn_delete');
+  //** ============ 削除（admin_top.php） ==================*/
+  // 削除ボタンの確認ダイアログ表示
+  const btnDelete = document.querySelectorAll('.js-btndelete');
   if (btnDelete) {
     btnDelete.forEach((btnDelete) => {
       btnDelete.addEventListener('click', (e) => {
@@ -194,26 +219,21 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  const tel = document.querySelector('#js-tel');
-  const telMessage = document.querySelector('#js-telMessage');
-  if (tel) {
-    const telChange = (e) => {
-      console.log(e.target.value);
-      const telValue = e.target.value;
-      // 入力が空白または許可されている文字以外を含んでいるかをチェック
-      if (!telValue.trim()) {
-        telMessage.innerText = '電話番号を入力してください';
-        tel.style.border = '2px solid red';
-      } else if (!/^[0-9+\-]+$/.test(telValue)) {
-        telMessage.innerText = '半角数字と + - のみ利用できます';
-      } else if (!/^(0\d{9,10}|\d{1,4}-\d{1,4}-\d{4})$/.test(telValue)) {
-        telMessage.innerText = '正しい電話番号の形式で入力してください';
-      } else {
-        telMessage.innerText = '';
-        tel.style.border = '';
-      }
-    }
-    tel.addEventListener('blur', telChange);
+  //** ============ パスワードアイコンクリック（admin_signup.php） ==================*/
+  const passwordField = document.querySelector('#js-password');
+  const passwordButtonEye = document.querySelector('#js-passwordButtonEye');
+  if (passwordButtonEye && passwordField) {
+    // パスワード表示切替処理
+    const togglePassword = () => {
+      // パスワードフィールドのタイプをトグル（テキスト ⇄ パスワード）
+      passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+      // パスワード表示切替アイコンのクラスをトグル（目のアイコン ⇄ 斜線のアイコン）
+      passwordButtonEye.classList.toggle('fa-eye-slash');
+    };
+    // パスワード表示切替ボタンにクリックイベントを追加
+    passwordButtonEye.addEventListener('click', togglePassword);
+  } else {
+    console.error('Error: #js-passwordButtonEye or #js-password not found.');
   }
 
 
@@ -259,7 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //     event.preventDefault();
   //   }
   // });
-
 
 
 

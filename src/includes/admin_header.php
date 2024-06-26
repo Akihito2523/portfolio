@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="/image/png" href="image/CSS.svg" />
     <title>admin.html | ◯◯フォーム</title>
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="../../public/css/destyle.css" />
     <link rel="stylesheet" href="../../public/css/style.css" />
     <script src="../../public/js/index.js" defer></script>
@@ -28,16 +29,15 @@
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="../admin/admin_top.php">トップ</a>
                     </li>
-                    <li class="bl_headerNav_item">
+                    <!-- <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="../admin/admin_update.php?id=<?php echo h($id); ?>">会員情報</a>
-                    </li>
-
-                    <!-- <td><a href="/src/admin/detail.php?id=<?php echo h($column["id"]); ?>"><?php echo h($column["id"]); ?></a></td> -->
-
-
+                    </li> -->
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">会社情報</a>
+                        <a class="bl_headerNav_link" href="../admin/admin_detail.php?id=<?php echo h($id); ?>">会員詳細</a>
                     </li>
+
+                    <!-- <td><a href="/src/admin/user_detail.php?id=<?php echo h($column["id"]); ?>"><?php echo h($column["id"]); ?></a></td> -->
+
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="#">採用情報</a>
                     </li>

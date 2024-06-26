@@ -137,11 +137,13 @@ body {
   border: 2px solid transparent;
   box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
   color: #fff;
-  font-size: 2.2rem;
+  font-size: 2.0rem;
+  /* font-size: clamp(0.3rem, 2vw, 2.2rem); */
   font-weight: bold;
   text-align: center;
   transition: .25s;
   cursor: pointer;
+  background-color: #5250e0;
 }
 
 /* disabled属性がない場合にホバー効果を適用する（JSでdisableを切り替え） */
@@ -187,9 +189,9 @@ body {
 /* ============================================ */
 .form {
   position: relative;
-  z-index: 1000;
+  z-index: 100;
   max-width: 1200px;
-  padding: 50px;
+  padding: 20px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -227,7 +229,7 @@ body {
   border-radius: 5px;
   padding: 6px;
   font-size: 1.6rem;
-  width: 80%;
+  width: 90%;
   height: 5rem;
   display: block;
   margin: 0 auto 10px;
@@ -301,7 +303,8 @@ body {
 .form_input_textarea_message,
 .form_input_error_message,
 .form_input_need,
-.form_input_any {
+.form_input_any,
+.dbsuccess_message {
   font-size: 1.4rem;
   font-weight: bold;
   text-shadow:
@@ -404,45 +407,94 @@ body {
   padding: 10px;
 }
 
-.table .table_thead .table_tr {
+.table_thead .table_tr {
   height: 60px;
 }
 
-.table .table_thead th {
+.table_thead th {
   background: rgb(49, 75, 126);
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: rgb(235, 229, 229);
   text-align: center;
   padding: 20px 10px 0;
 }
 
-.table .table_thead th:nth-child(1) {
+.table_thead th:nth-child(1) {
   /* width: 8%; */
 }
 
-.table .table_thead th:nth-child(6) {
+.table_thead th:nth-child(6) {
   /* width: 32%; */
 }
 
-.table .table_tbody {
+.table_tbody {
   background: #E5E2E4;
 }
 
-.table .table_tbody:nth-child(even) {
+.table_tbody:nth-child(even) {
   background: #FBFBF6;
 }
 
-.table .table_tbody td {
+.table_tbody td {
   font-size: 1.2rem;
-  padding: 10px;
+  padding: 6px;
   text-align: center;
   height: 20px;
   line-height: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
 
+.table_tbody:hover .table_tr:hover td {
+  background-color: rgb(222, 226, 231);
+}
+
+.table_td {
+  width: 300px;
+}
+
+/* admin_signup.php */
+/* ============================================ */
+
+.password-wrapper {
+  position: relative;
+}
+
+.fa-eye {
+  z-index: 100;
+  position: absolute;
+  top: 50%;
+  right: 14%;
+  /* 適切な位置に調整 */
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #000;
+  transition: .2s linear;
+}
+
+.fa-eye:hover {
+  opacity: 0.6;
+}
+
+/* admin_detail */
+/* ============================================ */
+.dbsuccess_message {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #095695;
+  margin: 16px auto;
+}
+
+.dbsuccess_check {
+  color: rgb(246, 246, 246);
+  background: #095695;
+  padding: 4px 6px;
+  margin-right: 8px;
+  font-weight: normal;
+  text-shadow: none;
 }
 
 /* user_top.php */
@@ -573,7 +625,7 @@ body {
 }
 
 /* 表示件数 */
-#js-select_image_gallery_form {
+#js-select-image-gallery-form {
   padding: 0 40px;
   display: flex;
   justify-content: flex-end;
@@ -614,12 +666,24 @@ body {
   background: #8cacc6;
 }
 
-
+.scroll-info {
+  display: none;
+  /* 初期状態は非表示 */
+  text-align: center;
+  color: #333;
+}
 
 /* レスポンス */
 /* ============================================ */
 
 @media screen and (max-width: 768px) {
+
+  .el_btn {
+    width: 30%;
+    font-size: 1rem;
+  }
+
+
 
   header {
     position: relative;
@@ -634,12 +698,6 @@ body {
     margin: 0 auto;
   }
 
-
-  /*contact*/
-  #contact .page-title {
-    margin-top: 40px;
-  }
-
   /*フォーム*/
   input[type="text"],
   input[type="email"],
@@ -647,8 +705,34 @@ body {
     max-width: 100%;
   }
 
-  body {
-    /* background-color: #71a9d7; */
+  .table {
+    table-layout: auto;
+  }
+
+  .tb_wrap {
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
+
+  .table th,
+  .table td {
+    /* white-space: nowrap; */
+  }
+
+  .table td img {
+    min-width: 70px;
+    /* 画像の最小幅を設定 */
+    height: auto;
+    /* 高さを自動調整 */
+  }
+
+  .table_thead th,
+  .table_tbody td {
+    font-size: 1rem;
+  }
+
+  .scroll-info {
+    display: block;
   }
 
 }

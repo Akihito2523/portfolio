@@ -9,7 +9,6 @@ if (!$logout = filter_input(INPUT_POST, 'logout')) {
 }
 
 // ログアウト処理
-// Admin::AdminDblogout();
 $admin = new Admin();
 $admin->AdminDblogout();
 

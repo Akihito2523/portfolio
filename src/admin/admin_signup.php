@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $admin->AdminDbCreate($data);
 
     if ($result) {
-      $_SESSION['data'] = $data;
+      unset($_SESSION['data']);
       header("Location: admin_signup_thanks.php");
       exit;
     } else {
@@ -92,7 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
       <span class="need form_input_need">必須</span>
-      <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
+      <div class="password-wrapper">
+        <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
+        <span id="js-passwordButtonEye" class="fa fa-eye"></span>
+      </div>
       <?php if (isset($error['password'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password']; ?></p>
       <?php endif; ?>

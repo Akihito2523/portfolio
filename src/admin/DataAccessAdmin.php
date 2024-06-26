@@ -32,9 +32,49 @@ class Admin
         }
     }
 
-    // //============================================
-    // // INSERT文（データ追加）
-    // //============================================
+    //============================================
+    // WHERE文（ログイン情報）
+    //============================================
+    public function AdminDbLogin($data)
+    {
+
+        $sql = "SELECT * FROM $this->table_name WHERE email = :email";
+        $dbh = $this->AdminDbConnect();
+
+        try {
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
+            $stmt->execute();
+            $member = $stmt->fetch();
+            if ($member['deleted_at']) {
+                $_SESSION['error'] = '退会済みです';
+                return false;
+            } else {
+                if ($member && password_verify($data['password'], $member['password'])) {
+                    // ログイン成功時に最終ログイン日時を更新する
+                    $sql_update = "UPDATE $this->table_name SET last_login = :last_login WHERE id = :id";
+                    $stmt_update = $dbh->prepare($sql_update);
+                    $stmt_update->bindValue(':last_login', getDateTime(), PDO::PARAM_STR);
+                    $stmt_update->bindValue(':id', $member['id'], PDO::PARAM_INT);
+                    $stmt_update->execute();
+                    // セッションにユーザー情報を保存
+                    $_SESSION['id'] = $member['id'];
+                    $_SESSION['name'] = $member['name'];
+                    return true;
+                } else {
+                    $_SESSION['error'] = 'メールアドレスまたはパスワードが正しくありません';
+                    return false;
+                }
+            }
+        } catch (Exception $e) {
+            error_log('Loginエラー: ' . $e->getMessage());
+            $_SESSION['error'] = 'ログイン認証に失敗しました';
+        }
+    }
+
+    //============================================
+    // INSERT文（データ追加）
+    //============================================
     public function AdminDbCreate($data)
     {
         $sql = "INSERT INTO $this->table_name (name, email, password, user_agent, ip_address) VALUES (:name, :email, :password, :user_agent, :ip_address)";
@@ -56,9 +96,9 @@ class Admin
         }
     }
 
-    // //============================================
-    // // UPDATE文（会員情報変更）
-    // //============================================
+    //============================================
+    // UPDATE文（会員情報変更）
+    //============================================
     public function AdminDbUpdate($data)
     {
         $sql = "UPDATE $this->table_name SET
@@ -72,7 +112,7 @@ class Admin
             $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
             $stmt->bindValue(':updated_at', getDateTime(), PDO::PARAM_STR);
             $stmt->execute();
-            $_SESSION['message'] = 'ユーザー登録完了しました。';
+            $_SESSION['message'] = 'ユーザー登録更新完了しました。';
             return true;
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
@@ -80,44 +120,32 @@ class Admin
         }
     }
 
-    // //============================================
-    // // WHERE文（ログイン情報）
-    // //============================================
-    public function AdminDbLogin($data)
+    //============================================
+    // UPDATE文（削除日時）
+    //============================================
+    public function AdminDbUpdateDeleted($data)
     {
+        $sql = "UPDATE $this->table_name SET deleted_at = :deleted_at WHERE id = :id";
 
-        $sql = "SELECT * FROM $this->table_name WHERE email = :email";
         $dbh = $this->AdminDbConnect();
-
         try {
             $stmt = $dbh->prepare($sql);
-            $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
+            $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':deleted_at', getDateTime(), PDO::PARAM_STR);
             $stmt->execute();
-            $member = $stmt->fetch();
-            if ($member && password_verify($data['password'], $member['password'])) {
-                // ログイン成功時に最終ログイン日時を更新する
-                $sql_update = "UPDATE $this->table_name SET last_login = :last_login WHERE id = :id";
-                $stmt_update = $dbh->prepare($sql_update);
-                $stmt_update->bindValue(':last_login', getDateTime(), PDO::PARAM_STR);
-                $stmt_update->bindValue(':id', $member['id'], PDO::PARAM_INT);
-                $stmt_update->execute();
-                // セッションにユーザー情報を保存
-                $_SESSION['id'] = $member['id'];
-                $_SESSION['name'] = $member['name'];
-                return true;
-            } else {
-                $_SESSION['error'] = 'メールアドレスまたはパスワードが正しくありません';
-                return false;
-            }
-        } catch (Exception $e) {
-            error_log('Loginエラー: ' . $e->getMessage());
-            $_SESSION['error'] = 'ログイン認証に失敗しました';
+            $_SESSION['message'] = '退会が完了しました。';
+            return true;
+        } catch (PDOException $e) {
+            $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
+            error_log('AdminDbCreateエラー: ' . $e->getMessage());
         }
     }
 
-    // //============================================
-    // // SELECT文（データ詳細）
-    // //============================================
+
+
+    //============================================
+    // SELECT文（データ詳細）
+    //============================================
     public function AdminDbDetail($id)
     {
         if (empty($id)) {

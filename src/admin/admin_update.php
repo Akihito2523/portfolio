@@ -1,10 +1,17 @@
 <?php
 session_start();
-$id = $_SESSION['id'];
 require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
 
+$id = $_SESSION['id'];
+$name = $_SESSION['name'];
+
+// ユーザーがログインしているか確認
+if (!$id) {
+  header('Location: admin_signin.php');
+  exit();
+}
 
 // CSRFトークンを生成
 $csrf_token = setToken();
@@ -14,10 +21,7 @@ unset($_SESSION['error']);
 
 $error = [];
 
-// POSTリクエストの場合、フォームが送信されたとして処理
-// $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $id = $_GET['id'];
   $data = [
     'id' => $id,
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
@@ -25,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'email_confirm' => h($_POST['email_confirm'] ?? ''),
   ];
 
-  // $id = $data['id'];
   $error = validateUserSignupFormData($data);
 
   if (empty($error)) {
@@ -33,8 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $admin->AdminDbUpdate($data);
 
     if ($result) {
-      $_SESSION['data'] = $data;
-      header("Location: admin_signup_thanks.php");
+      unset($_SESSION['data']);
+      // 更新処理が成功した場合
+      $_SESSION['dbsuccess_message'] = "会員情報の更新が完了しました";
+      header("Location: admin_detail.php");
       exit;
     } else {
       header('Location: admin_update.php');
@@ -42,19 +47,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 } else {
-  $admin = new Admin();
-  $result = $admin->AdminDbDetail($_GET['id']);
+  // $admin = new Admin();
+  // $result = $admin->AdminDbDetail($id);
   // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
-  // $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
-  //   'id' => '',
-  //   'name' => '',
-  //   'email' => '',
-  //   'email_confirm' => '',
-  // ];
+  $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
+    'id' => $name,
+    'name' => '',
+    'email' => '',
+    'email_confirm' => '',
+  ];
 }
 ?>
 
-<?php echo h($id); ?>
+<?php //echo h($id); 
+?>
 <main class="">
   <h2 class="contents-title">会員情報変更</h2>
 
@@ -66,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
       <span class="need form_input_need">必須</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($result['name']); ?>">
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
       <?php endif; ?>
@@ -76,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
       <span class="need form_input_need">必須</span>
-      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($result['email']); ?>">
+      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email']; ?></p>
       <?php endif; ?>
@@ -98,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php endif; ?>
 
     <div class="form_confirm_btn_block">
-      <a class="el_btn el_btn_back" href="admin_top.php">戻る</a>
+      <a class="el_btn el_btn_back" href="admin_detail.php">戻る</a>
       <input type="submit" value="更新" class="el_btn el_btn_submit">
     </div>
 

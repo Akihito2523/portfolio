@@ -120,23 +120,6 @@ function validateUserSignupFormData($data)
         $error['email_confirm'] = 'メールアドレスが一致しません。';
     }
 
-    $password = isset($data['password']) ? $data['password'] : '';
-    $password_confirm = isset($data['password_confirm']) ? $data['password_confirm'] : '';
-
-    if (empty($password)) {
-        $error['password'] = 'パスワードを入力してください。';
-    } elseif (strlen($password) < 8 || strlen($password) > 16) {
-        $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
-    } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
-        $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
-    }
-
-    if (empty($password_confirm)) {
-        $error['password_confirm'] = '確認用パスワードを入力してください。';
-    } elseif ($password !== $password_confirm) {
-        $error['password_confirm'] = 'パスワードが一致しません。';
-    }
-
     return $error;
 }
 

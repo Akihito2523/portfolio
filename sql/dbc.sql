@@ -40,7 +40,8 @@ CREATE TABLE admin (
     password_changed_at TIMESTAMP NULL,
     password_reset_requested_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL AFTER updated_at
 );
 
 

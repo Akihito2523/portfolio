@@ -11,7 +11,8 @@ $result = $user->UserDbDetail($_GET['id']);
 ?>
 
 <main class="">
-  <form action="/php/user_form_thanks.php" method="post" name="demoForm" class="form">
+<h2 class="contents-title">ユーザー詳細</h2>
+  <form class="form">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
       <dd class="form_confirm_value"><?php echo h($result['name']); ?></dd>
@@ -28,7 +29,7 @@ $result = $user->UserDbDetail($_GET['id']);
       <dt class="form_input_title form_confirm_title">性別</dt>
       <dd class="form_confirm_value"><?php echo h($result['gender']); ?></dd>
     </dl>
-    <dl class="form_confirm_block">
+    <dl class="form_confirm_block">  
       <dt class="form_input_title form_confirm_title">チェックボックス</dt>
       <dd class="form_confirm_value"><?php echo h($result['']); ?></dd>
     </dl>
