@@ -33,7 +33,7 @@ class Admin
     }
 
     //============================================
-    // WHERE文（ログイン情報）
+    // WHERE文（ログイン認証）
     //============================================
     public function AdminDbLogin($data)
     {
@@ -91,7 +91,7 @@ class Admin
             $_SESSION['message'] = '会員登録が完了しました。';
             return true;
         } catch (PDOException $e) {
-            $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
+            $_SESSION['error'] = ($e->getCode() == 23000) ? 'メールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
             error_log('AdminDbCreateエラー: ' . $e->getMessage());
         }
     }
@@ -120,28 +120,56 @@ class Admin
         }
     }
 
+
+    // public function AdminDbUpdateDeleted($data)
+    // {
+    // $sql = "UPDATE $this->table_name SET deleted_at = :deleted_at WHERE id = :id";
+
+    // $dbh = $this->AdminDbConnect();
+    // try {
+    //     $stmt = $dbh->prepare($sql);
+    //     $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+    //     $stmt->bindValue(':deleted_at', getDateTime(), PDO::PARAM_STR);
+    //     $stmt->execute();
+    //     $_SESSION['message'] = '退会が完了しました。';
+    //     return true;
+    // } catch (PDOException $e) {
+    //     $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
+    //     error_log('AdminDbCreateエラー: ' . $e->getMessage());
+    // }
+
     //============================================
-    // UPDATE文（削除日時）
+    // UPDATE文（削除日時更新）
     //============================================
     public function AdminDbUpdateDeleted($data)
     {
-        $sql = "UPDATE $this->table_name SET deleted_at = :deleted_at WHERE id = :id";
-
+        $sql = "SELECT * FROM $this->table_name WHERE email = :email";
         $dbh = $this->AdminDbConnect();
+
         try {
             $stmt = $dbh->prepare($sql);
-            $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
-            $stmt->bindValue(':deleted_at', getDateTime(), PDO::PARAM_STR);
+            $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
             $stmt->execute();
-            $_SESSION['message'] = '退会が完了しました。';
-            return true;
-        } catch (PDOException $e) {
-            $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
-            error_log('AdminDbCreateエラー: ' . $e->getMessage());
+            $member = $stmt->fetch();
+
+            if ($member && password_verify($data['password'], $member['password'])) {
+                // 成功時に削除日時を更新する
+                $sql_update = "UPDATE $this->table_name SET deleted_at = :deleted_at WHERE id = :id";
+                $stmt_update = $dbh->prepare($sql_update);
+                $stmt_update->bindValue(':deleted_at', getDateTime(), PDO::PARAM_STR);
+                $stmt_update->bindValue(':id', $member['id'], PDO::PARAM_INT);
+                $stmt_update->execute();
+                $_SESSION['message'] = '退会が完了しました。';
+                return true;
+            } else {
+                $_SESSION['error'] = 'メールアドレスまたはパスワードが正しくありません';
+                return false;
+            }
+        } catch (Exception $e) {
+            error_log('Loginエラー: ' . $e->getMessage());
+            $_SESSION['error'] = 'ログイン認証に失敗しました';
         }
     }
-
-
 
     //============================================
     // SELECT文（データ詳細）

@@ -47,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="">
   <h2 class="contents-title">管理者用退会ページ</h2>
-  <p>現在のメールアドレスとパスワードを入力してください</p>
+  <p class="form_input_caution">現在のメールアドレスとパスワードを入力してください</p>
+
   <form action="" method="post" name="demoForm" class="form">
 
     <div class="form_input_block">
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php endif; ?>
 
     <div class="form_login_btn_block">
-      <input type="submit" value="退会する" class="el_btn el_btn_submit">
+      <input type="submit" value="退会する" class="el_btn el_btn_submit js-btndeleteadmin ">
       <a class="el_btn el_btn_back" href="admin_detail.php">戻る</a>
     </div>
 

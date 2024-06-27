@@ -219,6 +219,18 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
+  //** ============ アカウント退会（admin_delete_account.php） ==================*/
+  // const btnDeleteAdmin = document.querySelector('.js-btndeleteadmin');
+  // if (btnDeleteAdmin) {
+  //   const deleteAdminClick = (e) => {
+  //     const result = confirm('削除するとログインできません');
+  //     if (!result) {
+  //       e.preventDefault();
+  //     }
+  //   }
+  //   btnDeleteAdmin.addEventListener('click', deleteAdminClick());
+  // }
+
   //** ============ パスワードアイコンクリック（admin_signup.php） ==================*/
   const passwordField = document.querySelector('#js-password');
   const passwordButtonEye = document.querySelector('#js-passwordButtonEye');

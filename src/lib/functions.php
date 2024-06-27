@@ -111,13 +111,25 @@ function validateUserSignupFormData($data)
         $error['email'] = 'メールアドレスを入力してください。';
     } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         $error['email'] = '有効なメールアドレスを入力してください。';
+    } elseif (empty($data['email_confirm'])) {
+        $error['email_confirm'] = '確認用メールアドレスを入力してください。';
+    } elseif ($data['email_confirm'] !== $data['email']) {
+        $error['email_confirm'] = 'メールアドレスが一致しません。';
     }
 
-    $email_confirm = isset($data['email_confirm']) ? $data['email_confirm'] : '';
-    if (empty($email_confirm)) {
-        $error['email_confirm'] = '確認用メールアドレスを入力してください。';
-    } elseif ($email_confirm !== $data['email']) {
-        $error['email_confirm'] = 'メールアドレスが一致しません。';
+    $password = isset($data['password']) ? $data['password'] : '';
+    $password_confirm = isset($data['password_confirm']) ? $data['password_confirm'] : '';
+
+    if (empty($password)) {
+        $error['password'] = 'パスワードを入力してください。';
+    } elseif (strlen($password) < 8 || strlen($password) > 16) {
+        $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
+    } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
+        $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
+    } elseif (empty($password_confirm)) {
+        $error['password_confirm'] = '確認用パスワードを入力してください。';
+    } elseif ($password !== $password_confirm) {
+        $error['password_confirm'] = 'パスワードが一致しません。';
     }
 
     return $error;
@@ -166,23 +178,6 @@ function validateInputFormData($data)
 
     if (empty($data['pref'])) {
         $error['pref'] = '都道府県を選択してください。';
-    }
-
-    $password = isset($data['password']) ? $data['password'] : '';
-    $password_confirm = isset($data['password_confirm']) ? $data['password_confirm'] : '';
-
-    if (!empty($password)) {
-        if (strlen($password) < 8 || strlen($password) > 16) {
-            $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
-        } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
-            $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
-        }
-
-        if (empty($password_confirm)) {
-            $error['password_confirm'] = '確認用パスワードを入力してください。';
-        } elseif ($password !== $password_confirm) {
-            $error['password_confirm'] = 'パスワードが一致しません。';
-        }
     }
 
     return $error;

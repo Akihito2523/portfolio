@@ -28,12 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($error)) {
     $admin = new Admin();
     $result = $admin->AdminDbCreate($data);
-
     if ($result) {
       unset($_SESSION['data']);
       header("Location: admin_signup_thanks.php");
       exit;
     } else {
+      $_SESSION['data'] = $data;
       header('Location: admin_signup.php');
       exit();
     }
@@ -117,7 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
+    <div class="form_confirm_btn_block">
+      <a class="el_btn el_btn_back" href="admin_signin.php">戻る</a>
     <input type="submit" value="アカウント新規作成" class="el_btn el_btn_submit">
+    </div>
 
   </form>
 </main>
