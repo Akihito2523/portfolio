@@ -1,7 +1,8 @@
-// DOMの読み込み完了後に処理を開始
+/**
+ * DOMの読み込みが完了した時に実行される初期処理を設定します。
+ */
 document.addEventListener("DOMContentLoaded", () => {
 
-  //** ============ form ==================*/
   // フォームの送信処理
   const form = document.querySelector('form');
   if (form) {
@@ -11,15 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //** ============ バリデーションチェック ==================*/
   // 電話番号フィールドのバリデーションとメッセージの設定
   const tel = document.querySelector('#js-tel');
   const telMessage = document.querySelector('#js-telMessage');
   if (tel) {
+    /**
+     * 電話番号フィールドのバリデーションを行い、エラーメッセージを設定します。
+     * @param {Event} e 入力イベント
+     */
     const validateTel = (e) => {
-      console.log(e.target.value);
       const telValue = e.target.value;
-      // 入力が空白または許可されている文字以外を含んでいるかをチェック
       if (!telValue.trim()) {
         telMessage.innerText = '電話番号を入力してください';
         tel.style.border = '2px solid red';
@@ -32,19 +34,21 @@ document.addEventListener("DOMContentLoaded", () => {
         tel.style.border = '';
       }
     }
-    // フォーカスアウト時にバリデーションを実行
     tel.addEventListener('blur', validateTel);
   }
 
-  //** ============ ラジオボタン ==================*/
   // ラジオボタンの選択状態監視
   const radio = document.querySelector('#js-radio');
   if (radio) {
+    /**
+     * ラジオボタンの選択状態が変化した際に、選択された値をコンソールに出力します。
+     * @param {Event} event 変更イベント
+     */
     const radioChange = (event) => {
       const target = event.target;
       if (target.name === 'gender') {
-        const fruitValue = target.value;
-        console.log(`選択された性別は ${fruitValue} です`);
+        const genderValue = target.value;
+        console.log(`選択された性別は ${genderValue} です`);
       } else if (target.name === 'drink') {
         const drinkValue = target.value;
         console.log(`選択された飲み物は ${drinkValue} です`);
@@ -53,12 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
     radio.addEventListener('change', radioChange);
   }
 
-  //** ============ セレクト ==================*/
   // セレクトボックスの選択状態監視
   const select = document.querySelector('#js-select');
   if (select) {
+    /**
+     * セレクトボックスの選択状態が変化した際に、選択された値をコンソールに出力します。
+     * @param {Event} event 変更イベント
+     */
     const selectChange = (event) => {
-      console.log(event.target.value);
       console.log(`セレクトのvalue値は ${select.value} です`);
       const selectOptions = select.options[select.selectedIndex].innerHTML;
       console.log(`セレクトの中身は ${selectOptions} です`);
@@ -66,55 +72,58 @@ document.addEventListener("DOMContentLoaded", () => {
     select.addEventListener('change', selectChange);
   }
 
-  //** ============ チェックボックス ==================*/
   // チェックボックスの選択状態監視
   const checkboxes = document.querySelectorAll('#js-checkbox input[type="checkbox"]');
-  let checkbox_output = '';
   if (checkboxes) {
+    /**
+     * チェックボックスの選択状態が変化した際に、選択された値をコンソールに出力します。
+     */
     const checkboxChange = () => {
-      checkbox_output = '';
+      let checkbox_output = '';
       checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
           checkbox_output += ' ' + checkbox.value;
         }
       });
       console.log(`選択されたチェックボックス: ${checkbox_output}`);
-
-      //Checkboxのうち、選択されている値を取得
-      const form = document.querySelector('form');
-      const checkedLanguages = [];
-      for (const language of form.checkbox) {
-        if (language.checked) {
-          checkedLanguages.push(language.value);
-          console.log(`${checkedLanguages}`);
-        }
-      }
     };
+
+    //Checkboxのうち、選択されている値を取得
+    // const form = document.querySelector('form');
+    // const checkedLanguages = [];
+    // for (const language of form.checkbox) {
+    //   if (language.checked) {
+    //     checkedLanguages.push(language.value);
+    //     console.log(`${checkedLanguages}`);
+    //   }
+    // }
+
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener('change', checkboxChange);
     });
   }
 
-  //** ============ テキストエリア ==================*/
   // テキストエリアの文字数カウント
   const textarea = document.querySelector('#js-textarea');
   const textareaCount = document.querySelector('#js-textareaCount');
-
   if (textarea && textareaCount) {
-    textareaCount.innerText = textarea.value.length;
+    /**
+     * テキストエリアの入力内容が変化した際に、文字数をカウントして表示します。
+     */
     const textareaInput = () => {
       const textareaValue = textarea.value;
       textareaCount.innerText = textareaValue.length;
     }
     textarea.addEventListener('input', textareaInput);
-  } else {
-    console.error('Error: #js-textarea not found.');
   }
 
-  //** ============ カレンダー ==================*/
   // カレンダーの選択日時のログ出力
   const datetime = document.querySelector('#js-datetime');
   if (datetime) {
+    /**
+     * カレンダーの選択された日時をコンソールに出力します。
+     * @param {Event} e 変更イベント
+     */
     const datetimeChange = (e) => {
       console.log(e.target.value);
       const dt = new Date(e.target.value);
@@ -122,48 +131,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     datetime.addEventListener('change', datetimeChange);
   }
-  //** ============ 利用規約（チェックボックス） ==================*/
+
   // 利用規約に同意した場合の送信ボタンの操作
   const check = document.querySelector('#js-check');
-  const $submit = document.querySelector('#js-submit');
-
-  if ($submit) {
-    $submit.style.opacity = '60%';
-  }
-
-  if (check) {
-    if (!check.checked) {
-      $submit.style.opacity = '60%';
-      $submit.style.cursor = 'default';
-    } else {
-      $submit.style.opacity = '100%';
-      $submit.style.cursor = 'pointer';
-      $submit.disabled = false;
-    }
-  }
-
-  if (check) {
+  const submitButton = document.querySelector('#js-submit');
+  if (check && submitButton) {
+    submitButton.style.opacity = '60%';
+    /**
+     * 利用規約の同意チェックボックスの状態が変化した際に、送信ボタンの有効/無効とスタイルを更新します。
+     * @param {Event} event 変更イベント
+     */
     const checkChange = (event) => {
       const checked = event.target.checked;
-      console.log(`チェックボックス ${checked} です`);
-      $submit.disabled = !check.checked;
-      if ($submit.disabled) {
-        $submit.style.opacity = '60%';
-        $submit.style.cursor = 'default';
-      } else {
-        $submit.style.opacity = '100%';
-        $submit.style.cursor = 'pointer';
-      }
+      submitButton.disabled = !checked;
+      submitButton.style.opacity = checked ? '100%' : '60%';
+      submitButton.style.cursor = checked ? 'pointer' : 'default';
     }
     check.addEventListener('change', checkChange);
   }
 
-  //** ============ ファイル ==================*/
   // ファイルの選択とプレビュー表示
   const image = document.querySelector('#js-image');
   const imagePreview = document.querySelector('#js-imagePreview');
-
   if (image && imagePreview) {
+    /**
+    * ファイルが選択された時に、画像ファイルであればプレビュー表示を行います。
+    * @param {Event} event 変更イベント
+    */
     const imageChange = (event) => {
       const file = event.target.files[0];
 
@@ -193,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     image.addEventListener('change', imageChange);
   }
 
-  //** ============ チェックボックス（user_top.php） ==================*/
   // 変更時にフォームを送信
   const selectImageGallery = document.querySelector('#js-select-image-gallery');
   const selectImageGalleryForm = document.querySelector('#js-select-image-gallery-form');
@@ -205,10 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
     selectImageGallery.addEventListener('change', selectImageGalleryChange);
   }
 
-  //** ============ 削除（admin_top.php） ==================*/
+
   // 削除ボタンの確認ダイアログ表示
   const btnDelete = document.querySelectorAll('.js-btndelete');
   if (btnDelete) {
+    /**
+     * 削除ボタンがクリックされた時に、確認ダイアログを表示します。
+     * @param {MouseEvent} e クリックイベント
+     */
     btnDelete.forEach((btnDelete) => {
       btnDelete.addEventListener('click', (e) => {
         const result = confirm('削除しますか');
@@ -219,26 +216,16 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 
-  //** ============ アカウント退会（admin_delete_account.php） ==================*/
-  // const btnDeleteAdmin = document.querySelector('.js-btndeleteadmin');
-  // if (btnDeleteAdmin) {
-  //   const deleteAdminClick = (e) => {
-  //     const result = confirm('削除するとログインできません');
-  //     if (!result) {
-  //       e.preventDefault();
-  //     }
-  //   }
-  //   btnDeleteAdmin.addEventListener('click', deleteAdminClick());
-  // }
-
-  //** ============ パスワードアイコンクリック（admin_signup.php） ==================*/
-  const passwordField = document.querySelector('#js-password');
+  // パスワード表示切替処理
+  const passwordAdmin = document.querySelector('#js-password-admin');
   const passwordButtonEye = document.querySelector('#js-passwordButtonEye');
-  if (passwordButtonEye && passwordField) {
-    // パスワード表示切替処理
+  if (passwordButtonEye && passwordAdmin) {
+    /**
+     * パスワード表示切替ボタンがクリックされた時に、パスワードフィールドの表示形式を切り替えます。
+     */
     const togglePassword = () => {
       // パスワードフィールドのタイプをトグル（テキスト ⇄ パスワード）
-      passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+      passwordAdmin.type = passwordAdmin.type === 'password' ? 'text' : 'password';
       // パスワード表示切替アイコンのクラスをトグル（目のアイコン ⇄ 斜線のアイコン）
       passwordButtonEye.classList.toggle('fa-eye-slash');
     };
@@ -248,50 +235,148 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error('Error: #js-passwordButtonEye or #js-password not found.');
   }
 
+  /**
+ * パスワードの強度をチェックし、強度数を返す
+ * @param {string} password パスワード文字列
+ * @return {number} 強度数（0から4の範囲）
+ */
+  const checkPasswordStrength = passwordAdminValue => {
+    let passwordStrengthNumber = 0;
 
+    // パスワードの長さが8文字以上なら強度数を加算
+    if (passwordAdminValue.length >= 8) {
+      passwordStrengthNumber++;
+      console.log('8文字以上++');
+    }
 
-  //** ============ バリデーションチェック ==================*/
-  // $submit.addEventListener('click', (event) => {
+    // 小文字が含まれていれば強度数を加算
+    if (/[a-z]/.test(passwordAdminValue)) {
+      passwordStrengthNumber++;
+      console.log('小文字++');
+    }
 
-  //   // フォームの入力要素とメッセージ要素を取得
-  //   const tel = document.querySelector('#js-tel');
-  //   const telMessage = document.querySelector('#js-telMessage');
-  //   const text = document.querySelector('#js-text');
-  //   const textMessage = document.querySelector('#js-textMessage');
-  //   const email = document.querySelector('#js-email');
-  //   const emailMessage = document.querySelector('#js-emailMessage');
+    // 数字が含まれていれば強度数を加算
+    if (/\d/.test(passwordAdminValue)) {
+      passwordStrengthNumber++;
+      console.log('数字++');
+    }
 
-  //   // 共通の検証関数
-  //   const validateField = (value, messageElement, errorMessage, validateFunc) => {
-  //     if (!validateFunc(value)) {
-  //       messageElement.textContent = errorMessage;
-  //       return false;
-  //     } else {
-  //       messageElement.textContent = '';
-  //       return true;
-  //     }
-  //   };
+    // 特殊文字が含まれていれば強度数を加算
+    if (/[!@#$%^&*()\-_=+[\]{}|;:'",.<>/?`~\\]/.test(passwordAdminValue)) {
+      console.log('特殊文字++');
+      passwordStrengthNumber++;
+    }
 
-  //   // 各フィールドの検証関数
-  //   const isValidTel = (value) => /^[0][0-9]{9,10}$/.test(value.replace(/-/g, ''));
-  //   const isNotEmpty = (value) => value.trim() !== "";
+    // 各条件が満たされない場合に強度数を0にする
+    if (passwordStrengthNumber === 0) {
+      console.log('強度0');
+    }
 
-  //   // 各フィールドの値を取得
-  //   const telValue = tel.value;
-  //   const textValue = text.value;
-  //   const emailValue = email.value;
+    // プログレスバーとサークルの更新
+    passwordToggle(passwordStrengthNumber);
+    return passwordStrengthNumber;
+  };
 
-  //   // 検証実行
-  //   const isTelValid = validateField(telValue, telMessage, '半角数字と + - のみ利用できます', isValidTel);
-  //   const isTextValid = validateField(textValue, textMessage, '氏名を入力してください', isNotEmpty);
-  //   const isEmailValid = validateField(emailValue, emailMessage, 'メールアドレスを入力してください', isNotEmpty);
+  /**
+   * パスワードの強度を文字列で返す
+   * @return {string} パスワードの強度（非常に強い、強い、普通、弱い、非常に弱い）
+   */
+  const showPasswordStrength = () => {
+    let passwordAdminValue = document.querySelector('#js-password-admin').value;
+    let passwordStrengthNumber = checkPasswordStrength(passwordAdminValue);
+    console.log(`パスワードの強度数${passwordStrengthNumber}`);
 
-  //   // フォーム送信をキャンセルするかどうかを決定
-  //   if (!isTelValid || !isTextValid || !isEmailValid) {
-  //     event.preventDefault();
-  //   }
-  // });
+    let passwordStrengthText;
+    if (passwordStrengthNumber >= 4) {
+      passwordStrengthText = "非常に強い";
+    } else if (passwordStrengthNumber === 3) {
+      passwordStrengthText = "強い";
+    } else if (passwordStrengthNumber === 2) {
+      passwordStrengthText = "普通";
+    } else {
+      passwordStrengthText = "弱い";
+    }
+    return passwordStrengthText;
+  };
 
+  /**
+   * サークルのアクティブ状態とプログレスバーの幅を更新する
+   * @param {number} currentActive 現在のアクティブなサークルの数
+   */
+  const passwordToggle = currentActive => {
+    circles.forEach((circle, idx) => {
+      // サークルにクラス 'js-circle-active' をトグルする
+      circle.classList.toggle('js-circle-active', idx < currentActive);
+    });
+    // プログレスバーの幅を更新する
+    passwordProgress.style.width = (currentActive - 1) / (circles.length - 1) * 100 + '%';
+  };
 
+  // HTML要素の取得
+  const passwordProgress = document.querySelector('.js-passwordProgress');
+  const circles = document.querySelectorAll('.js-circle');
+
+  // // 初期のアクティブなサークル数
+  let currentActive = 0;
+
+  // パスワードの強度を初期表示する
+  const passwordStrength = document.querySelector('#js-password-strength');
+  if (passwordStrength) {
+    passwordStrength.textContent = `パスワードの強度:${showPasswordStrength()}`;
+  }
+  // 入力イベントを監視して、パスワードの強度を動的に更新する
+
+  if (passwordAdmin) {
+    passwordAdmin.addEventListener('input', () => {
+      passwordStrength.textContent = `パスワードの強度:${showPasswordStrength()}`;
+    });
+  }
 
 });
+
+
+
+
+
+
+//** ============ バリデーションチェック ==================*/
+// $submit.addEventListener('click', (event) => {
+
+//   // フォームの入力要素とメッセージ要素を取得
+//   const tel = document.querySelector('#js-tel');
+//   const telMessage = document.querySelector('#js-telMessage');
+//   const text = document.querySelector('#js-text');
+//   const textMessage = document.querySelector('#js-textMessage');
+//   const email = document.querySelector('#js-email');
+//   const emailMessage = document.querySelector('#js-emailMessage');
+
+//   // 共通の検証関数
+//   const validateField = (value, messageElement, errorMessage, validateFunc) => {
+//     if (!validateFunc(value)) {
+//       messageElement.textContent = errorMessage;
+//       return false;
+//     } else {
+//       messageElement.textContent = '';
+//       return true;
+//     }
+//   };
+
+//   // 各フィールドの検証関数
+//   const isValidTel = (value) => /^[0][0-9]{9,10}$/.test(value.replace(/-/g, ''));
+//   const isNotEmpty = (value) => value.trim() !== "";
+
+//   // 各フィールドの値を取得
+//   const telValue = tel.value;
+//   const textValue = text.value;
+//   const emailValue = email.value;
+
+//   // 検証実行
+//   const isTelValid = validateField(telValue, telMessage, '半角数字と + - のみ利用できます', isValidTel);
+//   const isTextValid = validateField(textValue, textMessage, '氏名を入力してください', isNotEmpty);
+//   const isEmailValid = validateField(emailValue, emailMessage, 'メールアドレスを入力してください', isNotEmpty);
+
+//   // フォーム送信をキャンセルするかどうかを決定
+//   if (!isTelValid || !isTextValid || !isEmailValid) {
+//     event.preventDefault();
+//   }
+// });

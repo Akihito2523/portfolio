@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'password' => h($_POST['password'] ?? ''),
   ];
 
-  $error = validateLogin($data);
+  $error = validateAdminLogin($data);
 
   if (empty($error)) {
     $admin = new Admin();

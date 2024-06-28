@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 
   // バリデーション関数を呼び出し
-  $error = validateInputFormData($data);
+  $error = validateUserForm($data);
 
   // エラーがなければ確認ページに遷移
   if (empty($error)) {

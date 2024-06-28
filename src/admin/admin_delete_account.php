@@ -3,11 +3,12 @@ session_start();
 require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
+
+$id = $_SESSION['id'];
+
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 // メッセージを一度表示したらセッションから削除
 unset($_SESSION['error']);
-
-$id = $_SESSION['id'];
 
 $error = [];
 
@@ -19,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'password' => h($_POST['password'] ?? ''),
   ];
 
-  $error = validateLogin($data);
+  $error = validateAdminLogin($data);
 
   if (empty($error)) {
     $admin = new Admin();

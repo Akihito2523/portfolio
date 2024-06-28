@@ -29,7 +29,7 @@ $currentPage = intval(max(1, min($currentPage, $totalPage))); // 範囲を制限
 $items = range(1, $userDbCount);
 ?>
 
-<form action="admin_top.php" method="post" class="">
+<form action="user_top.php" method="post" class="">
     <div class="form_search_btn_block">
         <div id="js-checkbox">
             <label for="js-checkbox" class="form_input_title form_input_title_checkbox">チェックボックス</label>
@@ -48,12 +48,14 @@ $items = range(1, $userDbCount);
 <form id="js-select-image-gallery-form" action="" method="get">
     <!-- <div>1 - 4件 / <?php echo $userDbCount ?>件</div> -->
     <div class="form_input_block">
+        <label for="js-checkbox" class="form_input_title form_input_title_checkbox">表示件数</label>
         <select name="imagePerPage" id="js-select-image-gallery" class="form_input_value image_gallery_perPage">
             <option value="3" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 3) echo "selected"; ?>> 3件 ▼</option>
-            <option value="6" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 6) echo "selected"; ?>> 6件</option>
-            <option value="9" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 9) echo "selected"; ?>> 9件</option>
+            <option value="6" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 6) echo "selected"; ?>> 6件 ▼</option>
+            <option value="9" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 9) echo "selected"; ?>> 9件 ▼</option>
         </select>
     </div>
+    
 </form>
 
 <!-- <?php foreach ($prefs as $pref) : ?>

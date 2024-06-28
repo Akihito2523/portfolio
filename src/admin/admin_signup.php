@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
   ];
 
-  $error = validateUserSignupFormData($data);
+  $error = validateAdminSignup($data);
 
   if (empty($error)) {
     $admin = new Admin();
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <label for="js-password" class="form_input_title">パスワード</label>
       <span class="need form_input_need">必須</span>
       <div class="password-wrapper">
-        <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
+        <input type="password" name="password" class="form_input_value" id="js-password-admin" value="<?php echo h($data['password']); ?>">
         <span id="js-passwordButtonEye" class="fa fa-eye"></span>
       </div>
       <?php if (isset($error['password'])) : ?>
@@ -101,8 +101,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endif; ?>
       <p class="form_input_error_message" id="js-passwordMessage"></p>
       <span class="form_input_caution">※半角英数記号8文字以上16文字以下</span>
+      <div class="form_input_caution" id="js-password-strength"></div>
     </div>
 
+    <div class="progress-container">
+      <div class="js-passwordProgress" id="js-passwordProgress"></div>
+      <div class="js-circle js-circle-active">1</div>
+      <div class="js-circle">2</div>
+      <div class="js-circle">3</div>
+      <div class="js-circle">4</div>
+    </div>
+    
     <div class="form_input_block">
       <label for="js-password-confirm" class="form_input_title">パスワード (確認用)</label>
       <span class="need form_input_need">必須</span>
@@ -119,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_confirm_btn_block">
       <a class="el_btn el_btn_back" href="admin_signin.php">戻る</a>
-    <input type="submit" value="アカウント新規作成" class="el_btn el_btn_submit">
+      <input type="submit" value="アカウント新規作成" class="el_btn el_btn_submit">
     </div>
 
   </form>

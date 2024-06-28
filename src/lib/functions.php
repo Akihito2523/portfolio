@@ -12,6 +12,36 @@
 <?php
 
 /**
+ * 各ページごとにタイトルを動的に変更
+ * @param
+ * @return string タイトル
+ */
+function getPageTitle()
+{
+    $pageTitle = '';
+
+    // PHP_SELF から現在のファイル名を取得
+    $currentPage = basename($_SERVER['PHP_SELF']);
+
+    // 各ページごとにタイトルを設定
+    switch ($currentPage) {
+        case 'user_form_regist.php':
+        case 'user_form_confirm.php':
+        case 'user_form_thanks.php':
+            $pageTitle = 'ユーザー登録';
+            break;
+        case 'user_top.php':
+            $pageTitle = 'ユーザートップページ';
+            break;
+            // 追加のページがあればここに追加
+        default:
+            $pageTitle = 'デフォルトタイトル';
+            break;
+    }
+    return $pageTitle;
+}
+
+/**
  * 文字列をHTML特殊文字に変換（サニタイズ処理）
  * @param string $str 変換する文字列
  * @return string 変換された文字列
@@ -74,12 +104,17 @@ function getDateTime()
     return $today->format("Y-m-d H:i");
 }
 
+
+
+
+
+
 /**
- * ログインフォームの入力データをバリデーションする
+ * 「admin_signin.php」と「admin_delete_account.php」の入力データをバリデーションする
  * @param array $data フォームデータ
  * @return array エラーメッセージの配列
  */
-function validateLogin($data)
+function validateAdminLogin($data)
 {
     $error = [];
 
@@ -95,11 +130,37 @@ function validateLogin($data)
 }
 
 /**
- * ユーザー登録フォームの入力データをバリデーションする
+ * 「admin_update.php」の入力データをバリデーションする
  * @param array $data フォームデータ
  * @return array エラーメッセージの配列
  */
-function validateUserSignupFormData($data)
+function validateAdminUpdate($data)
+{
+    $error = [];
+
+    if (empty($data['name'])) {
+        $error['name'] = '氏名を入力してください。';
+    }
+
+    if (empty($data['email'])) {
+        $error['email'] = 'メールアドレスを入力してください。';
+    } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        $error['email'] = '有効なメールアドレスを入力してください。';
+    } elseif (empty($data['email_confirm'])) {
+        $error['email_confirm'] = '確認用メールアドレスを入力してください。';
+    } elseif ($data['email_confirm'] !== $data['email']) {
+        $error['email_confirm'] = 'メールアドレスが一致しません。';
+    }
+
+    return $error;
+}
+
+/**
+ * 「admin_signup.php」の入力データをバリデーションする
+ * @param array $data フォームデータ
+ * @return array エラーメッセージの配列
+ */
+function validateAdminSignup($data)
 {
     $error = [];
 
@@ -136,18 +197,21 @@ function validateUserSignupFormData($data)
 }
 
 /**
- * 入力フォームの入力データをバリデーションする
+ * 「user_form_regist.php」と「user_form_update.php」の入力データをバリデーションする
  * @param array $data フォームデータ
  * @return array エラーメッセージの配列
  */
-function validateInputFormData($data)
+function validateUserForm($data)
 {
     $error = [];
 
-    if (empty($data['name'])) {
+    // 氏名のバリデーション
+    if (empty($_POST['name'])) {
         $error['name'] = '氏名を入力してください。';
-    }
-
+    } elseif (mb_strlen($_POST['name']) > 64) {
+        $error['name'] = '氏名は64文字以内で入力してください。';
+    } 
+    
     // 電話番号が空かどうかをチェック
     if (empty($data['tel'])) {
         $error['tel'] = '電話番号を入力してください';
@@ -257,36 +321,6 @@ function setCategoryName($category)
     }
 }
 
-
-/**
- * 各ページごとにタイトルを動的に変更
- * @param
- * @return string タイトル
- */
-function getPageTitle()
-{
-    $pageTitle = '';
-
-    // PHP_SELF から現在のファイル名を取得
-    $currentPage = basename($_SERVER['PHP_SELF']);
-
-    // 各ページごとにタイトルを設定
-    switch ($currentPage) {
-        case 'user_form_regist.php':
-        case 'user_form_confirm.php':
-        case 'user_form_thanks.php':
-            $pageTitle = 'ユーザー登録';
-            break;
-        case 'user_top.php':
-            $pageTitle = 'ユーザートップページ';
-            break;
-            // 追加のページがあればここに追加
-        default:
-            $pageTitle = 'デフォルトタイトル';
-            break;
-    }
-    return $pageTitle;
-}
 
 
 ?>

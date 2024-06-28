@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-  $error = validateInputFormData($data);
+  $error = validateUserForm($data);
   $imageError = validateImage($_FILES['image_path']);
 
   if (empty($error) && empty($imageError)) {
@@ -57,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // header('Location: user_form.php');
   }
 } else {
+  unset($_SESSION['data']);
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'name' => '',
     'tel' => '',
@@ -76,6 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   ];
 }
 
+// unset($_SESSION['data']);
+
 ?>
 
 <main class="">
@@ -88,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
       <span class="need form_input_need">(必須)</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>" tabindex="1" autocomplete="name">
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="64" autofocus value="<?php echo h($data['name']); ?>" tabindex="1" autocomplete="name">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message"><?= $error['name']; ?></p>
       <?php endif; ?>

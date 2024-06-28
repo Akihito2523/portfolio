@@ -29,10 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'email_confirm' => h($_POST['email_confirm'] ?? ''),
   ];
 
-  $error = validateUserSignupFormData($data);
+  $error = validateAdminUpdate($data);
 
   if (empty($error)) {
     $admin = new Admin();
+
     $result = $admin->AdminDbUpdate($data);
 
     if ($result) {

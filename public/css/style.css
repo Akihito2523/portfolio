@@ -241,7 +241,7 @@ body {
 }
 
 .form_input_value_textarea {
-  width: 80%;
+  width: 90%;
   height: 100px;
   padding: 10px;
 }
@@ -478,6 +478,65 @@ body {
   opacity: 0.6;
 }
 
+/* プログレスバーとサークル */
+.js-circle {
+  overflow: hidden;
+}
+
+.progress-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: -10px auto 20px;
+  max-width: 100%;
+  width: 220px;
+}
+
+.progress-container::before {
+  content: '';
+  background-color: #e0e0e0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 100%;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+
+.js-passwordProgress {
+  background-color: #3498DB;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 0%;
+  z-index: -1;
+  transition: 0.4s ease;
+}
+
+.js-circle {
+  background-color: #fff;
+  color: #999;
+  border-radius: 50%;
+  height: 26px;
+  width: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e0e0e0;
+  transition: .4s ease;
+}
+
+/* サークルにアクティブクラスがついている */
+.js-circle.js-circle-active {
+  border-color: #3498DB;
+}
+
+
+
 /* admin_detail */
 /* ============================================ */
 .dbsuccess_message {
@@ -671,6 +730,8 @@ body {
   text-align: center;
   color: #333;
 }
+
+
 
 /* レスポンス */
 /* ============================================ */
