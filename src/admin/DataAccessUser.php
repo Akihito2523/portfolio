@@ -38,7 +38,16 @@ class User
     public function UserDbCreate($data)
     {
 
-        $sql = "INSERT INTO $this->table_name (name, tel, email, gender, genre, pref, datetimelocal, image_path, textarea, password, checkbox_name, user_agent, ip_address) VALUES (:name, :tel, :email, :gender, :genre, :pref, :datetimelocal, :image_path, :textarea, :password, :checkbox_name, :user_agent, :ip_address)";
+        $sql = "INSERT INTO $this->table_name (name, tel, email, gender, genre, pref, image_path, textarea, password, checkbox_name, user_agent, ip_address) VALUES (:name, :tel, :email, :gender, :genre, :pref,  :image_path, :textarea, :password, :checkbox_name, :user_agent, :ip_address)";
+
+        $genre_str = implode('、', $data['genre']);
+
+        echo '<pre>';
+        var_dump($genre_str);
+        echo '</pre>';
+        echo '<br>';
+        // exit('exitを実行中');
+
 
         $dbh = $this->UserDbConnect();
         try {
@@ -47,9 +56,9 @@ class User
             $stmt->bindValue(':tel', $data['tel'], PDO::PARAM_INT);
             $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
             $stmt->bindValue(':gender', $data['gender'], PDO::PARAM_STR);
-            $stmt->bindValue(':genre', $data['genre'], PDO::PARAM_STR);
+            $stmt->bindValue(':genre', $genre_str, PDO::PARAM_STR);
+            // $stmt->bindValue(':genre', $data['genre'], PDO::PARAM_STR);
             $stmt->bindValue(':pref', $data['pref'], PDO::PARAM_STR);
-            $stmt->bindValue(':datetimelocal', $data['datetimelocal'], PDO::PARAM_STR);
             $stmt->bindValue(':image_path', uploadImage($_SESSION['savePath']) ?? null, PDO::PARAM_STR);
             $stmt->bindValue(':textarea', $data['textarea'], PDO::PARAM_STR);
             $stmt->bindValue(':password', password_hash($data['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
@@ -162,15 +171,43 @@ class User
         return $result;
     }
 
+    // public function UserDbSearch($data)
+    // {
+
+    //     $sql = "SELECT * FROM $this->table_name WHERE name LIKE :keyword";
+    //     $dbh = $this->UserDbConnect();
+
+    //     try {
+    //         $stmt = $dbh->prepare($sql);
+    //         $stmt->bindValue(':keyword', '%' . $data['keyword'] . '%', PDO::PARAM_STR);
+    //         $stmt->execute();
+    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     } catch (Exception $e) {
+    //         error_log('UserDbSearchエラー: ' . $e->getMessage());
+    //         throw new Exception('データの検索に失敗しました');
+    //     }
+    // }
+
     public function UserDbSearch($data)
     {
-      
         $sql = "SELECT * FROM $this->table_name WHERE name LIKE :keyword";
         $dbh = $this->UserDbConnect();
+
+        if (!empty($data['genre'])) {
+            // ジャンルが選択されている場合、SQLに追加する条件を生成
+            $genreConditions = implode(',', array_fill(0, count($data['genre']), '?'));
+            $sql .= " AND genre IN ($genreConditions)";
+        }
 
         try {
             $stmt = $dbh->prepare($sql);
             $stmt->bindValue(':keyword', '%' . $data['keyword'] . '%', PDO::PARAM_STR);
+
+            // ジャンルの条件をバインド
+            // foreach ($data['genre'] as $index => $genre) {
+            //     $stmt->bindValue($index + 2, $genre, PDO::PARAM_STR);
+            // }
+
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

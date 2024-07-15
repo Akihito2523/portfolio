@@ -247,7 +247,7 @@ class Admin
       24時間以内に下記URLへアクセスし、パスワードの変更を完了してください。
       {$url}
       EOD;
-
+      http://localhost:1515
         // Fromはご自身の環境に合わせてください
         $headers = "From : http://localhost:1515\n";
         // text/htmlを指定し、html形式で送ることも可能
@@ -255,6 +255,11 @@ class Admin
 
         // mb_send_mailは成功したらtrue、失敗したらfalseを返す
         $isSent = mb_send_mail($email, $subject, $body, $headers);
+        echo '<pre>';
+        var_dump($isSent);
+        echo '</pre>';
+        echo '<br>';
+        exit('exitを実行中');
 
         return $isSent;
         // if (!$isSent) throw new \Exception('メール送信に失敗しました。');

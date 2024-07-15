@@ -29,13 +29,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $_POST['genre'] が設定かつ配列の場合、array_map関数を使って $_POST['genre'] の各要素をエスケープをし$data['genre']に格納、設定されていない場合は空の配列 [] を格納
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
-    'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
     'image_path' => $_SESSION['data']['image_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
+
 
   $user = new User();
   $result = $user->UserDbCreate($data);
@@ -57,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'gender' => '',
     'genre' => [],
     'pref' => '',
-    'datetimelocal' => '',
     'image_path' => '',
     'textarea' => '',
     'password' => '',
@@ -71,18 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } elseif ($data['gender'] === 'others') {
     $data['gender'] = 'その他';
   }
-  $genreInfo = '';
-  if (is_array($data['genre'])) {
-    foreach ($data['genre'] as $item) {
-      $genreInfo .= h($item) . '  ';
-    }
-  }
 }
 
 ?>
 
 <main class="">
-  <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
+  <form action="" method="post" name="form" class="form" enctype="multipart/form-data">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
       <dd class="form_confirm_value"><?php echo h($data['name']); ?></dd>
@@ -101,17 +94,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">チェックボックス</dt>
-      <dd class="form_confirm_value"><?php echo $genreInfo; ?></dd>
+      <dd class="form_confirm_value">
+        <?php foreach ($data['genre'] as $item) : ?>
+          <?php echo h($item)  . '  '?><br>
+        <?php endforeach; ?>
+      </dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">都道府県</dt>
       <dd class="form_confirm_value"><?php echo h($data['pref']); ?></dd>
     </dl>
-    <dl class="form_confirm_block">
-      <dt class="form_input_title form_confirm_title">日時</dt>
-      <dd class="form_confirm_value"><?php echo $data['datetimelocal']; ?></dd>
-    </dl>
-
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">写真</dt>
       <dd class="form_confirm_value">
@@ -145,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                           ?></div>
     <?php //endif; 
     ?>
-    <div class="form_confirm_btn_block">
+    <div class="form_btn_block">
       <a class="el_btn el_btn_back" href="user_form_regist.php">戻る</a>
       <input type="submit" value="送信" class="el_btn el_btn_submit">
     </div>
@@ -155,9 +147,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="hidden" name="tel" value="<?php echo h($data['tel']); ?>">
     <input type="hidden" name="email" value="<?php echo h($data['email']); ?>">
     <input type="hidden" name="gender" value="<?php echo h($data['gender']); ?>">
-    <input type="hidden" name="genre" value="<?php echo $genreInfo; ?>">
+    <?php foreach ($data['genre'] as $item) : ?>
+      <input type="hidden" name="genre[]" value="<?php echo h($item); ?>">
+    <?php endforeach; ?>
+
+    <!-- <input type="hidden" name="genre" value="<?php echo $genreInfo; ?>"> -->
     <input type="hidden" name="pref" value="<?php echo h($data['pref']); ?>">
-    <input type="hidden" name="datetimelocal" value="<?php echo h($data['datetimelocal']); ?>">
     <input type="hidden" name="image_path" value="<?php echo h($data['image_path']['name']); ?>">
     <input type="hidden" name="textarea" value="<?php echo h($data['textarea']); ?>">
     <input type="hidden" name="password" value="<?php echo h($data['password']); ?>">

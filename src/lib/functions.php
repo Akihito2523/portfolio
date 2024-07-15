@@ -240,9 +240,9 @@ function validateUserForm($data)
         $error['gender'] = '性別を選択してください。';
     }
 
-    if (empty($data['pref'])) {
-        $error['pref'] = '都道府県を選択してください。';
-    }
+    // if (empty($data['pref'])) {
+    //     $error['pref'] = '都道府県を選択してください。';
+    // }
 
     return $error;
 }

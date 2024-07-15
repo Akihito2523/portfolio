@@ -14,32 +14,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $admin = new Admin();
     $result = $admin->AdminDbPassReset($email);
-   
+
     if ($result) {
 
         $admin = new Admin();
         $isSent = $admin->AdminDbEmail($email);
-        if($isSent){
+        if ($isSent) {
             echo 'メール送信完了';
-        }else {
+            header('Location: admin_password_reset_thanks.php');
+        } else {
             echo 'メール送信末完了';
         }
-
-        // header('Location: admin_top.php');
         exit();
     } else {
         header('Location: admin_password_reset_thanks.php');
         exit();
     }
 }
-
-
 ?>
 
 <main class="">
     <h2 class="contents-title">パスワードリセット</h2>
 
-    <form action="" method="post" name="demoForm" class="form">
+    <form action="" method="post" name="form" class="form">
         <!-- CSRFトークンをフォームに埋め込む -->
         <input type="hidden" name="_csrf_token" value="<?= $_SESSION['_csrf_token']; ?>">
         <div class="form_input_block">
@@ -49,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="form_input_error_message" id="js-emailMessage"></p>
         </div>
 
-        <div class="form_confirm_btn_block">
+        <div class="form_btn_block">
             <a class="el_btn el_btn_back" href="admin_signin.php">戻る</a>
             <input type="submit" value="パスワードリセット" class="el_btn el_btn_submit">
         </div>

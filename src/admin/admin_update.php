@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">会員情報変更</h2>
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="form" class="form">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <span class="need form_input_need">必須</span>
       <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
-        <p class="form_input_error_message"><?= $error['name']; ?></p>
+        <p class="form_input_error_message" id="js-textMessage"><?= $error['name']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-textMessage"></p>
     </div>
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <span class="need form_input_need">必須</span>
       <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['email']; ?></p>
+        <p class="form_input_error_message" id="js-emailMessage"><?php echo $error['email']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <div class="form_confirm_btn_block">
+    <div class="form_btn_block">
       <a class="el_btn el_btn_back" href="admin_detail.php">戻る</a>
       <input type="submit" value="更新" class="el_btn el_btn_submit">
     </div>

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2 class="contents-title">管理者用退会ページ</h2>
   <p class="form_input_caution">現在のメールアドレスとパスワードを入力してください</p>
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="form" class="form">
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
@@ -74,9 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <div class="form_login_btn_block">
-      <input type="submit" value="退会する" class="el_btn el_btn_submit js-btndeleteadmin ">
+    <div class="form_btn_block ">
       <a class="el_btn el_btn_back" href="admin_detail.php">戻る</a>
+      <input type="submit" value="退会する" class="el_btn el_btn_submit js-btndeleteadmin ">
     </div>
 
   </form>

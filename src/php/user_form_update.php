@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $_POST['genre'] が設定かつ配列の場合、array_map関数を使って $_POST['genre'] の各要素をエスケープをし$data['genre']に格納、設定されていない場合は空の配列 [] を格納
     'genre' => isset($_POST['genre']) && is_array($_POST['genre']) ? array_map('h', $_POST['genre']) : [],
     'pref' => h($_POST['pref'] ?? ''),
-    'datetimelocal' => h($_POST['datetimelocal'] ?? ''),
     'textarea' => h($_POST['textarea'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
@@ -62,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'genre' => [],
     'checkbox' => '',
     'pref' => '',
-    'datetimelocal' => '',
     'textarea' => '',
     'password' => '',
     'password_confirm' => '',
@@ -75,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">ユーザー情報更新</h2>
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="form" class="form">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">

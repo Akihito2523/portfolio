@@ -12,7 +12,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 電話番号フィールドのバリデーションとメッセージの設定
+  // 氏名バリデーション
+  const text = document.querySelector('#js-text');
+  const textMessage = document.querySelector('#js-textMessage');
+  if (text) {
+    /**
+     * 電話番号フィールドのバリデーションを行い、エラーメッセージを設定します。
+     * @param {Event} e 入力イベント
+     */
+    const validateText = (e) => {
+      const textValue = text.value;
+      console.log(textValue);
+      if (!textValue.trim()) {
+        textMessage.innerText = '氏名を入力してください';
+        text.style.border = '3px solid red';
+      } else if (textValue > 64) {
+        textMessage.innerText = '氏名は64文字以内で入力してください。';
+        text.style.border = '3px solid red';
+      } else {
+        textMessage.innerText = '';
+        text.style.border = '';
+      }
+    }
+    text.addEventListener('blur', validateText);
+  }
+
+  // 電話番号バリデーション
   const tel = document.querySelector('#js-tel');
   const telMessage = document.querySelector('#js-telMessage');
   if (tel) {
@@ -24,11 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const telValue = e.target.value;
       if (!telValue.trim()) {
         telMessage.innerText = '電話番号を入力してください';
-        tel.style.border = '2px solid red';
+        tel.style.border = '3px solid red';
       } else if (!/^[0-9+\-]+$/.test(telValue)) {
         telMessage.innerText = '半角数字と + - のみ利用できます';
+        tel.style.border = '3px solid red';
       } else if (!/^(0\d{9,10}|\d{1,4}-\d{1,4}-\d{4})$/.test(telValue)) {
         telMessage.innerText = '正しい電話番号の形式で入力してください';
+        tel.style.border = '3px solid red';
       } else {
         telMessage.innerText = '';
         tel.style.border = '';
@@ -36,6 +63,75 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     tel.addEventListener('blur', validateTel);
   }
+
+  const email = document.querySelector('#js-email');
+  const emailMessage = document.querySelector('#js-emailMessage');
+
+  if (email) {
+    /**
+     * メールアドレスフィールドのバリデーションを行い、エラーメッセージと枠線のスタイルを設定します。
+     * @param {Event} e 入力イベント
+     */
+    const validateEmail = (e) => {
+      const emailValue = email.value.trim(); // メールアドレスの値を取得し、前後の空白を除去する
+
+      if (!emailValue) {
+        emailMessage.innerText = 'メールアドレスを入力してください。';
+        email.style.border = '3px solid red';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+        emailMessage.innerText = '有効なメールアドレスを入力してください。';
+        email.style.border = '3px solid red';
+      } else {
+        emailMessage.innerText = '';
+        email.style.border = '';
+      }
+    };
+
+    // 入力時にバリデーション関数を呼び出す
+    email.addEventListener('blur', validateEmail);
+  }
+
+
+  /**
+   * フォーカスを当てる。
+   *  @param {element} event 変更イベント
+   * */
+  const validateFocus = (element) => {
+    element.focus();
+  }
+  // フォーカスが設定されたかどうかを示すフラグ
+  let focused = false;
+
+  if (text) {
+    if (textMessage.innerText) {
+      if (!focused) {
+        validateFocus(text);
+        focused = true;
+      }
+    }
+  }
+
+  if (tel) {
+    if (telMessage.innerText) {
+      if (!focused) {
+        validateFocus(tel);
+        focused = true;
+      }
+    }
+  }
+
+  if (email) {
+    if (emailMessage.innerText) {
+      if (!focused) {
+        validateFocus(email);
+        focused = true;
+      }
+    }
+  }
+
+
+
+
 
   // ラジオボタンの選択状態監視
   const radio = document.querySelector('#js-radio');
@@ -117,26 +213,13 @@ document.addEventListener("DOMContentLoaded", () => {
     textarea.addEventListener('input', textareaInput);
   }
 
-  // カレンダーの選択日時のログ出力
-  const datetime = document.querySelector('#js-datetime');
-  if (datetime) {
-    /**
-     * カレンダーの選択された日時をコンソールに出力します。
-     * @param {Event} e 変更イベント
-     */
-    const datetimeChange = (e) => {
-      console.log(e.target.value);
-      const dt = new Date(e.target.value);
-      console.log(dt);
-    }
-    datetime.addEventListener('change', datetimeChange);
-  }
 
   // 利用規約に同意した場合の送信ボタンの操作
   const check = document.querySelector('#js-check');
   const submitButton = document.querySelector('#js-submit');
   if (check && submitButton) {
-    submitButton.style.opacity = '60%';
+    submitButton.style.opacity = check.checked ? '100%' : '60%';
+    submitButton.disabled = check.checked ? false : true;
     /**
      * 利用規約の同意チェックボックスの状態が変化した際に、送信ボタンの有効/無効とスタイルを更新します。
      * @param {Event} event 変更イベント
@@ -331,6 +414,58 @@ document.addEventListener("DOMContentLoaded", () => {
       passwordStrength.textContent = `パスワードの強度:${showPasswordStrength()}`;
     });
   }
+
+
+
+  /**
+   * テーブルの写真をクリック拡大
+   */
+  const images = document.querySelectorAll('.table_td img');
+  const overlay = document.getElementById('js-overlay');
+  const overlayImage = document.getElementById('js-overlay-image');
+  const closeButton = document.getElementById('js-close-button');
+
+  images.forEach(function (image) {
+    image.addEventListener('click', function () {
+      overlay.style.display = 'flex'; // オーバーレイを表示
+      overlayImage.src = image.src; // クリックした画像を拡大表示
+    });
+  });
+
+  closeButton.addEventListener('click', function () {
+    overlay.style.display = 'none'; // オーバーレイを非表示
+  });
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) {
+      overlay.style.display = 'none'; // オーバーレイの外側をクリックしても非表示にする
+    }
+  });
+
+
+
+  // モーダルメニュー
+  const open = document.querySelector('#modal-open');
+  const container = document.querySelector('#modal-container');
+  const modalBg = document.querySelector('#modal-bg');
+  const close = document.querySelector('#modal-close');
+
+  open.addEventListener('click', () => {
+    container.classList.toggle('active');
+    modalBg.classList.toggle('active');
+  });
+
+  close.addEventListener('click', () => {
+    container.classList.toggle('active');
+    modalBg.classList.toggle('active');
+  });
+
+  modalBg.addEventListener('click', () => {
+    container.classList.remove('active');
+    modalBg.classList.remove('active');
+  });
+
+
 
 });
 

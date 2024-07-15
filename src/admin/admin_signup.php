@@ -54,34 +54,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">会員登録</h2>
 
-  <form action="" method="post" name="demoForm" class="form" enctype="multipart/form-data">
+  <form action="" method="post" name="form" class="form" enctype="multipart/form-data">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
-      <span class="need form_input_need">必須</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?php echo h($data['name']); ?>">
+      <span class="need form_input_need">【必須】</span>
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" value="<?php echo h($data['name']); ?>">
       <?php if (isset($error['name'])) : ?>
-        <p class="form_input_error_message"><?= $error['name']; ?></p>
+        <p class="form_input_error_message" id="js-textMessage"><?= $error['name']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-textMessage"></p>
     </div>
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">【必須】</span>
       <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
       <?php if (isset($error['email'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['email']; ?></p>
+        <p class="form_input_error_message" id="js-emailMessage"><?php echo $error['email']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
 
     <div class="form_input_block">
       <label for="js-email-confirm" class="form_input_title">メールアドレス (確認用)</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">【必須】</span>
       <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
       <?php if (isset($error['email_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">【必須】</span>
       <div class="password-wrapper">
         <input type="password" name="password" class="form_input_value" id="js-password-admin" value="<?php echo h($data['password']); ?>">
         <span id="js-passwordButtonEye" class="fa fa-eye"></span>
@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <div class="form_input_block">
       <label for="js-password-confirm" class="form_input_title">パスワード (確認用)</label>
-      <span class="need form_input_need">必須</span>
+      <span class="need form_input_need">【必須】</span>
       <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
       <?php if (isset($error['password_confirm'])) : ?>
         <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
@@ -126,13 +126,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
     <?php endif; ?>
 
-    <div class="form_confirm_btn_block">
+    <div class="form_btn_block">
       <a class="el_btn el_btn_back" href="admin_signin.php">戻る</a>
       <input type="submit" value="アカウント新規作成" class="el_btn el_btn_submit">
     </div>
 
   </form>
 </main>
-
 
 <?php require_once("../includes/footer.php"); ?>

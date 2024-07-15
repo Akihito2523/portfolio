@@ -29,23 +29,7 @@ $currentPage = intval(max(1, min($currentPage, $totalPage))); // 範囲を制限
 $items = range(1, $userDbCount);
 ?>
 
-<form action="user_top.php" method="post" class="">
-    <div class="form_search_btn_block">
-        <div id="js-checkbox">
-            <label for="js-checkbox" class="form_input_title form_input_title_checkbox">チェックボックス</label>
-            <?php foreach ($genre as $item) : ?>
-                <label class="form_input_label">
-                    <input type="checkbox" name="genre[]" class="form_input_value_checkbox" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
-                    <?= h($item) ?>
-                </label>
-            <?php endforeach; ?>
-        </div>
-        <input type="search" name="keyword" placeholder="入力して検索" class="form_input_value form_input_search">
-        <input type="submit" name="search" value="検索" class="el_btn_search">
-    </div>
-</form>
-
-<form id="js-select-image-gallery-form" action="" method="get">
+<form class="image_gallery_form" id="js-select-image-gallery-form" action="" method="get">
     <!-- <div>1 - 4件 / <?php echo $userDbCount ?>件</div> -->
     <div class="form_input_block">
         <label for="js-checkbox" class="form_input_title form_input_title_checkbox">表示件数</label>
@@ -55,7 +39,14 @@ $items = range(1, $userDbCount);
             <option value="9" <?php if (isset($_SESSION['$imagePerPage']) && $_SESSION['$imagePerPage'] == 9) echo "selected"; ?>> 9件 ▼</option>
         </select>
     </div>
-    
+</form>
+
+<form action="user_top.php" method="post" class="">
+    <div class="form_search_btn_block">
+        
+        <input type="search" name="keyword" placeholder="入力して検索" class="form_input_value form_input_search">
+        <input type="submit" name="search" value="検索" class="el_btn_search">
+    </div>
 </form>
 
 <!-- <?php foreach ($prefs as $pref) : ?>

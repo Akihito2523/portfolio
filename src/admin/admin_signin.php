@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="">
 
-  <form action="" method="post" name="demoForm" class="form">
+  <form action="" method="post" name="form" class="form">
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>

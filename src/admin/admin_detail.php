@@ -30,7 +30,7 @@ $_SESSION['data'] = $result;
       <dd class="form_confirm_value"><?php echo h($result['email']); ?></dd>
     </dl>
 
-    <div class="form_confirm_btn_block">
+    <div class="form_btn_block">
       <a class="el_btn el_btn_back" href="admin_top.php">戻る</a>
       <a class="el_btn" href="admin_update.php">会員情報変更</a>
     </div>
@@ -38,3 +38,5 @@ $_SESSION['data'] = $result;
 
   </form>
 </main>
+
+<?php require_once("../includes/footer.php"); ?>

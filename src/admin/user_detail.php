@@ -31,7 +31,7 @@ $result = $user->UserDbDetail($_GET['id']);
     </dl>
     <dl class="form_confirm_block">  
       <dt class="form_input_title form_confirm_title">チェックボックス</dt>
-      <dd class="form_confirm_value"><?php echo h($result['']); ?></dd>
+      <dd class="form_confirm_value"><?php echo h($result['genre']); ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">都道府県</dt>
@@ -59,3 +59,5 @@ $result = $user->UserDbDetail($_GET['id']);
 
   </form>
 </main>
+
+<?php require_once("../includes/footer.php"); ?>
