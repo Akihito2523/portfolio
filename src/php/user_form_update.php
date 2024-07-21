@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <main class="">
   <h2 class="contents-title">ユーザー情報更新</h2>
 
-  <form action="" method="post" name="form" class="form">
+  <form action="" method="post" name="form" class="form container">
 
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
@@ -119,10 +119,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- $data配列内に'gender'キーが存在しかつvalue値と等しければ、trueを返しchecked属性を出力 -->
-    <div id="js-radio">
+    <div class="form_input_block" id="js-radio">
       <fieldset>
-        <legend class="form_input_title">性別</legend>
-        <!-- <span class="need form_input_need">必須</span> -->
+        <legend class="form_input_title">性別<span class="need form_input_need"> 【必須】</span></legend>
         <label class="form_input_label">
           <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
         </label>
@@ -132,10 +131,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label class="form_input_label">
           <input type="radio" name="gender" class="form_input_value_radio" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他
         </label>
-        <?php if (isset($error['gender'])) : ?>
-          <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
-        <?php endif; ?>
       </fieldset>
+      <?php if (isset($error['gender'])) : ?>
+        <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
+      <?php endif; ?>
     </div>
 
     <div class="form_input_block">

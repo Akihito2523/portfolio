@@ -14,7 +14,7 @@
 </head>
 
 <body ontouchstart="">
-    <header class="ly_header">
+    <header class="ly_header container">
         <div class="ly_header_inner">
             <div class="bl_headerUtils">
                 <!-- <a class="bl_headerUtils_logo" href="#"><img src="/image/ピカチュウ.png" alt=""></a> -->
@@ -27,13 +27,10 @@
                         <a class="bl_headerNav_link" href="/src/php/user_top.php">トップ</a>
                     </li>
                     <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="/src/php/user_form_update.php">ユーザー情報変更</a>
+                        <a class="bl_headerNav_link" href="/src/php/user_form_update.php">情報変更</a>
                     </li>
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="/src/php/user_form_regist.php">投稿</a>
-                    </li>
-                    <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="/src/php/counter.php">カウンター</a>
                     </li>
                 </ul>
             </nav>

@@ -15,7 +15,7 @@
 <!-- <body> -->
 <body ontouchstart="">
 
-    <header class="ly_header">
+    <header class="ly_header container">
         <div class="ly_header_inner">
             <!-- <div class="bl_headerUtils">
                 <a class="bl_headerUtils_logo" href="#"><img src="/image/ピカチュウ.png" alt=""></a>
@@ -30,20 +30,8 @@
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="../admin/admin_top.php">トップ</a>
                     </li>
-                    <!-- <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="../admin/admin_update.php?id=<?php echo h($id); ?>">会員情報</a>
-                    </li> -->
                     <li class="bl_headerNav_item">
                         <a class="bl_headerNav_link" href="../admin/admin_detail.php?id=<?php echo h($id); ?>">会員詳細</a>
-                    </li>
-
-                    <!-- <td><a href="/src/admin/user_detail.php?id=<?php echo h($column["id"]); ?>"><?php echo h($column["id"]); ?></a></td> -->
-
-                    <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">採用情報</a>
-                    </li>
-                    <li class="bl_headerNav_item">
-                        <a class="bl_headerNav_link" href="#">ブログ</a>
                     </li>
                 </ul>
             </nav>

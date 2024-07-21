@@ -5,6 +5,7 @@ require_once('../config/env.php');
 require_once("DataAccessAdmin.php");
 require_once("../includes/admin_header.php");
 
+// セッションから会員idを取得
 $id = $_SESSION['id'];
 
 $admin = new Admin();
@@ -20,7 +21,7 @@ $_SESSION['data'] = $result;
   <?php unset($_SESSION['dbsuccess_message']);
   } ?>
 
-  <form class="form">
+  <form class="form container detail">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
       <dd class="form_confirm_value"><?php echo h($result['name']); ?></dd>
@@ -35,6 +36,7 @@ $_SESSION['data'] = $result;
       <a class="el_btn" href="admin_update.php">会員情報変更</a>
     </div>
     <p class="form_input_link"><a href="admin_delete_account.php" ontouchstart="">※退会はこちら</a></p>
+    <p class="form_input_link"><a href="admin_password_update.php" ontouchstart="">※パスワード変更はこちら</a></p>
 
   </form>
 </main>

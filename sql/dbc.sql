@@ -30,7 +30,6 @@ CREATE TABLE user (
     pref VARCHAR(255) NULL,
     image_path VARCHAR(255) NOT NULL UNIQUE,
     textarea TEXT NULL,
-    password VARCHAR(191) NOT NULL,
     checkbox_name VARCHAR(50) NULL,
     user_agent VARCHAR(255),
     ip_address VARCHAR(45) NULL,

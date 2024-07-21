@@ -230,38 +230,77 @@ class Admin
     }
 
     /**
-     * パスワード再登録
+     * パスワード再登録メール送信
+     *
+     * @param string $email メール送信先のメールアドレス
+     * @param string $token トークン（パスワードリセット用の一意の識別子）
+     * @param int $expiry 有効期限（秒単位での期限、例えば900秒＝15分）
+     * @return bool 送信が成功した場合はtrue、失敗した場合はfalse
      */
     public function AdminDbEmail($email)
     {
-        // 以下、mail関数でパスワードリセット用メールを送信
+        // 日本語のメール送信のための設定
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        // URLはご自身の環境に合わせてください
-        $url = "http://localhost:1515";
+        // 有効期限（秒単位、ここでは900秒＝15分）
+        $expiry = 900;
 
+        // パスワードリセット用のUR
+        $url = "https://trippleblog0942.com/src/admin/admin_password_update.php";
+
+        // メールの件名
         $subject =  'パスワードリセット用URLをお送りします';
 
+        // メール本文
         $body = <<<EOD
-      24時間以内に下記URLへアクセスし、パスワードの変更を完了してください。
-      {$url}
-      EOD;
-      http://localhost:1515
-        // Fromはご自身の環境に合わせてください
-        $headers = "From : http://localhost:1515\n";
-        // text/htmlを指定し、html形式で送ることも可能
-        $headers .= "Content-Type : text/plain";
+        以下のURLにアクセスし、パスワードの変更を行ってください。有効期限は{$expiry}秒です。
+        {$url}
+        EOD;
 
-        // mb_send_mailは成功したらtrue、失敗したらfalseを返す
+        // From ヘッダーの設定（実際のドメイン名や送信元のアドレスに修正が必要です）
+        $from = "From: example@example.com";
+
+        // Content-Type ヘッダーの設定
+        $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
+        $headers .= $from;
+
+        // メール送信
         $isSent = mb_send_mail($email, $subject, $body, $headers);
-        echo '<pre>';
-        var_dump($isSent);
-        echo '</pre>';
-        echo '<br>';
-        exit('exitを実行中');
 
         return $isSent;
-        // if (!$isSent) throw new \Exception('メール送信に失敗しました。');
     }
-};
+
+    //============================================
+    // UPDATE文（パスワード変更）
+    //============================================
+    public function AdminDbPasswordUpdate($data)
+    {
+        $sql = "UPDATE $this->table_name SET
+        password = :password, password_changed_at = :password_changed_at WHERE id = :id";
+
+        $dbh = $this->AdminDbConnect();
+        try {
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':password', password_hash($data['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
+            $stmt->bindValue(':password_changed_at', getDateTime(), PDO::PARAM_STR);
+
+            // SQLを実行し、結果を確認する
+            $result = $stmt->execute();
+
+            if ($result) {
+                $_SESSION['message'] = 'パスワードの更新が完了しました。';
+                return true;
+            } else {
+                $_SESSION['error'] = 'パスワードの更新に失敗しました。';
+                error_log('AdminDbPasswordUpdate: パスワード更新に失敗しました。');
+                return false;
+            }
+        } catch (PDOException $e) {
+            $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
+            error_log('AdminDbPasswordUpdateエラー: ' . $e->getMessage());
+            return false;
+        }
+    }
+}

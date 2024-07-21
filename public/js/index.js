@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * ラジオボタンの選択状態が変化した際に、選択された値をコンソールに出力します。
      * @param {Event} event 変更イベント
      */
-    const radioChange = (event) => {
+    const changeRadioHandler = (event) => {
       const target = event.target;
       if (target.name === 'gender') {
         const genderValue = target.value;
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(`選択された飲み物は ${drinkValue} です`);
       }
     }
-    radio.addEventListener('change', radioChange);
+    radio.addEventListener('change', changeRadioHandler);
   }
 
   // セレクトボックスの選択状態監視
@@ -160,12 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
      * セレクトボックスの選択状態が変化した際に、選択された値をコンソールに出力します。
      * @param {Event} event 変更イベント
      */
-    const selectChange = (event) => {
+    const changeSelectHandler = (event) => {
       console.log(`セレクトのvalue値は ${select.value} です`);
       const selectOptions = select.options[select.selectedIndex].innerHTML;
       console.log(`セレクトの中身は ${selectOptions} です`);
     }
-    select.addEventListener('change', selectChange);
+    select.addEventListener('change', changeSelectHandler);
   }
 
   // チェックボックスの選択状態監視
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * チェックボックスの選択状態が変化した際に、選択された値をコンソールに出力します。
      */
-    const checkboxChange = () => {
+    const checkboxChangeHandler = () => {
       let checkbox_output = '';
       checkboxes.forEach((checkbox) => {
         if (checkbox.checked) {
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // }
 
     checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener('change', checkboxChange);
+      checkbox.addEventListener('change', checkboxChangeHandler);
     });
   }
 
@@ -206,11 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * テキストエリアの入力内容が変化した際に、文字数をカウントして表示します。
      */
-    const textareaInput = () => {
+    const inputTextareaHandler = () => {
       const textareaValue = textarea.value;
       textareaCount.innerText = textareaValue.length;
     }
-    textarea.addEventListener('input', textareaInput);
+    textarea.addEventListener('input', inputTextareaHandler);
   }
 
 
@@ -224,13 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
      * 利用規約の同意チェックボックスの状態が変化した際に、送信ボタンの有効/無効とスタイルを更新します。
      * @param {Event} event 変更イベント
      */
-    const checkChange = (event) => {
+    const changeCheckHandler = (event) => {
       const checked = event.target.checked;
       submitButton.disabled = !checked;
       submitButton.style.opacity = checked ? '100%' : '60%';
       submitButton.style.cursor = checked ? 'pointer' : 'default';
     }
-    check.addEventListener('change', checkChange);
+    check.addEventListener('change', changeCheckHandler);
   }
 
   // ファイルの選択とプレビュー表示
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     * ファイルが選択された時に、画像ファイルであればプレビュー表示を行います。
     * @param {Event} event 変更イベント
     */
-    const imageChange = (event) => {
+    const changeImageHandler = (event) => {
       const file = event.target.files[0];
 
       // ファイルが存在しないか、画像形式でない場合のエラーチェック
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.addEventListener('load', (event) => {
         // 読み込み完了後に画像をプレビュー
         imagePreview.setAttribute('src', event.target.result);
-        const imagePathError = document.querySelector('.image_path_error');
+        const imagePathError = document.querySelector('.js-image_path_error');
         if (imagePathError.innerText !== '') {
           imagePathError.innerText = '';
         }
@@ -267,18 +267,18 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // 変更時に画像をプレビュー
-    image.addEventListener('change', imageChange);
+    image.addEventListener('change', changeImageHandler);
   }
 
   // 変更時にフォームを送信
   const selectImageGallery = document.querySelector('#js-select-image-gallery');
   const selectImageGalleryForm = document.querySelector('#js-select-image-gallery-form');
   if (selectImageGallery) {
-    const selectImageGalleryChange = (event) => {
+    const changeSelectImageGalleryHandler = (event) => {
       selectImageGalleryForm.submit();
       console.log(parseInt(event.target.value));
     }
-    selectImageGallery.addEventListener('change', selectImageGalleryChange);
+    selectImageGallery.addEventListener('change', changeSelectImageGalleryHandler);
   }
 
 
@@ -306,14 +306,14 @@ document.addEventListener("DOMContentLoaded", () => {
     /**
      * パスワード表示切替ボタンがクリックされた時に、パスワードフィールドの表示形式を切り替えます。
      */
-    const togglePassword = () => {
+    const clickPasswordButtonEyeHandler = () => {
       // パスワードフィールドのタイプをトグル（テキスト ⇄ パスワード）
       passwordAdmin.type = passwordAdmin.type === 'password' ? 'text' : 'password';
       // パスワード表示切替アイコンのクラスをトグル（目のアイコン ⇄ 斜線のアイコン）
       passwordButtonEye.classList.toggle('fa-eye-slash');
     };
     // パスワード表示切替ボタンにクリックイベントを追加
-    passwordButtonEye.addEventListener('click', togglePassword);
+    passwordButtonEye.addEventListener('click', clickPasswordButtonEyeHandler);
   } else {
     console.error('Error: #js-passwordButtonEye or #js-password not found.');
   }
@@ -371,13 +371,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let passwordStrengthText;
     if (passwordStrengthNumber >= 4) {
-      passwordStrengthText = "非常に強い";
+      passwordStrengthText = "最強";
     } else if (passwordStrengthNumber === 3) {
-      passwordStrengthText = "強い";
+      passwordStrengthText = "強";
     } else if (passwordStrengthNumber === 2) {
       passwordStrengthText = "普通";
     } else {
-      passwordStrengthText = "弱い";
+      passwordStrengthText = "弱";
     }
     return passwordStrengthText;
   };
@@ -405,13 +405,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // パスワードの強度を初期表示する
   const passwordStrength = document.querySelector('#js-password-strength');
   if (passwordStrength) {
-    passwordStrength.textContent = `パスワードの強度:${showPasswordStrength()}`;
+    passwordStrength.textContent = `${showPasswordStrength()}`;
+    if (passwordStrength.textContent === '最強') {
+      passwordStrength.style.color = "red";
+    }
   }
   // 入力イベントを監視して、パスワードの強度を動的に更新する
 
   if (passwordAdmin) {
     passwordAdmin.addEventListener('input', () => {
-      passwordStrength.textContent = `パスワードの強度:${showPasswordStrength()}`;
+      passwordStrength.textContent = `${showPasswordStrength()}`;
+      if (passwordStrength.textContent === '最強') {
+        passwordStrength.style.color = "red";
+      }
     });
   }
 
@@ -432,39 +438,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  closeButton.addEventListener('click', function () {
-    overlay.style.display = 'none'; // オーバーレイを非表示
-  });
+  if (closeButton) {
+    closeButton.addEventListener('click', function () {
+      overlay.style.display = 'none'; // オーバーレイを非表示
+    });
+  }
 
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) {
-      overlay.style.display = 'none'; // オーバーレイの外側をクリックしても非表示にする
-    }
-  });
+  if (overlay) {
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) {
+        overlay.style.display = 'none'; // オーバーレイの外側をクリックしても非表示にする
+      }
+    });
+  }
 
 
 
   // モーダルメニュー
-  const open = document.querySelector('#modal-open');
-  const container = document.querySelector('#modal-container');
-  const modalBg = document.querySelector('#modal-bg');
-  const close = document.querySelector('#modal-close');
+  const modalOpen = document.querySelector('#js-modal-open');
+  const modalClose = document.querySelector('#js-modal-close');
+  const modalBg = document.querySelector('#js-modal-bg');
+  const modalContainer = document.querySelector('#js-modal-container');
 
-  open.addEventListener('click', () => {
-    container.classList.toggle('active');
-    modalBg.classList.toggle('active');
-  });
+  if (modalOpen) {
+    modalOpen.addEventListener('click', () => {
+      modalContainer.classList.toggle('active');
+      modalBg.classList.toggle('active');
+    });
+  }
 
-  close.addEventListener('click', () => {
-    container.classList.toggle('active');
-    modalBg.classList.toggle('active');
-  });
+  if (modalClose) {
+    modalClose.addEventListener('click', () => {
+      modalContainer.classList.toggle('active');
+      modalBg.classList.toggle('active');
+    });
+  }
 
-  modalBg.addEventListener('click', () => {
-    container.classList.remove('active');
-    modalBg.classList.remove('active');
-  });
-
+  if (modalBg) {
+    modalBg.addEventListener('click', () => {
+      modalContainer.classList.remove('active');
+      modalBg.classList.remove('active');
+    });
+  }
 
 
 });

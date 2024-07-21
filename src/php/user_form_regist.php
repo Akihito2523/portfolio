@@ -1,20 +1,11 @@
 <?php
 session_start();
 
-
-// 現在のセッションIDを取得する
-$currentSessionId = session_id();
-
-// セッション変数を全て解除する
-$_SESSION = array();
-
-// セッションを終了する
-session_destroy();
-
 require_once("../config/variable.php");
 require_once('../lib/functions.php');
 require_once('../admin/DataAccessUser.php');
 require_once("../includes/header.php");
+
 // ページネーションのセッションを削除
 unset($_SESSION['$imagePerPage']);
 
@@ -34,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   //   die("CSRFトークンが正しくありません。");
   // }
   // // チェックが通ったらセッションからトークンを削除する（一度きりの使用）
-  // unset($_SESSION['csrf_token']);
+  unset($_SESSION['csrf_token']);
 
   $data = [
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
@@ -48,17 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'image_path' => $_FILES['image_path'] ?? '',
     // 'tmp_path' => $_FILES['image_path']['tmp_path'] ?? '',
     'textarea' => h($_POST['textarea'] ?? ''),
-    'password' => h($_POST['password'] ?? ''),
-    'password_confirm' => h($_POST['password_confirm'] ?? ''),
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
   $error = validateUserForm($data);
-  $imageError = validateImage($_FILES['image_path']);
+  $imageError = validateImage($_FILES['image_path'], $error);
 
   if (empty($error) && empty($imageError)) {
     $_SESSION['data'] = $data;
-
     header("Location: user_form_confirm.php");
     exit;
   } else {
@@ -80,29 +68,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'image_path' => '',
     // 'tmp_path' => '',
     'textarea' => '',
-    'password' => '',
-    'password_confirm' => '',
     'checkbox_name' => ''
   ];
 }
 
-unset($_SESSION['data']);
+// unset($_SESSION['data']);
 
 ?>
 
 <main class="">
   <h2 class="contents-title">ユーザー登録</h2>
 
-  <form action="" method="post" name="form" class="form" enctype="multipart/form-data">
+  <form action="" method="post" name="form" class="form container" enctype="multipart/form-data">
     <!-- CSRFトークンをフォームに埋め込む -->
     <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
       <span class="need form_input_need">【必須】</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="64" value="<?php echo h($data['name']); ?>" autocomplete="name">
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="64" value="<?= h($data['name'] ?? '') ?>" autocomplete="name" aria-describedby="js-textMessage">
       <?php if (isset($error['name'])) : ?>
-        <p class="form_input_error_message" id="js-textMessage"><?= $error['name']; ?></p>
+        <p class="form_input_error_message" id="js-textMessage"><?= $error['name'] ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-textMessage"></p>
     </div>
@@ -110,9 +96,9 @@ unset($_SESSION['data']);
     <div class="form_input_block">
       <label for="js-tel" class="form_input_title">電話番号</label>
       <span class="need form_input_need">【必須】</span>
-      <input type="tel" name="tel" class="form_input_value" id="js-tel" value="<?php echo h($data['tel']); ?>" autocomplete="tel">
+      <input type="tel" name="tel" class="form_input_value" id="js-tel" value="<?= h($data['tel'] ?? ''); ?>" autocomplete="tel" aria-describedby="js-telMessage">
       <?php if (isset($error['tel'])) : ?>
-        <p class="form_input_error_message" id="js-telMessage"><?php echo $error['tel']; ?></p>
+        <p class="form_input_error_message" id="js-telMessage"><?= $error['tel'] ?></p>
       <?php else : ?>
         <p class="form_input_error_message" id="js-telMessage"></p>
       <?php endif; ?>
@@ -122,9 +108,9 @@ unset($_SESSION['data']);
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
       <span class="need form_input_need">【必須】</span>
-      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>" autocomplete="email">
+      <input type="email" name="email" class="form_input_value" id="js-email" value="<?= h($data['email'] ?? ''); ?>" autocomplete="email" aria-describedby="js-emailMessage">
       <?php if (isset($error['email'])) : ?>
-        <p class="form_input_error_message" id="js-emailMessage"><?php echo $error['email']; ?></p>
+        <p class="form_input_error_message" id="js-emailMessage"><?= $error['email'] ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
@@ -132,125 +118,106 @@ unset($_SESSION['data']);
     <div class="form_input_block">
       <label for="js-email-confirm" class="form_input_title">メールアドレス (確認用)</label>
       <span class="need form_input_need">【必須】</span>
-      <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?php echo isset($_POST['email_confirm']) ? h($_POST['email_confirm']) : ''; ?>">
+      <input type="email" name="email_confirm" class="form_input_value" id="js-email-confirm" value="<?= h($_POST['email_confirm'] ?? ''); ?>" aria-describedby="js-emailMessage-confirm">
       <?php if (isset($error['email_confirm'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['email_confirm']; ?></p>
+        <p class="form_input_error_message"><?= $error['email_confirm'] ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage-confirm"></p>
       <span class="form_input_caution">上記と同じメールアドレスを入力してください</span>
     </div>
 
     <!-- $data配列内に'gender'キーが存在しかつvalue値と等しければ、trueを返しchecked属性を出力 -->
-    <div id="js-radio">
+    <div class="form_input_block" id="js-radio">
       <fieldset>
         <legend class="form_input_title">性別<span class="need form_input_need"> 【必須】</span></legend>
         <label class="form_input_label">
-          <input type="radio" name="gender" class="form_input_value_radio" value="man" <?php if (isset($data['gender']) && $data['gender'] === 'man') echo 'checked'; ?> />男性
+          <input type="radio" name="gender" class="form_input_value_radio" value="man" <?= isset($data['gender']) && $data['gender'] === 'man' ? 'checked' : ''; ?> />男性
         </label>
         <label class="form_input_label">
-          <input type="radio" name="gender" class="form_input_value_radio" value="woman" <?php if (isset($data['gender']) && $data['gender'] === 'woman') echo 'checked'; ?> />女性
+          <input type="radio" name="gender" class="form_input_value_radio" value="woman" <?= isset($data['gender']) && $data['gender'] === 'woman' ? 'checked' : ''; ?> />女性
         </label>
         <label class="form_input_label">
-          <input type="radio" name="gender" class="form_input_value_radio" value="others" <?php if (isset($data['gender']) && $data['gender'] === 'others') echo 'checked'; ?> />その他
+          <input type="radio" name="gender" class="form_input_value_radio" value="others" <?= isset($data['gender']) && $data['gender'] === 'others' ? 'checked' : ''; ?> />その他
         </label>
       </fieldset>
       <?php if (isset($error['gender'])) : ?>
-        <p class="form_input_error_message radio_error_message"><?php echo $error['gender']; ?></p>
+        <p class="form_input_error_message radio_error_message"><?= $error['gender'] ?></p>
       <?php endif; ?>
     </div>
 
-    <div id="js-checkbox">
+    <div class="form_input_block" id="js-checkbox">
       <label for="js-checkbox" class="form_input_title form_input_title_checkbox">チェックボックス</label>
       <?php foreach ($genre as $item) : ?>
         <label class="form_input_label">
-          <input type="checkbox" name="genre[]" class="form_input_value_checkbox" value="<?php echo h($item); ?>" <?php echo in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
-          <?= h($item) ?>
+          <input type="checkbox" name="genre[]" class="form_input_value_checkbox" value="<?= h($item); ?>" <?= in_array($item, $data['genre'] ?? []) ? 'checked' : ''; ?>>
+          <?= h($item); ?>
         </label>
       <?php endforeach; ?>
     </div>
 
     <div class="form_input_block">
       <label for="js-select" class="form_input_title">都道府県</label>
-      <select name="pref" id="js-select" class="form_input_value">
+      <select name="pref" id="js-select" class="form_input_value" aria-describedby="js-prefError">
         <option value="">▼選択してください</option>
         <?php foreach ($prefectures as $region => $prefs) : ?>
-          <optgroup label="<?= h($region) ?>">
+          <optgroup label="<?= h($region); ?>">
             <?php foreach ($prefs as $pref) : ?>
-              <option value="<?= h($pref) ?>" <?php if (isset($data['pref']) && $data['pref'] === $pref) echo "selected"; ?>>
-                <?= h($pref) ?></option>
+              <option value="<?= h($pref); ?>" <?= isset($data['pref']) && $data['pref'] === $pref ? 'selected' : ''; ?>>
+                <?= h($pref); ?></option>
             <?php endforeach; ?>
           </optgroup>
         <?php endforeach; ?>
       </select>
       <?php if (isset($error['pref'])) : ?>
-        <p class="form_input_error_message radio_error_message"><?php echo $error['pref']; ?></p>
+        <p class="form_input_error_message radio_error_message" id="js-prefError"><?= $error['pref'] ?></p>
       <?php endif; ?>
     </div>
 
     <div class="form_input_block">
       <label for="js-image" class="form_input_title">写真アップロード</label>
       <span class="need form_input_need">【必須】</span>
-      <input type="file" name="image_path" class="form_input_value" id="js-image" accept="image/*" value="">
+      <div class="form_input_image_block">
+        <input type="file" name="image_path" class="" id="js-image" accept="image/*" value="">
+        <!-- <img src="<?php //echo $result['image_path'] 
+                        ?>" alt="" id="js-imagePreview"> -->
+        <img src="<?= isset($result['image_path']) ? h($result['image_path']) : ''; ?>" alt="" id="js-imagePreview">
+      </div>
+      <?php if (isset($imageError['image_path'])) : ?>
+        <p class="form_input_error_message js-image_path_error" id="js-imageMessage"><?= $imageError['image_path'] ?></p>
+      <?php endif; ?>
       <span class="form_input_caution">※ JPEG、PNG、FIFのみ</span>
     </div>
-    <img src="<?php echo $result['image_path']; ?>" alt="" id="js-imagePreview">
-    <?php if (isset($imageError['image_path'])) : ?>
-      <p class="form_input_error_message image_path_error" id="js-imageMessage"><?php echo $imageError['image_path']; ?></p>
-    <?php endif; ?>
 
     <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>
       <span class="need form_input_any">任意</span>
-      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="10" placeholder="140文字以下"><?php echo $data['textarea']; ?></textarea>
+      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="10" placeholder="140文字以下"><?= h($data['textarea'] ?? ''); ?></textarea>
       <p class="form_input_textarea_message">現在
         <span id="js-textareaCount">0</span>文字入力中です。
       </p>
     </div>
 
     <div class="form_input_block">
-      <label for="js-password" class="form_input_title">パスワード</label>
-      <span class="need form_input_need">【必須】</span>
-      <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
-      <?php if (isset($error['password'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['password']; ?></p>
-      <?php endif; ?>
-      <p class="form_input_error_message" id="js-passwordMessage"></p>
-      <span class="form_input_caution">※半角英数記号8文字以上16文字以下</span>
-    </div>
-
-    <div class="form_input_block">
-      <label for="js-password-confirm" class="form_input_title">パスワード (確認用)</label>
-      <span class="need form_input_need">【必須】</span>
-      <input type="password" name="password_confirm" class="form_input_value" id="js-password-confirm">
-      <?php if (isset($error['password_confirm'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['password_confirm']; ?></p>
-      <?php endif; ?>
-      <p class="form_input_error_message" id="js-passwordConfirmMessage"></p>
-    </div>
-
-    <div class="form_input_block">
       <p class="form_input_title">個人情報の取り扱いについて</p>
       <div id="privacyPolicy" class="form_input_privacy_policy">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil minus excepturi harum, labore earum odio. Minima itaque sit labore, nostrum earum eaque, debitis qui sunt molestias, voluptas accusamus veritatis minus quidem sint cumque inventore eligendi! Suscipit, dolores sed numquam ex eum minus esse, rerum harum accusantium cumque animi commodi ipsa ullam nulla quibusdam? Quis magni, doloribus amet commodi ratione quibusdam nam nobis tempore excepturi laboriosam molestias nulla enim deleniti! Sed impedit ducimus deserunt sunt, tempora amet, temporibus unde reiciendis, animi veritatis a ut aperiam in aspernatur earum. Iusto ipsa aperiam ex eveniet earum similiqueur quos asperiores eius nobis totam error mollitia rem dolor excepturi doloremque molestiae magni porro id exercitationem, sunt fuga minus modi cupiditate quidem? Molestias autem quos voluptates accusantium quod alias distinctio illum nulla. Quis accusamus ipsa obcaecati tempora necessitatibus error qui ipsam eum eveniet delectus placeat animi quo sunt earum, atque numquam tenetur est molestias quas fugit praesentium voluptatibus alias ducimus! Soluta officia sunt at id illo? Commodi optio dolores dolore ducimus unde nobis necessitatibus temporibus doloribus corrupti velit distinctio maiores nulla, cum molestias accusamus, qui sapiente suscipit neque labore ratione quos a eaque error. Provident vel debitis dolores, necessitatibus non in quam fugiat et excepturi a esse? Iusto facere porro inventore deleniti, repellendus eum in voluptatibus odio nulla, officiis magni suscipit distinctio essetate quae aliquam quia amet excepturi dolores ullam provident illum, ad exercitationem expedita sed non impedit, dolor quod natus voluptatem consequuntur incidunt officiis sapiente iure. Libero, explicabo. Modi possimus ab repellendus? Consectetur nihil, aperiam beatae earum fugiat asperiores mollitia modi molestias distinctio harum excepturi sit necessitatibus minima accusamus ullam doloremque officiis. Aspernatur, eius consequatur. Voluptas nobis maxime saepe ipsum fuga voluptatem est ex molestias reiciendis temporibus. Similique, quibusdam beatae esse magni consequatur cum vero, ab ad ullam, facere provident? Ullam, consequatur! Eum nostrum incidunt tempora. Dolore sit veritatis, asperiores numquam iste debitis vel.
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil minus excepturi harum, labore earum odio. Minima itaque sit labore, nostrum ea
       </div>
     </div>
 
     <div class="form_input_block">
       <label class="form_input_label">
-        <input type="checkbox" name="checkbox_name" class="form_input_value_checkbox" id="js-check" value="同意" <?php if ($data['checkbox_name'] === '同意') echo 'checked'; ?>>
+        <input type="checkbox" name="checkbox_name" class="form_input_value_checkbox" id="js-check" value="同意" <?= $data['checkbox_name'] === '同意' ? 'checked' : ''; ?>>
         <label for="js-check" class="form_input_title">個人情報保護方針に同意する</label>
       </label>
       <?php if (isset($error['checkbox_name'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['checkbox_name']; ?></p>
+        <p class="form_input_error_message"><?= $error['checkbox_name'] ?></p>
       <?php endif; ?>
       <span class="need form_input_need">【必須】</span>
     </div>
 
     <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
 
-
   </form>
 </main>
-
 
 <?php require_once("../includes/footer.php"); ?>

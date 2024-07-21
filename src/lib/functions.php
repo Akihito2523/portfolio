@@ -197,6 +197,33 @@ function validateAdminSignup($data)
 }
 
 /**
+ * 「admin_password_update.php」の入力データをバリデーションする
+ * @param array $data フォームデータ
+ * @return array エラーメッセージの配列
+ */
+function validateAdminPasswordUpdate($data)
+{
+    $error = [];
+
+    $password = isset($data['password']) ? $data['password'] : '';
+    $password_confirm = isset($data['password_confirm']) ? $data['password_confirm'] : '';
+
+    if (empty($password)) {
+        $error['password'] = 'パスワードを入力してください。';
+    } elseif (strlen($password) < 8 || strlen($password) > 16) {
+        $error['password'] = 'パスワードは8文字以上16文字以下で入力してください。';
+    } elseif (!preg_match('/[A-Za-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[\W_]/', $password)) {
+        $error['password'] = 'パスワードには英字、数字、記号を含めてください。';
+    } elseif (empty($password_confirm)) {
+        $error['password_confirm'] = '確認用パスワードを入力してください。';
+    } elseif ($password !== $password_confirm) {
+        $error['password_confirm'] = 'パスワードが一致しません。';
+    }
+
+    return $error;
+}
+
+/**
  * 「user_form_regist.php」と「user_form_update.php」の入力データをバリデーションする
  * @param array $data フォームデータ
  * @return array エラーメッセージの配列
@@ -210,8 +237,8 @@ function validateUserForm($data)
         $error['name'] = '氏名を入力してください。';
     } elseif (mb_strlen($_POST['name']) > 64) {
         $error['name'] = '氏名は64文字以内で入力してください。';
-    } 
-    
+    }
+
     // 電話番号が空かどうかをチェック
     if (empty($data['tel'])) {
         $error['tel'] = '電話番号を入力してください';
@@ -252,7 +279,7 @@ function validateUserForm($data)
  * @param array $image アップロードされた画像の情報（$_FILESから取得）
  * @return array エラーメッセージの配列
  */
-function validateImage($image)
+function validateImage($image, $validateerror)
 {
     $error = [];
 
@@ -272,26 +299,27 @@ function validateImage($image)
         return $error;
     }
 
-    $filename = date('YmdHis') . '_' . $imageName;
+    // 他のバリデーションチェックでエラーがなければ保存する
+    if (empty($validateerror)) {
+        $filename = date('YmdHis') . '_' . $imageName;
+        $uploadDir = '../../public/image/';
 
-    $uploadDir = '../../public/image/';
+        if (!file_exists($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                $error['image_path'] = 'ディレクトリの作成に失敗しました';
+                return $error;
+            }
+        }
 
-    if (!file_exists($uploadDir)) {
-        if (!mkdir($uploadDir, 0755, true)) {
-            $error['image_path'] = 'ディレクトリの作成に失敗しました';
+        $savePath = $uploadDir . $filename;
+
+        if (!move_uploaded_file($tmp_path, $savePath)) {
+            $error['image_path'] = 'ファイルの保存に失敗しました';
             return $error;
         }
     }
-
-    $savePath = $uploadDir . $filename;
-
-    if (!move_uploaded_file($tmp_path, $savePath)) {
-        $error['image_path'] = 'ファイルの保存に失敗しました';
-        return $error;
-    }
-
     $_SESSION['savePath'] = $savePath;
-
+    
     return [];
 }
 

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2 class="contents-title">管理者用退会ページ</h2>
   <p class="form_input_caution">現在のメールアドレスとパスワードを入力してください</p>
 
-  <form action="" method="post" name="form" class="form">
+  <form action="" method="post" name="form" class="form container">
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>

@@ -43,28 +43,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="">
 
-  <form action="" method="post" name="form" class="form">
+  <form action="" method="post" name="form" class="form container">
 
     <div class="form_input_block">
       <label for="js-email" class="form_input_title">メールアドレス</label>
-      <input type="email" name="email" class="form_input_value" id="js-email" value="<?php echo h($data['email']); ?>">
+      <input type="email" name="email" class="form_input_value" id="js-email" value="<?= h($data['email'] ?? ''); ?>">
       <?php if (isset($error['email'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['email']; ?></p>
+        <p class="form_input_error_message"><?= $error['email']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>
-      <input type="password" name="password" class="form_input_value" id="js-password" value="<?php echo h($data['password']); ?>">
+      <input type="password" name="password" class="form_input_value" id="js-password" value="<?= h($data['password'] ?? ''); ?>">
       <?php if (isset($error['password'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['password']; ?></p>
+        <p class="form_input_error_message"><?= $error['password']; ?></p>
       <?php endif; ?>
       <p class="form_input_error_message" id="js-passwordMessage"></p>
     </div>
 
     <?php if ($error_message) : ?>
-      <div class="form_input_error_message dberror_message"><?php echo h($error_message); ?></div>
+      <div class="form_input_error_message dberror_message"><?= h($error_message); ?></div>
     <?php endif; ?>
 
     <div class="form_login_btn_block">

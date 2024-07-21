@@ -12,7 +12,7 @@ $result = $user->UserDbDetail($_GET['id']);
 
 <main class="">
 <h2 class="contents-title">ユーザー詳細</h2>
-  <form class="form">
+  <form class="form container detail">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
       <dd class="form_confirm_value"><?php echo h($result['name']); ?></dd>

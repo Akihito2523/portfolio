@@ -4,6 +4,7 @@ require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
 
+
 // formに埋め込むcsrf tokenの生成
 if (empty($_SESSION['_csrf_token'])) {
     $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
@@ -16,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $admin->AdminDbPassReset($email);
 
     if ($result) {
-
         $admin = new Admin();
         $isSent = $admin->AdminDbEmail($email);
         if ($isSent) {
@@ -31,12 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
+
 ?>
 
 <main class="">
-    <h2 class="contents-title">パスワードリセット</h2>
+    <h2 class="contents-title">パスワード再設定手続き</h2>
 
-    <form action="" method="post" name="form" class="form">
+    <form action="" method="post" name="form" class="form container">
         <!-- CSRFトークンをフォームに埋め込む -->
         <input type="hidden" name="_csrf_token" value="<?= $_SESSION['_csrf_token']; ?>">
         <div class="form_input_block">
@@ -54,4 +55,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </main>
 
-<?php require_once("../includes/footer.php"); ?>ï
+<?php require_once("../includes/footer.php"); ?>

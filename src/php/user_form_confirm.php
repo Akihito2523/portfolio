@@ -36,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'checkbox_name' => h($_POST['checkbox_name'] ?? '')
   ];
 
-
   $user = new User();
   $result = $user->UserDbCreate($data);
 
@@ -75,40 +74,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <main class="">
-  <form action="" method="post" name="form" class="form" enctype="multipart/form-data">
+  <form action="" method="post" name="form" class="form form_confirm container" enctype="multipart/form-data">
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">氏名</dt>
-      <dd class="form_confirm_value"><?php echo h($data['name']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['name'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">電話番号</dt>
-      <dd class="form_confirm_value"><?php echo h($data['tel']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['tel'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">メールアドレス</dt>
-      <dd class="form_confirm_value"><?php echo h($data['email']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['email'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">性別</dt>
-      <dd class="form_confirm_value"><?php echo h($data['gender']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['gender'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">チェックボックス</dt>
       <dd class="form_confirm_value">
         <?php foreach ($data['genre'] as $item) : ?>
-          <?php echo h($item)  . '  '?><br>
+          <?= h($item) ?> <br>
         <?php endforeach; ?>
       </dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">都道府県</dt>
-      <dd class="form_confirm_value"><?php echo h($data['pref']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['pref'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">写真</dt>
       <dd class="form_confirm_value">
         <?php if (!empty($data['image_path']['name'])) : ?>
-          <?php echo $data['image_path']['name']; ?>
+          <?= h($data['image_path']['name']) ?>
         <?php else : ?>
           画像がアップロードされていません
         <?php endif; ?>
@@ -117,15 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">テキストエリア</dt>
-      <dd class="form_confirm_value"><?php echo h($data['textarea']); ?></dd>
-    </dl>
-    <dl class="form_confirm_block">
-      <dt class="form_input_title form_confirm_title">パスワード</dt>
-      <dd class="form_confirm_value">*****</dd>
+      <dd class="form_confirm_value"><?= h($data['textarea'] ?? '') ?></dd>
     </dl>
     <dl class="form_confirm_block">
       <dt class="form_input_title form_confirm_title">利用規約</dt>
-      <dd class="form_confirm_value"><?php echo h($data['checkbox_name']); ?></dd>
+      <dd class="form_confirm_value"><?= h($data['checkbox_name'] ?? '') ?></dd>
     </dl>
 
     <?php if ($error_message) : ?>
@@ -143,20 +138,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <!-- hiddenパラメータ -->
-    <input type="hidden" name="name" value="<?php echo h($data['name']); ?>">
-    <input type="hidden" name="tel" value="<?php echo h($data['tel']); ?>">
-    <input type="hidden" name="email" value="<?php echo h($data['email']); ?>">
-    <input type="hidden" name="gender" value="<?php echo h($data['gender']); ?>">
+    <input type="hidden" name="name" value="<?= h($data['name'] ?? '') ?>">
+    <input type="hidden" name="tel" value="<?= h($data['tel'] ?? '') ?>">
+    <input type="hidden" name="email" value="<?= h($data['email'] ?? '') ?>">
+    <input type="hidden" name="gender" value="<?= h($data['gender'] ?? '') ?>">
     <?php foreach ($data['genre'] as $item) : ?>
-      <input type="hidden" name="genre[]" value="<?php echo h($item); ?>">
+      <input type="hidden" name="genre[]" value="<?= h($item) ?>">
     <?php endforeach; ?>
-
-    <!-- <input type="hidden" name="genre" value="<?php echo $genreInfo; ?>"> -->
-    <input type="hidden" name="pref" value="<?php echo h($data['pref']); ?>">
-    <input type="hidden" name="image_path" value="<?php echo h($data['image_path']['name']); ?>">
-    <input type="hidden" name="textarea" value="<?php echo h($data['textarea']); ?>">
-    <input type="hidden" name="password" value="<?php echo h($data['password']); ?>">
-    <input type="hidden" name="checkbox_name" value="<?php echo h($data['checkbox_name']); ?>">
+    <input type="hidden" name="pref" value="<?= h($data['pref'] ?? '') ?>">
+    <input type="hidden" name="image_path" value="<?= h($data['image_path']['name'] ?? '') ?>">
+    <input type="hidden" name="textarea" value="<?= h($data['textarea'] ?? '') ?>">
+    <input type="hidden" name="checkbox_name" value="<?= h($data['checkbox_name'] ?? '') ?>">
   </form>
 </main>
 
