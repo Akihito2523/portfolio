@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'email_confirm' => '',
   ];
 }
+
 ?>
 
 <?php //echo h($id); 
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
       <span class="need form_input_need">必須</span>
-      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value=""<?= h($data['name'] ?? ''); ?>">
+      <input type="text" name="name" class="form_input_value" id="js-text" maxlength="20" autofocus value="<?= h($data['name'] ?? ''); ?>">
       <?php if (isset($error['name'])) : ?>
         <p class="form_input_error_message" id="js-textMessage"><?= $error['name']; ?></p>
       <?php endif; ?>

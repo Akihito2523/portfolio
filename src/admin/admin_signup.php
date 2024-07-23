@@ -29,8 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $admin = new Admin();
     $result = $admin->AdminDbCreate($data);
     if ($result) {
+      $_SESSION['dbsuccess_message'] = "会員登録が完了しました";
       unset($_SESSION['data']);
-      header("Location: admin_signup_thanks.php");
+      header("Location: admin_signin.php");
       exit;
     } else {
       $_SESSION['data'] = $data;

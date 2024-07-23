@@ -106,9 +106,6 @@ function getDateTime()
 
 
 
-
-
-
 /**
  * 「admin_signin.php」と「admin_delete_account.php」の入力データをバリデーションする
  * @param array $data フォームデータ

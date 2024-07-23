@@ -27,16 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $admin->AdminDbUpdateDeleted($data);
 
     if ($result) {
+      $_SESSION['dbsuccess_message'] = '退会が完了しました。';
       unset($_SESSION['data']);
       unset($_SESSION['id']);
-      header('Location: admin_delete_account_thanks.php');
+      header('Location: admin_signin.php');
       exit();
     } else {
       header('Location: admin_delete_account.php');
       exit();
     }
   }
-
 } else {
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'email' => '',
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <main class="">
   <h2 class="contents-title">管理者用退会ページ</h2>
-  <p class="form_input_caution">現在のメールアドレスとパスワードを入力してください</p>
+  <p class="form_input_caution">メールアドレスとパスワードを入力してください</p>
 
   <form action="" method="post" name="form" class="form container">
 
@@ -56,9 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <label for="js-email" class="form_input_title">メールアドレス</label>
       <input type="email" name="email" class="form_input_value" id="js-email" value="">
       <?php if (isset($error['email'])) : ?>
-        <p class="form_input_error_message"><?php echo $error['email']; ?></p>
+        <p class="form_input_error_message" id="js-emailMessage"><?php echo $error['email']; ?></p>
+      <?php else : ?>
+        <p class="form_input_error_message" id="js-emailMessage"></p>
       <?php endif; ?>
-      <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
 
     <div class="form_input_block">

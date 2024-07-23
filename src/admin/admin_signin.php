@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     'email' => h($_POST['email'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
   ];
-
   $error = validateAdminLogin($data);
 
   if (empty($error)) {
@@ -41,6 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
+<?php if (isset($_SESSION['dbsuccess_message'])) { ?>
+    <div class="dbsuccess_message "><span class="dbsuccess_check">✔︎</span><?php echo $_SESSION['dbsuccess_message']; ?></div>
+  <?php unset($_SESSION['dbsuccess_message']);
+  } ?>
+
 <main class="">
 
   <form action="" method="post" name="form" class="form container">
@@ -53,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
+    
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>

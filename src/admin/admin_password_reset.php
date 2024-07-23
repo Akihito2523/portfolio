@@ -17,18 +17,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $admin->AdminDbPassReset($email);
 
     if ($result) {
+        // メールアドレスが存在し、かつ退会日時かNULLでない処理
         $admin = new Admin();
         $isSent = $admin->AdminDbEmail($email);
         if ($isSent) {
-            echo 'メール送信完了';
             header('Location: admin_password_reset_thanks.php');
-        } else {
-            echo 'メール送信末完了';
         }
-        exit();
     } else {
+        // メールアドレスが存在しない処理
         header('Location: admin_password_reset_thanks.php');
-        exit();
     }
 }
 

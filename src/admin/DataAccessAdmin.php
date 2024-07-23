@@ -44,7 +44,6 @@ class Admin
         $stmt = $dbh->prepare($sql);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-
         $admin = $stmt->fetch();
 
         if ($admin && password_verify($password, $admin['password'])) {
@@ -91,7 +90,7 @@ class Admin
     }
 
     //============================================
-    // UPDATE文（削除日時更新）
+    // UPDATE文（退会日時更新）
     //============================================
     public function AdminDbUpdateDeleted($data)
     {
@@ -99,7 +98,7 @@ class Admin
         try {
             $admin = $this->authenticateUser($data['email'], $data['password']);
 
-            // ログイン者情報しか削除できません
+            // ログイン者の情報しか退会できません
             if ($data['id'] !== $admin['id']) {
                 $_SESSION['error'] = '他の人の情報は削除できません';
                 return false;
@@ -117,8 +116,6 @@ class Admin
             $stmt_update->bindValue(':deleted_at', getDateTime(), PDO::PARAM_STR);
             $stmt_update->bindValue(':id', $admin['id'], PDO::PARAM_INT);
             $stmt_update->execute();
-            $_SESSION['message'] = '退会が完了しました。';
-
             return true;
         } catch (Exception $e) {
             error_log('削除処理エラー: ' . $e->getMessage());
@@ -143,7 +140,6 @@ class Admin
             $stmt->bindValue(':user_agent', getUserAgent(), PDO::PARAM_STR);
             $stmt->bindValue(':ip_address', getIpAddress(), PDO::PARAM_STR);
             $stmt->execute();
-            $_SESSION['message'] = '会員登録が完了しました。';
             return true;
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'メールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
@@ -167,7 +163,7 @@ class Admin
             $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
             $stmt->bindValue(':updated_at', getDateTime(), PDO::PARAM_STR);
             $stmt->execute();
-            $_SESSION['message'] = 'ユーザー登録更新完了しました。';
+            // $_SESSION['message'] = 'ユーザー登録更新完了しました。';
             return true;
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
@@ -196,9 +192,9 @@ class Admin
         return $result;
     }
 
-    /**
-     * ログアウト処理
-     */
+    //============================================
+    // ログアウト処理
+    //============================================
     public function AdminDblogout()
     {
         session_unset();
@@ -207,9 +203,9 @@ class Admin
         exit();
     }
 
-    /**
-     * パスワード再登録
-     */
+    //============================================
+    // パスワード再設定手続き
+    //============================================
     public function AdminDbPassReset($email)
     {
 
@@ -217,12 +213,29 @@ class Admin
         $dbh = $this->AdminDbConnect();
 
         try {
+
             $stmt = $dbh->prepare($sql);
             $stmt->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
             // メールアドレスに一致するエントリがあるかどうかを確認
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result;
+
+            $sql = "UPDATE $this->table_name SET
+            password_reset_requested_at = :password_reset_requested_at  WHERE id = :id";
+
+            // パスワード再手続き依頼日時の処理
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':id', $result['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':password_reset_requested_at', getDateTime(), PDO::PARAM_STR);
+            $stmt->execute();
+
+            // 退会日時が登録されていれば、falseを返す
+            if ($result['deleted_at']) {
+                return false;
+            } else {
+
+                return $result;
+            }
         } catch (Exception $e) {
             error_log('AdminDbPassResetエラー: ' . $e->getMessage());
             throw new Exception('登録に失敗しました');
@@ -243,6 +256,8 @@ class Admin
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
+        $_SESSION['email'] = $email;
+
         // 有効期限（秒単位、ここでは900秒＝15分）
         $expiry = 900;
 
@@ -254,12 +269,17 @@ class Admin
 
         // メール本文
         $body = <<<EOD
-        以下のURLにアクセスし、パスワードの変更を行ってください。有効期限は{$expiry}秒です。
+        本メールは、パスワードの再登録手続きをされたことを確認するためにお送りしています。
+        パスワードの再登録を希望される場合は、以下のURLにアクセスし、パスワードの変更を行ってください。
+
+        ■パスワードの再登録ページURL
         {$url}
+        ※本メールは通知専用メールで返ができません。
+        ※有効期限は{$expiry}秒です。
         EOD;
 
         // From ヘッダーの設定（実際のドメイン名や送信元のアドレスに修正が必要です）
-        $from = "From: example@example.com";
+        $from = "From: trippleblog0942.com";
 
         // Content-Type ヘッダーの設定
         $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -267,7 +287,6 @@ class Admin
 
         // メール送信
         $isSent = mb_send_mail($email, $subject, $body, $headers);
-
         return $isSent;
     }
 
@@ -277,24 +296,20 @@ class Admin
     public function AdminDbPasswordUpdate($data)
     {
         $sql = "UPDATE $this->table_name SET
-        password = :password, password_changed_at = :password_changed_at WHERE id = :id";
+        password = :password, password_changed_at = :password_changed_at WHERE email = :email";
 
         $dbh = $this->AdminDbConnect();
         try {
             $stmt = $dbh->prepare($sql);
-            $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+            $stmt->bindValue(':email', $data['email'], PDO::PARAM_INT);
             $stmt->bindValue(':password', password_hash($data['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
             $stmt->bindValue(':password_changed_at', getDateTime(), PDO::PARAM_STR);
 
             // SQLを実行し、結果を確認する
             $result = $stmt->execute();
-
             if ($result) {
-                $_SESSION['message'] = 'パスワードの更新が完了しました。';
                 return true;
             } else {
-                $_SESSION['error'] = 'パスワードの更新に失敗しました。';
-                error_log('AdminDbPasswordUpdate: パスワード更新に失敗しました。');
                 return false;
             }
         } catch (PDOException $e) {

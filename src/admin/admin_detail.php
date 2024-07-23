@@ -16,8 +16,9 @@ $_SESSION['data'] = $result;
 <main class="">
   <h2 class="contents-title">管理者詳細</h2>
 
+<!-- 会員情報変更完了メッセージ -->
   <?php if (isset($_SESSION['dbsuccess_message'])) { ?>
-    <div class="dbsuccess_message "><span class="dbsuccess_check">✔︎</span><?php echo $_SESSION['dbsuccess_message']; ?></div>
+    <div class="dbsuccess_message"><span class="dbsuccess_check">✔︎</span><?php echo $_SESSION['dbsuccess_message']; ?></div>
   <?php unset($_SESSION['dbsuccess_message']);
   } ?>
 

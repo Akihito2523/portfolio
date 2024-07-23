@@ -5,7 +5,6 @@ require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
 
 $id = $_SESSION['id'];
-$name = $_SESSION['name'];
 
 // CSRFトークンを生成
 $csrf_token = setToken();
@@ -19,7 +18,7 @@ $error = [];
 // $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $data = [
-    'id' => $id,
+    'email' => h($_POST['email'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
   ];
@@ -30,10 +29,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $admin = new Admin();
     $result = $admin->AdminDbPasswordUpdate($data);
     if ($result) {
+      $_SESSION['dbsuccess_message'] = "パスワードの変更が完了しました";
       unset($_SESSION['data']);
       header("Location: admin_signin.php");
       exit;
     } else {
+      $_SESSION['dbsuccess_message'] = 'パスワードの更新に失敗しました。';
       $_SESSION['data'] = $data;
       header('Location: admin_delete_account.php');
       exit();
@@ -41,11 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 } else {
   // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
+  unset($_SESSION['data']);
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'password' => '',
     'password_confirm' => '',
   ];
 }
+
 
 ?>
 
