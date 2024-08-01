@@ -12,7 +12,9 @@ CREATE TABLE admin (
     password_changed_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL
+    deleted_at TIMESTAMP NULL,
+    token VARCHAR(64) NULL,
+    expiry TIMESTAMP  NULL
 );
 
 

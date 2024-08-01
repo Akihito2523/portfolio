@@ -52,7 +52,7 @@ $items = range(1, $userDbCount);
     <div class="modal-bg" id="js-modal-bg"></div>
     <div class="modal-container" id="js-modal-container">
         <div class="modal-container-block">
-             <img src="../../public/icon/search.svg" alt="search">
+            <img src="../../public/icon/search.svg" alt="search">
             <p class="">検索</p>
         </div>
         <form action="admin_top.php" method="post" class="">
@@ -117,7 +117,8 @@ $items = range(1, $userDbCount);
             <a href="?page=<?php echo $currentPage - 1; ?>" class="pagination_link">前へ</a>
         <?php endif; ?>
 
-        <?php //echo gettype($totalPage) ; ?>
+        <?php //echo gettype($totalPage) ; 
+        ?>
         <!-- ページ番号の表示 -->
         <?php for ($i = 1; $i <= $totalPage; $i++) : ?>
             <!-- 選択されているページネーション -->
@@ -137,6 +138,13 @@ $items = range(1, $userDbCount);
         <a href="?page=<?php echo $totalPage; ?>" class="pagination_link">最後</a>
 
     </div>
+
+    <div class="form_btn_block">
+        <a class="el_btn" href="user_form_regist.php">写真投稿</a>
+    </div>
+
 </div>
+
+
 
 <?php require_once("../includes/footer.php"); ?>

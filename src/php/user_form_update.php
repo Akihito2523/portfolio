@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $_SESSION['data'] = $data;
     header("Location: user_form_thanks.php");
-    exit;
+    exit();
   }
 } else {
   // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入

@@ -1,5 +1,7 @@
 <?php
 session_start();
+// CSRFトークンを生成
+unset($_SESSION['csrf_token']);
 
 require_once("../config/variable.php");
 require_once('../lib/functions.php');
@@ -9,25 +11,14 @@ require_once("../includes/header.php");
 // ページネーションのセッションを削除
 unset($_SESSION['$imagePerPage']);
 
-// CSRFトークンを生成
-unset($_SESSION['csrf_token']);
-$csrf_token = setToken();
-
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']);
 
 $error = [];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // POSTリクエストの場合のみチェックを行う
-  // if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-  //   // CSRFトークンが一致しない場合は処理を中断するなどの対応を行う
-  //   die("CSRFトークンが正しくありません。");
-  // }
-  // // チェックが通ったらセッションからトークンを削除する（一度きりの使用）
-  unset($_SESSION['csrf_token']);
-
   $data = [
+    'csrf_token' => isset($_POST['csrf_token']) ? h($_POST['csrf_token']) : '',
     'name' => isset($_POST['name']) ? h($_POST['name']) : '',
     'tel' => h($_POST['tel'] ?? ''),
     'email' => h($_POST['email'] ?? ''),
@@ -48,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($error) && empty($imageError)) {
     $_SESSION['data'] = $data;
     header("Location: user_form_confirm.php");
-    exit;
+    exit();
   } else {
     // エラーがある場合はエラーメッセージをセッションに保存して再度フォームを表示する
     // $_SESSION['error'] = '入力内容に誤りがあります。';
@@ -81,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <form action="" method="post" name="form" class="form container" enctype="multipart/form-data">
     <!-- CSRFトークンをフォームに埋め込む -->
-    <input type="hidden" name="csrf_token" value="<?php echo h($csrf_token); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
     <div class="form_input_block">
       <label for="js-text" class="form_input_title">氏名</label>
@@ -191,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <label for="js-textarea" class="form_input_title">テキストエリア</label>
       <span class="need form_input_any">任意</span>
-      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="10" placeholder="140文字以下"><?= h($data['textarea'] ?? ''); ?></textarea>
+      <textarea name="textarea" id="js-textarea" class="form_input_value form_input_value_textarea" maxlength="140" placeholder="140文字以下"><?= h($data['textarea'] ?? ''); ?></textarea>
       <p class="form_input_textarea_message">現在
         <span id="js-textareaCount">0</span>文字入力中です。
       </p>
@@ -215,8 +206,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <span class="need form_input_need">【必須】</span>
     </div>
 
-    <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
-
+    <div class="form_btn_block">
+      <a class="el_btn el_btn_back" href="user_top.php">戻る</a>
+      <input type="submit" value="確認" class="el_btn el_btn_submit" id="js-submit" disabled>
+    </div>
   </form>
 </main>
 

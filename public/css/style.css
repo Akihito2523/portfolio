@@ -380,6 +380,10 @@ main {
   text-align: center;
 }
 
+.form_input_link_delete {
+  margin-bottom: 0;
+}
+
 .form_input_link:active,
 .form_input_link:hover {
   font-weight: 700;
@@ -755,11 +759,13 @@ main {
 .form_input_block_displayedResults {
   display: flex;
   align-items: center;
+  margin: 20px 0;
 }
 
 .form_input_displayTitle {
   margin: 0 10px 0 0;
 }
+
 .imagearea {
   max-width: 1200px;
 }
@@ -891,7 +897,7 @@ main {
 
 /* 表示件数 */
 .image_gallery_form {
-  padding: 0 40px;
+  /* padding: 0 40px; */
   display: flex;
   justify-content: flex-end;
   margin: 0;
@@ -930,6 +936,177 @@ main {
   color: #fff;
   background: #8cacc6;
 }
+
+/* profile.php */
+/* ============================================ */
+/*
+LOADING
+================================================ */
+#loading {
+  background-color: #eee;
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+#loading-screen {
+  background-color: #d5edeb;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  translate: 0 100vh;
+}
+
+#loading p {
+  font-size: 2rem;
+  font-family: 'Oswald', sans-serif;
+}
+
+
+/* 画像スライダー */
+.mainImage {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto 100px;
+  padding: 0 40px;
+  position: relative;
+}
+
+/* 左右矢印 */
+.mainImage .prevImage,
+.mainImage .nextImage {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: .3s;
+  cursor: pointer;
+  font-size: 30px;
+}
+
+.mainImage .prevImage {
+  left: 0;
+  /* background-image: url(../image/) */
+}
+
+.mainImage .nextImage {
+  right: 0;
+}
+
+.mainImage .prevImage::before, 
+.mainImage .nextImage::before {
+  font-size: 30px;
+  color: #555;
+}
+
+.mainImage .prevImage:hover,
+.mainImage .nextImage:hover {
+  opacity: .5;
+}
+
+.mainImage img {
+  width: 100%;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+}
+.mainImage .currentSlideNumber {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.imageList {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto 100px;
+  display: flex;
+  flex-wrap: wrap;
+  /* 上下左右の余白を調整 */
+  /* 縦方向は30px、横方向は100％-(liの幅31%*3)=7% 
+  そして7%/2=(3.5%)にすると横の二つの幅が決まる */
+  gap: 30px 3.5%;
+}
+
+.imageList li {
+  width: 31%;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+  box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+  transition: .3s;
+}
+
+.imageList li:hover {
+  opacity: .7;
+  /* ホバーしたときに1.5倍写真を大きくする */
+  transform: scale(1.05);
+}
+
+
+/* アコーディオン */
+.details {
+  transition: .3s;
+  overflow: hidden;
+  margin-top: -10px;
+  padding-bottom: 20px;
+  width: 50%;
+  text-align: center;
+}
+
+.details:last-of-type {
+  margin-bottom: 0;
+}
+
+.details[open] {
+  margin-top: 0;
+  padding-bottom: 10px;
+}
+
+.details-summary {
+  display: block;
+  padding: 15px;
+  transition: .3s;
+  transform: translateY(10px);
+  background-color: #4156bc;
+  font-size: 20px;
+  text-decoration: underline;
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.details-summary::after {
+  content: '>';
+  transform: rotate(90deg);
+  /* display: inline-block; */
+}
+
+.details-summary:hover {
+  cursor: pointer;
+}
+
+.details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.details[open] .details-summary {
+  transform: translateY(0);
+}
+
+.details[open] .details-summary::after {
+  transform: rotate(-90deg) translateY(-3px);
+}
+
+.details-content {
+  padding: 20px;
+  background-color: #dfe0e7;
+  border-bottom: 2px solid #4156bc;
+  border-left: 2px solid #4156bc;
+  border-right: 2px solid #4156bc;
+}
+
+
 
 /* レスポンス */
 /* ============================================ */
@@ -984,8 +1161,8 @@ main {
   }
 
   .table td img {
-    max-width: 70px;
-    height: 70px
+    max-width: 170px;
+    height: 50px;
   }
 
   .table_thead th,
@@ -1006,4 +1183,11 @@ main {
     padding: 4px;
   }
 
+}
+
+
+@media (max-width: 900px) {
+  section .cards {
+    flex-direction: column;
+  }
 }

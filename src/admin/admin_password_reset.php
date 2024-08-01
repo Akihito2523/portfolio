@@ -4,28 +4,37 @@ require_once('../lib/functions.php');
 require_once('DataAccessAdmin.php');
 require_once("../includes/admin_header.php");
 
-
-// formに埋め込むcsrf tokenの生成
+// CSRFトークンの生成
 if (empty($_SESSION['_csrf_token'])) {
     $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_input(INPUT_POST, 'email');
+    // CSRFトークンの検証
+    $submitted_token = filter_input(INPUT_POST, '_csrf_token');
+    if ($submitted_token !== $_SESSION['_csrf_token']) {
+        die("不正なリクエストです。");
+    }
+
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
     $admin = new Admin();
-    $result = $admin->AdminDbPassReset($email);
+    // メールアドレスに対応するレコードが存在し、トークンを生成
+    $token = $admin->AdminDbPassReset($email);
 
-    if ($result) {
-        // メールアドレスが存在し、かつ退会日時かNULLでない処理
-        $admin = new Admin();
-        $isSent = $admin->AdminDbEmail($email);
+    if ($token) {
+        // メールアドレスが存在し、かつ退会日時かNULLでないトークンの送信処理
+        $expiry = 900; // 15分（秒単位）
+        $isSent = $admin->sendPasswordResetEmail($email, $token, $expiry);
         if ($isSent) {
             header('Location: admin_password_reset_thanks.php');
+            exit();
+        } else {
+            echo "メールの送信に失敗しました。";
         }
     } else {
-        // メールアドレスが存在しない処理
-        header('Location: admin_password_reset_thanks.php');
+        // メールアドレスが存在しないか、退会している場合
+        echo "指定されたメールアドレスは存在しません。";
     }
 }
 

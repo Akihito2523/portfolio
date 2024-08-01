@@ -26,6 +26,25 @@ $userDb = $user->UserDbRead();
 $userDbResults = $userDb['result'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['logout'])) {
+        // ログアウト処理
+        // $admin = new Admin();
+        // $admin->AdminDblogout();
+        session_unset();
+        session_destroy(); // セッションを破棄
+        // $_SESSION['dbsuccess_message'] = "ログアウトしました";
+        header('Location: admin_signin.php');
+        exit();
+    }
+
+    if (isset($_POST['delete']) && isset($_POST['id'])) {
+        $user->UserDbDelete($_POST['id']);
+        $_SESSION['dbsuccess_message'] = "削除成功しました";
+        header('Location: admin_top.php');
+        exit();
+    }
+
+    // 検索処理
     $keyword = h($_POST['keyword'] ?? '');
     $genre = isset($_POST['genre']) ? $_POST['genre'] : [];
 
@@ -36,17 +55,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $form = new User();
     $formData = $form->UserDbSearch(['keyword' => $keyword]);
+} else {
+    $formData = $userDbResults;
 }
+
 ?>
 
 <div class="container">
+
+    <?php if (isset($_SESSION['dbsuccess_message'])) { ?>
+        <div class="dbsuccess_message"><span class="dbsuccess_check">✔︎</span><?php echo $_SESSION['dbsuccess_message']; ?></div>
+    <?php unset($_SESSION['dbsuccess_message']);
+    } ?>
+
     <div class="adminName"><?php echo h($name); ?>さんログイン中</div>
 
 
     <div class="modal-bg" id="js-modal-bg"></div>
     <div class="modal-container" id="js-modal-container">
         <div class="modal-container-block">
-             <img src="../../public/icon/search.svg" alt="search">
+            <img src="../../public/icon/search.svg" alt="search">
             <p class="">検索</p>
         </div>
         <form action="admin_top.php" method="post" class="">
@@ -96,6 +124,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <tbody class="table_tbody">
                 <?php if ($userDbResults) : ?>
                     <?php foreach ($formData = $formData ?? $userDbResults as $column) : ?>
+                        <?php //foreach ($formData as $column) : 
+                        ?>
 
                         <tr class="table_tr">
                             <td><a href="/src/admin/user_detail.php?id=<?php echo h($column["id"]); ?>" class="form_input_link" ontouchstart=""><?php echo h($column["id"]); ?></a></td>
@@ -108,8 +138,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <td class="table_td"><img src="<?php echo h($column["image_path"]); ?>" alt=""></td>
                             <td><?php echo h($column["textarea"]); ?></td>
                             <td><?php echo h($column["created_at"]); ?></td>
+                            <!-- <td>
+                                <a href="/src/admin/admin_top.php?id=<?php echo $column['id']; ?>" class="js-btndelete form_input_link" ontouchstart="">削除</a>
+                            </td> -->
                             <td>
-                                <a href="/src/admin/user_delete.php?id=<?php echo $column['id']; ?>" class="js-btndelete form_input_link" ontouchstart="">削除</a>
+                                <form action="admin_top.php" method="post">
+                                    <input type="hidden" name="id" value="<?php echo h($column['id']); ?>">
+                                    <input type="submit" name="delete" value="削除" class="js-btndelete form_input_link form_input_link_delete">
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -128,7 +164,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
 
-    <form action="admin_signout.php" method="post">
+    <!-- ログアウトフォーム -->
+    <form action="" method="post">
         <input type="submit" name="logout" value="ログアウト" class="el_btn el_btn_top">
     </form>
 

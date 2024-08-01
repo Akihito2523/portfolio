@@ -31,9 +31,39 @@ function getPageTitle()
             $pageTitle = 'ユーザー登録';
             break;
         case 'user_top.php':
-            $pageTitle = 'ユーザートップページ';
+            $pageTitle = 'ユーザートップ';
             break;
-            // 追加のページがあればここに追加
+        case 'admin_signin.php':
+            $pageTitle = 'ログイン';
+            break;
+        case 'admin_signup.php':
+            $pageTitle = '会員登録';
+            break;
+        case 'admin_top.php':
+            $pageTitle = 'トップ';
+            break;
+        case 'user_detail.php':
+            $pageTitle = 'ユーザー詳細';
+            break;
+        case 'admin_detail.php':
+            $pageTitle = '詳細';
+            break;
+        case 'admin_update.php':
+            $pageTitle = '情報変更';
+            break;
+        case 'admin_delete_account.php':
+            $pageTitle = '退会';
+            break;
+        case 'admin_password_reset.php':
+            $pageTitle = 'パスワード再登録手続き';
+            break;
+        case 'admin_password_reset.php':
+        case 'admin_password_reset_thanks.php':
+            $pageTitle = 'パスワード再登録手続き';
+            break;
+        case 'admin_password_update.php.php':
+            $pageTitle = 'パスワード再設定';
+            break;
         default:
             $pageTitle = 'デフォルトタイトル';
             break;
@@ -60,10 +90,11 @@ function setToken()
     // トークンを生成
     $csrf_token = bin2hex(random_bytes(32));
     // セッションにトークンを保存
-    $_SESSION['csrf_token'] = $csrf_token;
+    // $_SESSION['csrf_token'] = $csrf_token;
     // トークンを返す
     return $csrf_token;
 }
+
 
 /**
  * IPアドレスを取得する
@@ -316,7 +347,7 @@ function validateImage($image, $validateerror)
         }
     }
     $_SESSION['savePath'] = $savePath;
-    
+
     return [];
 }
 

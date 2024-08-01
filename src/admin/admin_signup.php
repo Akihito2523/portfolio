@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $_SESSION['dbsuccess_message'] = "会員登録が完了しました";
       unset($_SESSION['data']);
       header("Location: admin_signin.php");
-      exit;
+      exit();
     } else {
       $_SESSION['data'] = $data;
       header('Location: admin_signup.php');

@@ -6,42 +6,63 @@ require_once("../includes/admin_header.php");
 
 $id = $_SESSION['id'];
 
-// CSRFトークンを生成
-$csrf_token = setToken();
+// CSRFトークンの生成
+$csrf_token = bin2hex(random_bytes(32));
+$_SESSION['_csrf_token'] = $csrf_token;
 
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']);
 
 $error = [];
 
-// POSTリクエストの場合、フォームが送信されたとして処理
-// $_POSTがセットされている場合その値を、セットされていない場合は空の文字列を返す
+// URLからトークンを取得
+$url_token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_STRING);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // CSRFトークンの検証
+  // $submitted_token = filter_input(INPUT_POST, '_csrf_token');
+  // if ($submitted_token !== $_SESSION['_csrf_token']) {
+  //   die("Invalid CSRF token.");
+  // }
+
   $data = [
     'email' => h($_POST['email'] ?? ''),
     'password' => h($_POST['password'] ?? ''),
     'password_confirm' => h($_POST['password_confirm'] ?? ''),
+    'token' => h($_POST['token'] ?? ''),
   ];
+
+  // トークンの検証
+  // if ($data['token'] !== $url_token) {
+  //   die("Invalid token.");
+  // }
 
   $error = validateAdminPasswordUpdate($data);
 
   if (empty($error)) {
     $admin = new Admin();
-    $result = $admin->AdminDbPasswordUpdate($data);
+
+    $result = $admin->AdminDbPasswordUpdate($data, $url_token);
     if ($result) {
-      $_SESSION['dbsuccess_message'] = "パスワードの変更が完了しました";
-      unset($_SESSION['data']);
-      header("Location: admin_signin.php");
-      exit;
+      // パスワード変更通知の送信
+      $result = $admin->sendPasswordChangeEmail($_SESSION['email']);
+      if ($result) {
+        $_SESSION['dbsuccess_message'] = "パスワードの変更が完了しました";
+        unset($_SESSION['data']);
+        unset($_SESSION['email']);
+        header("Location: admin_signin.php");
+        exit();
+      } else {
+        $_SESSION['dbsuccess_message'] = "パスワードの変更に失敗しました";
+      }
     } else {
-      $_SESSION['dbsuccess_message'] = 'パスワードの更新に失敗しました。';
+      $_SESSION['dbsuccess_message'] = 'メールの送信に失敗しました。';
       $_SESSION['data'] = $data;
-      header('Location: admin_delete_account.php');
+      header('Location: admin_signin.php');
       exit();
     }
   }
 } else {
-  // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
   unset($_SESSION['data']);
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'password' => '',
@@ -58,6 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <form action="" method="post" name="form" class="form container" enctype="multipart/form-data">
 
     <!-- CSRFトークンをフォームに埋め込む -->
+    <input type="hidden" name="_csrf_token" value="<?= h($_SESSION['_csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>

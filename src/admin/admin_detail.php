@@ -10,6 +10,7 @@ $id = $_SESSION['id'];
 
 $admin = new Admin();
 $result = $admin->AdminDbDetail($id);
+
 $_SESSION['data'] = $result;
 ?>
 
@@ -37,7 +38,7 @@ $_SESSION['data'] = $result;
       <a class="el_btn" href="admin_update.php">会員情報変更</a>
     </div>
     <p class="form_input_link"><a href="admin_delete_account.php" ontouchstart="">※退会はこちら</a></p>
-    <p class="form_input_link"><a href="admin_password_update.php" ontouchstart="">※パスワード変更はこちら</a></p>
+    <!-- <p class="form_input_link"><a href="admin_password_update.php" ontouchstart="">※パスワード変更はこちら</a></p> -->
 
   </form>
 </main>

@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // 更新処理が成功した場合
       $_SESSION['dbsuccess_message'] = "会員情報の更新が完了しました";
       header("Location: admin_detail.php");
-      exit;
+      exit();
     } else {
       header('Location: admin_update.php');
       exit();

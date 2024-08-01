@@ -57,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <?php endif; ?>
       <p class="form_input_error_message" id="js-emailMessage"></p>
     </div>
-    
 
     <div class="form_input_block">
       <label for="js-password" class="form_input_title">パスワード</label>

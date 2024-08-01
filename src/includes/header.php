@@ -14,13 +14,12 @@
 </head>
 
 <body ontouchstart="">
-    <header class="ly_header container">
+    <!-- <header class="ly_header container">
         <div class="ly_header_inner">
             <div class="bl_headerUtils">
-                <!-- <a class="bl_headerUtils_logo" href="#"><img src="/image/ピカチュウ.png" alt=""></a> -->
-                <!-- <a class="el_btn" href="#">お問い合わせ</a> -->
+                <a class="bl_headerUtils_logo" href="#"><img src="/image/ピカチュウ.png" alt=""></a>
+                <a class="el_btn" href="#">お問い合わせ</a>
             </div>
-            <!-- /.bl_headerUtils -->
             <nav>
                 <ul class="bl_headerNav">
                     <li class="bl_headerNav_item">
@@ -35,5 +34,4 @@
                 </ul>
             </nav>
         </div>
-        <!-- /.ly_header_inner -->
-    </header>
+    </header> -->

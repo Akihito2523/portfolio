@@ -4,8 +4,6 @@ require_once('../lib/functions.php');
 require_once('../admin/DataAccessUser.php');
 require_once("../includes/header.php");
 
-// CSRFトークンを生成
-$csrf_token = setToken();
 
 $error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
 unset($_SESSION['error']);
@@ -42,13 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if ($result) {
     unset($_SESSION['data']);
     header("Location: user_form_thanks.php");
-    exit;
+    exit();
   } else {
     header('Location: user_form_confirm.php');
     exit();
   }
 } else {
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
+    'csrf_token' => '',
     'name' => '',
     'tel' => '',
     'email' => '',

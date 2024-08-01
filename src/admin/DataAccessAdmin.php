@@ -187,25 +187,18 @@ class Admin
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         $dbh = null;
         if (!$result) {
+            header("Location: admin_signin.php");
             throw new Exception('データが見つかりません');
         }
         return $result;
     }
 
-    //============================================
-    // ログアウト処理
-    //============================================
-    public function AdminDblogout()
-    {
-        session_unset();
-        session_destroy();
-        header('Location: admin_signin.php');
-        exit();
-    }
-
-    //============================================
-    // パスワード再設定手続き
-    //============================================
+    /**
+     * パスワードリセットのトークンを生成し、データベースに保存します
+     *
+     * @param string $email メールアドレス
+     * @return string|false トークンを返す。メールアドレスが存在しない場合はfalseを返す
+     */
     public function AdminDbPassReset($email)
     {
 
@@ -213,73 +206,81 @@ class Admin
         $dbh = $this->AdminDbConnect();
 
         try {
-
             $stmt = $dbh->prepare($sql);
             $stmt->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt->execute();
             // メールアドレスに一致するエントリがあるかどうかを確認
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $sql = "UPDATE $this->table_name SET
-            password_reset_requested_at = :password_reset_requested_at  WHERE id = :id";
-
-            // パスワード再手続き依頼日時の処理
-            $stmt = $dbh->prepare($sql);
-            $stmt->bindValue(':id', $result['id'], PDO::PARAM_INT);
-            $stmt->bindValue(':password_reset_requested_at', getDateTime(), PDO::PARAM_STR);
-            $stmt->execute();
-
             // 退会日時が登録されていれば、falseを返す
-            if ($result['deleted_at']) {
-                return false;
-            } else {
+            // if ($result['deleted_at']) {
+            //     return false;
+            // } else {
+            //     return $result;
+            // }
 
-                return $result;
+            if ($result) {
+                // トークンの生成
+                $token = bin2hex(random_bytes(32));
+                $expiry = date('Y-m-d H:i:s', time() + 900); // 15分後のタイムスタンプ
+
+                // パスワードリセットのトークンと有効期限を更新
+                $sql = "UPDATE $this->table_name SET 
+                password_reset_requested_at = :password_reset_requested_at, 
+                token = :token, 
+                expiry = :expiry 
+                WHERE email = :email";
+                $stmt = $dbh->prepare($sql);
+                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+                $stmt->bindValue(':password_reset_requested_at', getDateTime(), PDO::PARAM_STR);
+                $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+                $stmt->bindValue(':expiry', $expiry, PDO::PARAM_STR);
+                $stmt->execute();
+
+                return $token;
+            } else {
+                return false; // メールアドレスが存在しない
             }
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             error_log('AdminDbPassResetエラー: ' . $e->getMessage());
-            throw new Exception('登録に失敗しました');
+            throw new Exception('パスワードリセット処理に失敗しました');
         }
     }
 
     /**
-     * パスワード再登録メール送信
+     * パスワードリセット用のメールを送信します
      *
      * @param string $email メール送信先のメールアドレス
      * @param string $token トークン（パスワードリセット用の一意の識別子）
      * @param int $expiry 有効期限（秒単位での期限、例えば900秒＝15分）
      * @return bool 送信が成功した場合はtrue、失敗した場合はfalse
      */
-    public function AdminDbEmail($email)
+    public function sendPasswordResetEmail($email, $token, $expiry)
     {
         // 日本語のメール送信のための設定
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 
-        $_SESSION['email'] = $email;
+        // パスワードリセット用のURL
+        $url = "https://trippleblog0942.com/src/admin/admin_password_update.php?token={$token}";
 
-        // 有効期限（秒単位、ここでは900秒＝15分）
-        $expiry = 900;
-
-        // パスワードリセット用のUR
-        $url = "https://trippleblog0942.com/src/admin/admin_password_update.php";
+        // 有効期限を分単位で計算
+        $expiry_minutes = $expiry / 60;
 
         // メールの件名
         $subject =  'パスワードリセット用URLをお送りします';
 
         // メール本文
-        $body = <<<EOD
-        本メールは、パスワードの再登録手続きをされたことを確認するためにお送りしています。
+        $body = "本メールは、パスワードの再登録手続きをされたことを確認するためにお送りしています。
         パスワードの再登録を希望される場合は、以下のURLにアクセスし、パスワードの変更を行ってください。
 
         ■パスワードの再登録ページURL
         {$url}
-        ※本メールは通知専用メールで返ができません。
-        ※有効期限は{$expiry}秒です。
-        EOD;
+        ※本メールは通知専用メールで返信ができません。
+        ※有効期限は{$expiry_minutes} 分です。";
 
         // From ヘッダーの設定（実際のドメイン名や送信元のアドレスに修正が必要です）
-        $from = "From: trippleblog0942.com";
+        $from = "From: no-reply@trippleblog0942.com";
 
         // Content-Type ヘッダーの設定
         $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
@@ -290,32 +291,117 @@ class Admin
         return $isSent;
     }
 
-    //============================================
-    // UPDATE文（パスワード変更）
-    //============================================
-    public function AdminDbPasswordUpdate($data)
+    /**
+     * トークンの検証
+     *
+     * @param string $token パスワードリセットトークン
+     * @return bool トークンが有効な場合はtrue、無効な場合はfalse
+     */
+    private function verifyResetToken($token)
     {
+        $sql = "SELECT COUNT(*) FROM $this->table_name WHERE token = :token AND expiry > NOW()";
+        $dbh = $this->AdminDbConnect();
+
+        try {
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+            $stmt->execute();
+            $count = $stmt->fetchColumn();
+            return $count > 0;
+        } catch (PDOException $e) {
+            error_log('verifyResetTokenエラー: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * パスワードを更新します
+     *
+     * @param array $data 更新するパスワードとメールアドレスを含む連想配列
+     * @param string $token パスワードリセットトークン
+     * @return bool 更新が成功した場合はtrue、失敗した場合はfalse
+     */
+    public function AdminDbPasswordUpdate($data, $url_token)
+    {
+
+        // トークンを検証
+        if (!$this->verifyResetToken($url_token)) {
+            return false; // トークンが無効な場合
+        }
+
+        $sql = "SELECT * FROM $this->table_name WHERE token = :token";
+        $dbh = $this->AdminDbConnect();
+
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':token', $url_token, PDO::PARAM_STR);
+        $stmt->execute();
+        $admin = $stmt->fetch();
+
+        if (!$admin) {
+            return false; // トークンに一致するレコードが存在しない場合
+        }
+
+        // トークンに一致するメールアドレスを取得
+        $email = $admin['email']; 
+
+        // トークンが有効な場合はパスワードを更新
         $sql = "UPDATE $this->table_name SET
-        password = :password, password_changed_at = :password_changed_at WHERE email = :email";
+        password = :password, 
+        password_changed_at = :password_changed_at,
+        token = NULL, 
+        expiry = NULL
+        WHERE token = :token";
 
         $dbh = $this->AdminDbConnect();
         try {
             $stmt = $dbh->prepare($sql);
-            $stmt->bindValue(':email', $data['email'], PDO::PARAM_INT);
+            $stmt->bindValue(':token', $url_token, PDO::PARAM_STR);
             $stmt->bindValue(':password', password_hash($data['password'], PASSWORD_DEFAULT), PDO::PARAM_STR);
             $stmt->bindValue(':password_changed_at', getDateTime(), PDO::PARAM_STR);
 
             // SQLを実行し、結果を確認する
             $result = $stmt->execute();
+
             if ($result) {
-                return true;
-            } else {
-                return false;
+                // パスワード変更通知の送信
+                $this->sendPasswordChangeEmail($email);
             }
+
+            return $result;
         } catch (PDOException $e) {
-            $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
+            $_SESSION['error'] = 'パスワードの更新に失敗しました: ' . $e->getMessage();
             error_log('AdminDbPasswordUpdateエラー: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * パスワード再設定メールを送信します
+     *
+     * @param string $email メール送信先のメールアドレス
+     * @return bool 送信が成功した場合はtrue、失敗した場合はfalse
+     */
+    public function sendPasswordChangeEmail($email)
+    {
+        // 日本語のメール送信のための設定
+        mb_language("Japanese");
+        mb_internal_encoding("UTF-8");
+
+        // メールの件名
+        $subject = "パスワード変更のお知らせ";
+
+        // メール本文
+        $message = "こんにちは、\n\nあなたのパスワードが変更されました。\n\nもしこの変更を行っていない場合は、直ちにサポートに連絡してください。";
+
+        // From ヘッダーの設定
+        $from = "From: no-reply@trippleblog0942.com";
+
+        // Content-Type ヘッダーの設定
+        $headers = "Content-Type: text/plain; charset=UTF-8\r\n";
+        $headers .= $from;
+
+        // メール送信
+        $isSent = mb_send_mail($email, $subject, $message, $headers);
+        return $isSent;
     }
 }
