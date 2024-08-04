@@ -566,7 +566,7 @@ window.addEventListener('load', () => {
       easing: 'ease',
       fill: 'forwards',
     }
-  );  
+  );
 
   // ローディング中テキスト
   loadingText.animate(
@@ -579,7 +579,7 @@ window.addEventListener('load', () => {
         opacity: 0,
         offset: 1  //100%
       },
-    ], 
+    ],
     {
       duration: 1200,
       easing: 'ease',
@@ -613,106 +613,107 @@ function reveal() {
 }
 
 
-const heading = document.querySelector('#heading');
+// const heading = document.querySelector('#heading');
 
-const keyframes = {
-  opacity: [0, 1],
-  rotate: ['x 360deg', 'x 0deg'],
-  translate: ['0 50px', 0],
-  color: ['#f66', '#fc2', '#0c6', '#0bd'],
-  backgroundPosition: ['100% 0', '0 0'],
-};
-// 監視対象が範囲内に現れたら実行する動作
-const showKirin = (entries) => {
-  const keyframes = {
-    opacity: [0, 1],
-    translate: ['200px 0', 0],
-  };
-  console.log('observeの範囲');
-  console.log(entries[0].target);
-  entries[0].target.animate(keyframes, 600);
-};
+// const keyframes = {
+//   opacity: [0, 1],
+//   rotate: ['x 360deg', 'x 0deg'],
+//   translate: ['0 50px', 0],
+//   color: ['#f66', '#fc2', '#0c6', '#0bd'],
+//   backgroundPosition: ['100% 0', '0 0'],
+// };
+// // 監視対象が範囲内に現れたら実行する動作
+// const showKirin = (entries) => {
+//   const keyframes = {
+//     opacity: [0, 1],
+//     translate: ['200px 0', 0],
+//   };
+//   console.log('observeの範囲');
+//   console.log(entries[0].target);
+//   entries[0].target.animate(keyframes, 600);
+// };
 
-// 監視ロボットの設定
-const observe = new IntersectionObserver(showKirin);
+// // 監視ロボットの設定
+// const observe = new IntersectionObserver(showKirin);
 
-// #kirinを監視するよう指示
-observe.observe(document.querySelector('#observe'));
+// // #kirinを監視するよう指示
+// observe.observe(document.querySelector('#observe'));
 
-const options = {
-  duration: 2000,
-  direction: 'alternate',
-  easing: 'ease',
-  //   iterations: Infinity,
-};
-heading.animate(keyframes, options);
+// const options = {
+//   duration: 2000,
+//   direction: 'alternate',
+//   easing: 'ease',
+//   //   iterations: Infinity,
+// };
+// heading.animate(keyframes, options);
 
-heading.animate(
-  {
-    filter: [
-      'grayscale(0%)', // 開始値
-      'grayscale(100%)' // 終了値
-    ]
-  },
-  {
-    duration: 500, // ミリ秒指定
-    fill: 'forwards', // 終了時にプロパティーを保つ
-    easing: 'ease' // 加減速種類
-  }
-);
+// heading.animate(
+//   {
+//     filter: [
+//       'grayscale(0%)', // 開始値
+//       'grayscale(100%)' // 終了値
+//     ]
+//   },
+//   {
+//     duration: 500, // ミリ秒指定
+//     fill: 'forwards', // 終了時にプロパティーを保つ
+//     easing: 'ease' // 加減速種類
+//   }
+// );
 
-const items = document.querySelectorAll('.img-item');
-for (let i = 0; i < items.length; i++) {
-  const keyframes = {
-    filter: ['blur(20px)', 'blur(0)'],
-    opacity: [0, 1],
-    rotate: ['5deg', 0],
-    scale: [1.1, 1],
-    translate: ['0 50px', 0],
-  };
-  const options = {
-    duration: 600,
-    delay: i * 300,
-    fill: 'forwards',
-  };
-  items[i].animate(keyframes, options);
-}
+// const items = document.querySelectorAll('.img-item');
+// for (let i = 0; i < items.length; i++) {
+//   const keyframes = {
+//     filter: ['blur(20px)', 'blur(0)'],
+//     opacity: [0, 1],
+//     rotate: ['5deg', 0],
+//     scale: [1.1, 1],
+//     translate: ['0 50px', 0],
+//   };
+//   const options = {
+//     duration: 600,
+//     delay: i * 300,
+//     fill: 'forwards',
+//   };
+//   items[i].animate(keyframes, options);
+// }
 
-const body = document.body;
-body.addEventListener('wheel', (event) => {
-  // 表示領域の高さ
-  const viewWidth = document.documentElement.clientWidth;
-  console.log(`表示領域の幅：${viewWidth}`)
-  // スクロールを無効
-  if (600 > viewWidth) {
-    event.preventDefault();
-  }
-}, {
-  passive: false
-});
+// const body = document.body;
+// body.addEventListener('wheel', (event) => {
+//   // 表示領域の高さ
+//   const viewWidth = document.documentElement.clientWidth;
+//   console.log(`表示領域の幅：${viewWidth}`)
+//   // スクロールを無効
+//   if (600 > viewWidth) {
+//     event.preventDefault();
+//   }
+// }, {
+//   passive: false
+// });
 
 
+// 写真スライド
 const imageTotalNumber = 6,
-  mainImageElement = document.querySelector("#mainImage");
-imageListElement = document.querySelector("#imageList");
+mainImageElement = document.querySelector("#js-mainImage");
+imageListElement = document.querySelector("#js-imageList");
 // 矢印
-prevImageElement = document.querySelector("#prevImage");
-nextImageElement = document.querySelector("#nextImage");
+prevImageElement = document.querySelector("#js-prevImage");
+nextImageElement = document.querySelector("#js-nextImage");
 let currentSlideNumber = 1;
 
 console.log(imageListElement);
 // mainImageの中にsrcのimagesをセットする
-mainImageElement.setAttribute("src", "../image/IMG_1.JPG");
+mainImageElement.setAttribute("src", "../../public/imageProfile/hobby_01.JPG");
 
-const number = document.querySelector("#currentSlideNumber");
+const number = document.querySelector("#js-currentSlideNumber");
 number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
 
 // ドットナビゲーション
 for (let i = 0; i < imageTotalNumber; i++) {
   const li = document.createElement("li");
-  li.style.backgroundImage = `url(image/IMG_${i + 1}.jpg)`;
+  li.style.backgroundImage = `url(../../public/imageProfile/hobby_0${i + 1}.JPG)`;
   li.addEventListener("click", () => {
-    mainImageElement.setAttribute("src", `image/IMG_${i + 1}.jpg`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${i + 1}.JPG`);
     number.textContent = `${i + 1} / ${imageTotalNumber}`;
   })
   imageListElement.appendChild(li);
@@ -722,10 +723,10 @@ for (let i = 0; i < imageTotalNumber; i++) {
 prevImageElement.addEventListener("click", () => {
   if (currentSlideNumber !== 1) {
     currentSlideNumber--;
-    mainImageElement.setAttribute("src", `../image/IMG_${currentSlideNumber}.jpg`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
   } else if (currentSlideNumber === 1) {
     currentSlideNumber = 6;
-    mainImageElement.setAttribute("src", `../image/IMG_${currentSlideNumber}.jpg`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
   }
   number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
 })
@@ -734,13 +735,13 @@ prevImageElement.addEventListener("click", () => {
 nextImageElement.addEventListener("click", () => {
   if (currentSlideNumber !== imageTotalNumber) {
     currentSlideNumber++
-    mainImageElement.setAttribute("src", `image/IMG_${currentSlideNumber}.jpg`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
   }
   else if (currentSlideNumber === 6) {
     currentSlideNumber = 1;
-    mainImageElement.setAttribute("src", `image/IMG_${currentSlideNumber}.jpg`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
   }
   number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
-}) 
+})
 
 

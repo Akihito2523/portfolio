@@ -35,7 +35,7 @@
                 <nav>
                     <ul class="bl_headerNav">
                         <li class="bl_headerNav_item">
-                            <a class="bl_headerNav_link" href="../admin/profile.php">ポートフォリオ</a>
+                            <a class="bl_headerNav_link" href="../admin/profile.php">プロフィール</a>
                         </li>
                         <li class="bl_headerNav_item">
                             <a class="bl_headerNav_link" href="../admin/admin_top.php">トップ</a>
