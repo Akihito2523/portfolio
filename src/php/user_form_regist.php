@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <main class="">
-  <h2 class="contents-title">ユーザー登録</h2>
+  <h2 class="contents-title">写真投稿</h2>
 
   <form action="" method="post" name="form" class="form container" enctype="multipart/form-data">
     <!-- CSRFトークンをフォームに埋め込む -->
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form_input_block">
       <p class="form_input_title">個人情報の取り扱いについて</p>
       <div id="privacyPolicy" class="form_input_privacy_policy">
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nihil minus excepturi harum, labore earum odio. Minima itaque sit labore, nostrum ea
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro modi perspiciatis sequi qui fuga illum officiis sed, doloremque incidunt dolorum quaerat quidem adipisci minus quo est repudiandae facilis molestiae ducimus! Dolores et quia harum ab voluptate officiis natus, officia facere laudantium consequatur odit quisquam aliquam porro labore! Consequuntur hic maiores, ipsum corrupti quia reprehenderit. Eius fugiat corporis cum officiis. Exercitationem minus expedita ipsum atque fuga, molestiae possimus illum dolor earum tempore ratione numquam explicabo adipisci vero recusandae, non placeat vitae commodi qui quos optio. Libero sit tenetur accusantium, vel temporibus voluptas, officia deserunt, minima quos illo dolorum omnis recusandae nostrum? Inventore iure veritatis deserunt fugit ratione sint numquam enim distinctio molestias, dolorum recusandae eos incidunt quo similique, exercitationem placeat delectus unde porro minima commodi quisquam tenetur a! Cum quaerat nulla ipsa iusto ut. Cupiditate possimus, nostrum laboriosam veniam nisi quisquam incidunt deserunt iure tenetur error sed totam tempora asperiores non quibusdam quod nesciunt. Ducimus quia totam ad odit obcaecati sunt officia quos cumque nesciunt recusandae tenetur quo voluptatum incidunt earum illum tempora, voluptatibus at similique ex eum architecto libero ratione. Veniam voluptates consequatur fugit, amet reiciendis, architecto adipisci quia ea tenetur asperiores unde rem beatae. Dolores possimus qui autem iusto!
       </div>
     </div>
 

@@ -703,7 +703,7 @@ let currentSlideNumber = 1;
 
 console.log(imageListElement);
 // mainImageの中にsrcのimagesをセットする
-mainImageElement.setAttribute("src", "../../public/imageProfile/hobby_01.JPG");
+mainImageElement.setAttribute("src", "../../public/imageProfile/hobby_01.jpg");
 
 const number = document.querySelector("#js-currentSlideNumber");
 number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
@@ -711,9 +711,9 @@ number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
 // ドットナビゲーション
 for (let i = 0; i < imageTotalNumber; i++) {
   const li = document.createElement("li");
-  li.style.backgroundImage = `url(../../public/imageProfile/hobby_0${i + 1}.JPG)`;
+  li.style.backgroundImage = `url(../../public/imageProfile/hobby_0${i + 1}.jpg)`;
   li.addEventListener("click", () => {
-    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${i + 1}.JPG`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${i + 1}.jpg`);
     number.textContent = `${i + 1} / ${imageTotalNumber}`;
   })
   imageListElement.appendChild(li);
@@ -723,10 +723,10 @@ for (let i = 0; i < imageTotalNumber; i++) {
 prevImageElement.addEventListener("click", () => {
   if (currentSlideNumber !== 1) {
     currentSlideNumber--;
-    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.jpg`);
   } else if (currentSlideNumber === 1) {
     currentSlideNumber = 6;
-    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.jpg`);
   }
   number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
 })
@@ -735,11 +735,11 @@ prevImageElement.addEventListener("click", () => {
 nextImageElement.addEventListener("click", () => {
   if (currentSlideNumber !== imageTotalNumber) {
     currentSlideNumber++
-    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.jpg`);
   }
   else if (currentSlideNumber === 6) {
     currentSlideNumber = 1;
-    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.JPG`);
+    mainImageElement.setAttribute("src", `../../public/imageProfile/hobby_0${currentSlideNumber}.jpg`);
   }
   number.textContent = `${currentSlideNumber} / ${imageTotalNumber}`;
 })
