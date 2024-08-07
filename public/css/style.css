@@ -529,8 +529,6 @@ main {
   max-width: 100%;
 }
 
-
-
 .modal-bg {
   position: fixed;
   top: 0;
@@ -705,8 +703,6 @@ main {
   transition: 0.4s ease;
 }
 
-
-
 .js-passwordProgress {
   background-color: #3498DB;
   position: absolute;
@@ -736,7 +732,6 @@ main {
 .js-circle.js-circle-active {
   border-color: #3498DB;
 }
-
 
 /* admin_detail */
 /* ============================================ */
@@ -874,7 +869,6 @@ main {
   text-align: center;
   transition: bottom .2s linear;
 }
-
 
 .image_gallery_box:hover .image_gallery_icons {
   bottom: 0;
@@ -1095,9 +1089,6 @@ main {
 }
 
 /* 仕事 */
-
-
-
 .box {
   position: relative;
 }

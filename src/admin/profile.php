@@ -6,11 +6,10 @@ require_once("../includes/admin_header.php");
 ?>
 
 <!-- ローディング画面 -->
-<!-- <div id="loading">
+<div id="loading">
   <p>Loading...</p>
   <div id="loading-screen"></div>
-</div> -->
-
+</div>
 
 <div class="container">
 
@@ -138,8 +137,6 @@ require_once("../includes/admin_header.php");
       </p>
     </details>
   </div>
-
-
 
 </div>
 

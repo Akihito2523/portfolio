@@ -28,11 +28,8 @@ $userDbResults = $userDb['result'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['logout'])) {
         // ログアウト処理
-        // $admin = new Admin();
-        // $admin->AdminDblogout();
         session_unset();
-        session_destroy(); // セッションを破棄
-        // $_SESSION['dbsuccess_message'] = "ログアウトしました";
+        session_destroy();
         header('Location: admin_signin.php');
         exit();
     }
@@ -69,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } ?>
 
     <div class="adminName"><?php echo h($name); ?>さんログイン中</div>
-
 
     <div class="modal-bg" id="js-modal-bg"></div>
     <div class="modal-container" id="js-modal-container">
@@ -163,7 +159,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </section>
     </div>
 
-
     <!-- ログアウトフォーム -->
     <form action="" method="post">
         <input type="submit" name="logout" value="ログアウト" class="el_btn el_btn_top">
@@ -172,5 +167,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <?php require_once("../includes/footer.php"); ?>
-
-<!-- <a href="../../public/image/"></a> -->

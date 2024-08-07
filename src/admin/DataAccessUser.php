@@ -2,17 +2,32 @@
 
 require_once('../lib/functions.php');
 require_once('../config/env.php');
-
+/**
+ * ユーザーデータを管理するクラス
+ */
 class User
 {
+    /**
+     * テーブル名
+     *
+     * @var string
+     */
     protected $table_name;
+
+    /**
+     * コンストラクタ
+     * テーブル名を設定します。
+     */
     public function __construct()
     {
         $this->table_name = preg_replace('/[^a-zA-Z0-9_]/', '', 'user');
     }
-    //============================================
-    // 1.DBへ接続
-    //============================================
+    /**
+     * データベースへ接続します。
+     *
+     * @return PDO データベース接続オブジェクト
+     * @throws Exception データベース接続に失敗した場合
+     */
     public function UserDbConnect()
     {
         $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
@@ -32,22 +47,18 @@ class User
         }
     }
 
-    //============================================
-    // INSERT文（データ追加）
-    //============================================
+    /**
+     * ユーザーのデータをデータベースに追加します。
+     *
+     * @param array $data ユーザー情報を含む配列
+     * @return bool 成功した場合はtrue、失敗した場合はfalse
+     */
     public function UserDbCreate($data)
     {
 
         $sql = "INSERT INTO $this->table_name (name, tel, email, gender, genre, pref, image_path, textarea, password, checkbox_name, user_agent, ip_address) VALUES (:name, :tel, :email, :gender, :genre, :pref,  :image_path, :textarea, :password, :checkbox_name, :user_agent, :ip_address)";
 
         $genre_str = implode('、', $data['genre']);
-
-        echo '<pre>';
-        var_dump($genre_str);
-        echo '</pre>';
-        echo '<br>';
-        // exit('exitを実行中');
-
 
         $dbh = $this->UserDbConnect();
         try {
@@ -75,13 +86,16 @@ class User
             } else {
                 $_SESSION['error'] = '登録に失敗しました: ' . $e->getMessage();
             }
-            error_log('user_form_confirmエラー: ' . $e->getMessage());
+            error_log('UserDbCreateエラー: ' . $e->getMessage());
+            return false;
         }
     }
 
-    //============================================
-    // SELECT文（データ取得）
-    //============================================
+    /**
+     * データベースから全ユーザー情報を取得します。
+     *
+     * @return array 結果と件数を含む連想配列
+     */
     public function UserDbRead()
     {
         $dbh = $this->UserDbConnect();
@@ -130,9 +144,13 @@ class User
     //     }
     // }
 
-    //============================================
-    // DELETE文（データ削除）
-    //============================================
+    /**
+     * ユーザーのデータを削除します。
+     *
+     * @param int $id ユーザーID
+     * @return void
+     * @throws Exception データ削除に失敗した場合
+     */
     public function UserDbDelete($id)
     {
         if (empty($id)) {
@@ -140,8 +158,8 @@ class User
         }
         $dbh = $this->UserDbConnect();
 
-        $stmt = $dbh->prepare("DELETE FROM $this->table_name where id = :id Limit 1");
-        $stmt->bindValue(':id', (int)$id, \PDO::PARAM_INT);
+        $stmt = $dbh->prepare("DELETE FROM $this->table_name WHERE id = :id LIMIT 1");
+        $stmt->bindValue(':id', (int)$id, PDO::PARAM_INT);
         try {
             $stmt->execute();
         } catch (PDOException $e) {
@@ -150,9 +168,13 @@ class User
         }
     }
 
-    //============================================
-    // SELECT文（データ詳細）
-    //============================================
+    /**
+     * ユーザーIDに基づいて詳細情報を取得します。
+     *
+     * @param int $id ユーザーID
+     * @return array ユーザーの詳細情報
+     * @throws Exception データが見つからない場合
+     */
     public function UserDbDetail($id)
     {
         if (empty($id)) {
@@ -160,7 +182,7 @@ class User
         }
 
         $dbh = $this->UserDbConnect();
-        $stmt = $dbh->prepare("SELECT * FROM $this->table_name where id = :id");
+        $stmt = $dbh->prepare("SELECT * FROM $this->table_name WHERE id = :id");
         $stmt->bindValue(':id', (int)$id, \PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -188,10 +210,16 @@ class User
     //     }
     // }
 
+    /**
+     * ユーザーを検索します。
+     *
+     * @param array $data 検索条件を含む配列
+     * @return array 検索結果の配列
+     * @throws Exception 検索に失敗した場合
+     */
     public function UserDbSearch($data)
     {
         $sql = "SELECT * FROM $this->table_name WHERE name LIKE :keyword";
-        $dbh = $this->UserDbConnect();
 
         if (!empty($data['genre'])) {
             // ジャンルが選択されている場合、SQLに追加する条件を生成
@@ -199,14 +227,17 @@ class User
             $sql .= " AND genre IN ($genreConditions)";
         }
 
+        $dbh = $this->UserDbConnect();
         try {
             $stmt = $dbh->prepare($sql);
             $stmt->bindValue(':keyword', '%' . $data['keyword'] . '%', PDO::PARAM_STR);
 
             // ジャンルの条件をバインド
-            // foreach ($data['genre'] as $index => $genre) {
-            //     $stmt->bindValue($index + 2, $genre, PDO::PARAM_STR);
-            // }
+            if (!empty($data['genre'])) {
+                foreach ($data['genre'] as $index => $genre) {
+                    $stmt->bindValue($index + 2, $genre, PDO::PARAM_STR);
+                }
+            }
 
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

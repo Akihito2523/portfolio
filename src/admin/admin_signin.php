@@ -75,6 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <input type="submit" value="ログイン" class="el_btn el_btn_submit">
       <p class="form_input_link"><a href="admin_password_reset.php" ontouchstart="">パスワードを忘れた場合はこちら</a></p>
       <p class="form_input_link"><a href="admin_signup.php" ontouchstart="">アカウント新規登録</a></p>
+      <p class="form_input_link"><a href="resume.php" ontouchstart="">履歴書</a></p>
+      <p class="form_input_link"><a href="curriculumVitae.php" ontouchstart="">職務経歴書</a></p>
     </div>
 
   </form>
