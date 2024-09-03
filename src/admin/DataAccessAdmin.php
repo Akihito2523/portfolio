@@ -200,6 +200,7 @@ class Admin
     {
         if (empty($id)) {
             throw new Exception('IDが不正です');
+            header('Location: admin_top.php');
         }
 
         $dbh = $this->AdminDbConnect();

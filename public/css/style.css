@@ -1,5 +1,7 @@
 html {
   font-size: 62.5%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
 }
 
 body {
@@ -16,9 +18,12 @@ main {
 }
 
 .container {
-  max-width: 1200px;
+  width: min(100% - 2rem, 1200px);
+  /* 中央よせ */
+  margin-inline: auto;
+  /* max-width: 1200px;
   margin: 0 auto 10px;
-  padding: 20px 10px;
+  padding: 20px 10px; */
   line-height: 1.5;
 }
 
@@ -87,8 +92,9 @@ main {
 .bl_headerNav_link::after {
   content: '';
   position: absolute;
-  top: 50%;
-  right: 0;
+  /* top: 50%;
+  right: 0; */
+  inset: 50% 0 0 0;
   width: 1px;
   height: 20px;
   background-color: #ddd;
@@ -548,8 +554,7 @@ main {
 
 .modal-container {
   position: absolute;
-  top: 40%;
-  left: 50%;
+  inset: 40% 50% auto 50%;
   transform: translateX(-50%);
   background-color: #fff;
   padding: 30px;
@@ -587,8 +592,8 @@ main {
   color: #fff;
   background: #2589d0;
   border-radius: 50%;
-  padding: 2px;
-  width: 44px;
+  padding: 1px;
+  width: 50px;
   text-align: center;
   cursor: pointer;
 }
@@ -650,7 +655,6 @@ main {
     1px 0 0 #fff, -1px 0 0 #fff,
     0 1px 0 #fff, 0 -1px 0 #fff;
 }
-
 
 /* admin_signup.php */
 /* ============================================ */
@@ -936,8 +940,7 @@ main {
 /* profile.php */
 /* ============================================ */
 
-/*LOADING
-================================================ */
+/* loading */
 #loading {
   background-color: #eee;
   position: fixed;
@@ -998,7 +1001,7 @@ main {
   margin: 10px 0;
 }
 
-.profile-card-explanation-title{
+.profile-card-explanation-title {
   padding: 10px 0 0;
 }
 
@@ -1089,11 +1092,16 @@ main {
 }
 
 /* 仕事 */
-.box {
+.profile-experience-item {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  z-index: 20;
   position: relative;
 }
 
-.box .card-label {
+.profile-experience-date {
   position: absolute;
   left: 0;
   top: 0;
@@ -1105,8 +1113,7 @@ main {
   z-index: 100;
 }
 
-
-.box-container {
+.profile-experience-container {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (minmax(27rem, 1fr))[auto-fit];
@@ -1114,60 +1121,52 @@ main {
   gap: 1.5rem;
 }
 
-.box-container .box {
-  border-radius: 1rem;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  z-index: 20;
-}
-
-.box-container .box:hover img,
-.box-container .box:hover iframe {
+.profile-experience-item:hover img,
+.profile-experience-item:hover iframe {
   transform: scale(1.1);
   filter: blur(3px);
   filter: grayscale(50%);
 }
 
-.box-container .box .image {
+.profile-experience-image {
   height: 20rem;
   overflow: hidden;
   width: 100%;
 }
 
-.box-container .box .image img, 
-.box-container .box .image iframe {
+.profile-experience-image img,
+.profile-experience-image iframe {
   height: 100%;
   width: 100%;
   object-fit: cover;
   transition: all .2s linear;
 }
 
-.box-container .box .content {
+.profile-experience-description {
   padding: 2rem;
   text-align: center;
 }
 
-.box-container .box .content h3 {
+.profile-experience-title {
   font-size: 2rem;
   color: #fff;
 }
 
-.box-container .box .content p {
+.profile-experience-text {
   padding: 1rem 0;
   font-size: 1.4rem;
   line-height: 2;
 }
 
-.box-container .box .content a {
+.profile-experience-description a {
   font-size: 1.7rem;
 }
 
-.box-container .box .content a:hover i {
+.profile-experience-description a:hover i {
   padding-left: 1rem;
 }
 
-.box-container .box .content a i {
+.profile-experience-description a i {
   padding-right: .5rem;
 }
 
@@ -1214,8 +1213,8 @@ main {
 
 .profile-photoSlides .profile-photoSlides-mainImage {
   width: 100%;
-  /* height: 600px; */
   height: 400px;
+  /* height: auto; */
   object-fit: cover;
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   position: relative;
@@ -1328,7 +1327,6 @@ main {
   margin-top: 20px;
 }
 
-
 /* アコーディオン */
 .profile-accordion {
   padding: 10px;
@@ -1337,6 +1335,10 @@ main {
 .profile-accordion-details-summary:hover {
   opacity: 0.7;
 }
+
+.profile-accordion-details[open] .profile-accordion-details-summary {
+  color: rgba(0 , 0, 0, .9)
+} 
 
 .profile-accordion-details {
   transition: .3s;
@@ -1408,8 +1410,6 @@ main {
   margin-bottom: 20px;
 }
 
-
-
 /* レスポンス */
 /* ============================================ */
 
@@ -1426,7 +1426,6 @@ main {
     justify-content: space-around;
     margin: 10px;
   }
-
 
   header {
     position: relative;
@@ -1502,11 +1501,14 @@ main {
   .profile-card-bg-image img {
     height: 230px;
   }
-}
 
+  .profile-photoSlides .profile-photoSlides-mainImage {
+    height: 300px;
+  }
 
-@media (max-width: 900px) {
-  section .cards {
-    flex-direction: column;
+  /* 左右矢印 */
+  .profile-photoSlides .profile-photoSlides-prevImage,
+  .profile-photoSlides .profile-photoSlides-nextImage {
+    top: 45%;
   }
 }

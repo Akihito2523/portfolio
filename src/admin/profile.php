@@ -13,6 +13,11 @@ require_once("../includes/admin_header.php");
 
 <div class="container">
 
+  <!-- <ul>
+    <a href="#profile-experience-container">仕事経歴</a>
+    <a href="#">趣味一覧</a>
+    <a href="#">質問</a>
+  </ul> -->
   <h2 class="contents-title">プロフィール</h2>
   <!-- プロフィールカード -->
   <div class="profile-card">
@@ -51,44 +56,42 @@ require_once("../includes/admin_header.php");
     </div>
   </div>
 
-  <h2 class="contents-title">仕事経歴</h2>
+  <h2 class="contents-title" id="profile-experience-container">仕事経歴</h2>
   <!-- 仕事 -->
-  <div class="box-container">
-    <div class="box" data-aos="fade-up" data-aos-delay="150">
-      <span class="card-label">2011年10月〜2016年12月</span>
-      <div class="image">
+  <div class="profile-experience-container">
+    <div class="profile-experience-item" data-aos="fade-up" data-aos-delay="150">
+      <span class="profile-experience-date">2011年10月〜2016年12月</span>
+      <div class="profile-experience-image">
         <img src="../../public/imageProfile/work_01.jpg" alt="仕事写真1" />
       </div>
-      <div class="content">
-        <h3>トラック運送</h3>
-        <p>トラックを運転し、自社工場で焼き上げたパンを自社営業所へ配送するお仕事です。
+      <div class="profile-experience-description">
+        <h3 class="profile-experience-title" >トラック運送</h3>
+        <p class="profile-experience-text">トラックを運転し、自社工場で焼き上げたパンを自社営業所へ配送するお仕事です。
           安全運転を心掛け、荷物が崩れないように細心の注意を払い、事故のないように努めてきました。
           お客様からの信頼を得るために、丁寧で確実な配達を心がけていました。
         </p>
       </div>
     </div>
 
-    <div class="box" data-aos="fade-up" data-aos-delay="300">
-      <span class="card-label">2017年1月〜2023年3月</span>
-      <div class="image">
-        <!-- <img src="../../public/imageProfile/work_02.jpg" alt="仕事写真2" /> -->
-        <!-- <iframe width="100%" height="315" src="https://www.youtube.com/embed/動画ID" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+    <div class="profile-experience-item" data-aos="fade-up" data-aos-delay="300">
+      <span class="profile-experience-date">2017年1月〜2023年3月</span>
+      <div class="profile-experience-image">
         <iframe width="" height="" src="https://www.youtube.com/embed/_idXzVS4hrQ?si=EV1ltK3lGcDC-hoB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay=1; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
-      <div class="content">
-        <h3>フリーランス</h3>
-        <p>個人事業主としてPCのキッティング、動画制作、Web制作に携わりました。動画作成では、主にブライダルの撮影と編集に携わり、新郎新婦の特別な1日を動画で記録するお仕事をしていました。PCキッティングでは、初期状態のPCやスマートフォンなどを利用できる状態にするお仕事です。</p>
+      <div class="profile-experience-description">
+        <h3 class="profile-experience-title" >フリーランス</h3>
+        <p class="profile-experience-text">個人事業主としてPCのキッティング、動画制作、Web制作に携わりました。動画作成では、主にブライダルの撮影と編集に携わり、新郎新婦の特別な1日を動画で記録するお仕事をしていました。PCキッティングでは、初期状態のPCやスマートフォンなどを利用できる状態にするお仕事です。</p>
       </div>
     </div>
 
-    <div class="box" data-aos="fade-up" data-aos-delay="450">
-      <span class="card-label">2023年4月〜現在</span>
-      <div class="image">
+    <div class="profile-experience-item" data-aos="fade-up" data-aos-delay="450">
+      <span class="profile-experience-date">2023年4月〜現在</span>
+      <div class="profile-experience-image">
         <img src="../../public/imageProfile/work_03.jpg" alt="仕事写真3" />
       </div>
-      <div class="content">
-        <h3>エンジニア</h3>
-        <p>クラウド型ローコード開発プラットフォームを利用し、Webフォームの作成、データベース管理、メール配などをGUI操作で実現するソリューションを提供しています。
+      <div class="profile-experience-description">
+        <h3 class="profile-experience-title" >エンジニア</h3>
+        <p class="profile-experience-text">クラウド型ローコード開発プラットフォームを利用し、Webフォームの作成、データベース管理、メール配などをGUI操作で実現するソリューションを提供しています。
           また、プラットフォームで実現できないカスタマイズ部分はPHPやJavaScriptを用いて対応しています。</p>
       </div>
     </div>

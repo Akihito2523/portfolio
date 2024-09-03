@@ -20,8 +20,8 @@
 <body ontouchstart="">
     <!-- ログインページ以外ならヘッダーを表示 -->
     <?php if (
-        getPageTitle() !== 'ログイン' &&
-        getPageTitle() !== '会員登録' &&
+        // getPageTitle() !== 'ログイン' &&
+        // getPageTitle() !== '会員登録' &&
         getPageTitle() !== 'パスワード再登録手続き' &&
         getPageTitle() !== 'パスワード再設定'
     ) : ?>
@@ -42,6 +42,9 @@
                         </li>
                         <li class="bl_headerNav_item">
                             <a class="bl_headerNav_link" href="../admin/admin_detail.php?id=<?php echo h($id); ?>">会員詳細</a>
+                        </li>
+                        <li class="bl_headerNav_item">
+                            <a class="bl_headerNav_link" href="../admin/admin_signin.php">ログイン</a>
                         </li>
                     </ul>
                 </nav>

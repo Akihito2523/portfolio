@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     <div class="form_input_block">
-      <label for="js-password" class="form_input_title">パスワード</label>
+      <label for="js-password" class="form_input_title">パスワード2</label>
       <span class="need form_input_need">【必須】</span>
       <div class="progress-container">
         <div class="js-passwordProgress" id="js-passwordProgress"></div>
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="form_input_caution" id="js-password-strength"></div>
 
       <div class="password-wrapper">
-        <input type="password" name="password" class="form_input_value" id="js-password-admin" value="<?= h($data['password'] ?? ''); ?>">
+        <input type="password" name="password" class="form_input_value" id="js-password-admin" value="<?= $data['password'] ?? ''; ?>">
         <span id="js-passwordButtonEye" class="fa fa-eye"></span>
       </div>
       <?php if (isset($error['password'])) : ?>
