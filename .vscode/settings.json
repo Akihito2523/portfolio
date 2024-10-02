@@ -1,0 +1,14 @@
+// ワークスペース -> 外観「Color Customizations」
+
+{
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#e0dcd6",
+        "titleBar.activeForeground": "#000",
+        "activityBar.background": "#e0dcd6",
+        "activityBar.foreground": "#000000",
+    },
+    "editor.semanticTokenColorCustomizations": {
+        
+
+    }
+}

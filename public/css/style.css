@@ -18,12 +18,12 @@ main {
 }
 
 .container {
-  width: min(100% - 2rem, 1200px);
-  /* 中央よせ */
+  /* width: min(100% - 2rem, 1200px); */
+  /* 荳ｭ螟ｮ繧医○ */
   margin-inline: auto;
-  /* max-width: 1200px;
+  max-width: 1200px;
   margin: 0 auto 10px;
-  padding: 20px 10px; */
+  padding: 20px 10px;
   line-height: 1.5;
 }
 
@@ -122,7 +122,7 @@ main {
   text-align: center;
 }
 
-/* モジュール */
+/* 繝｢繧ｸ繝･繝ｼ繝ｫ */
 /* ============================================ */
 .contents-title {
   font-size: clamp(1.8rem, 2vw, 2.8rem);
@@ -140,7 +140,7 @@ main {
   max-width: 1200px;
 }
 
-/* モジュール（ボタン） */
+/* 繝｢繧ｸ繝･繝ｼ繝ｫ�ｼ医�懊ち繝ｳ�ｼ� */
 /* ============================================ */
 .el_btn {
   /* display: inline-block; */
@@ -161,7 +161,7 @@ main {
   background-color: #5250e0;
 }
 
-/* disabled属性がない場合にホバー効果を適用する（JSでdisableを切り替え） */
+/* disabled螻樊ｧ縺後↑縺�蝣ｴ蜷医↓繝帙ヰ繝ｼ蜉ｹ譫懊ｒ驕ｩ逕ｨ縺吶ｋ�ｼ�JS縺ｧdisable繧貞��繧頑崛縺茨ｼ� */
 .el_btn:not([disabled]):focus,
 .el_btn:not([disabled]):hover {
   color: rgb(53, 58, 67);
@@ -196,14 +196,14 @@ main {
   font-size: clamp(1.6rem, 2vw, 1.3rem);
 }
 
-/* コンテンツ */
+/* 繧ｳ繝ｳ繝�繝ｳ繝� */
 /* ============================================ */
 
 .adminName {
   font-size: 1.6rem;
 }
 
-/* フォーム */
+/* 繝輔か繝ｼ繝� */
 /* ============================================ */
 .form {
   position: relative;
@@ -282,7 +282,7 @@ main {
   padding: 10px;
 }
 
-/* 20文字以上の場合、背景が#ffd3d3（薄い赤 */
+/* 20譁�蟄嶺ｻ･荳翫�ｮ蝣ｴ蜷医∬レ譎ｯ縺�#ffd3d3�ｼ郁埋縺�襍､ */
 .form_input_value_textarea:invalid {
   background: #7b6969;
   border: 2px solid #ff0000;
@@ -457,13 +457,13 @@ main {
 }
 
 .scroll-info {
-  /* 初期状態は非表示 */
+  /* 蛻晄悄迥ｶ諷九�ｯ髱櫁｡ｨ遉ｺ */
   display: none;
   padding-left: 14px;
   color: #333;
 }
 
-/* テーブル */
+/* 繝�繝ｼ繝悶Ν */
 .table {
   table-layout: fixed;
   width: 100%;
@@ -518,7 +518,7 @@ main {
   width: 300px;
 }
 
-/* 検索モーダル */
+/* 讀懃ｴ｢繝｢繝ｼ繝繝ｫ */
 .modal-icon {
   display: flex;
   justify-content: space-between;
@@ -598,7 +598,7 @@ main {
   cursor: pointer;
 }
 
-/* テーブルの中の写真 */
+/* 繝�繝ｼ繝悶Ν縺ｮ荳ｭ縺ｮ蜀咏悄 */
 .overlay {
   position: fixed;
   top: 0;
@@ -606,7 +606,7 @@ main {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.2);
-  /* 初期状態では非表示 */
+  /* 蛻晄悄迥ｶ諷九〒縺ｯ髱櫁｡ｨ遉ｺ */
   display: none;
   justify-content: center;
   align-items: center;
@@ -668,7 +668,7 @@ main {
   position: absolute;
   top: 50%;
   right: 8%;
-  /* 適切な位置に調整 */
+  /* 驕ｩ蛻�縺ｪ菴咲ｽｮ縺ｫ隱ｿ謨ｴ */
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 18px;
@@ -680,7 +680,7 @@ main {
   opacity: 0.6;
 }
 
-/* プログレスバーとサークル */
+/* 繝励Ο繧ｰ繝ｬ繧ｹ繝舌�ｼ縺ｨ繧ｵ繝ｼ繧ｯ繝ｫ */
 .js-circle {
   overflow: hidden;
 }
@@ -732,7 +732,7 @@ main {
   transition: .4s ease;
 }
 
-/* サークルにアクティブクラスがついている */
+/* 繧ｵ繝ｼ繧ｯ繝ｫ縺ｫ繧｢繧ｯ繝�繧｣繝悶け繝ｩ繧ｹ縺後▽縺�縺ｦ縺�繧� */
 .js-circle.js-circle-active {
   border-color: #3498DB;
 }
@@ -895,7 +895,7 @@ main {
   text-transform: capitalize; */
 }
 
-/* 表示件数 */
+/* 陦ｨ遉ｺ莉ｶ謨ｰ */
 .image_gallery_form {
   /* padding: 0 40px; */
   display: flex;
@@ -911,7 +911,7 @@ main {
   font-size: 1.2rem;
 }
 
-/* ページネーション */
+/* 繝壹�ｼ繧ｸ繝阪�ｼ繧ｷ繝ｧ繝ｳ */
 .pagination {
   display: flex;
   justify-content: flex-end;
@@ -963,7 +963,7 @@ main {
   font-family: 'Oswald', sans-serif;
 }
 
-/* プロフィールカード */
+/* 繝励Ο繝輔ぅ繝ｼ繝ｫ繧ｫ繝ｼ繝� */
 .profile-card {
   /* height: 500px; */
   /* width: 290px; */
@@ -1038,7 +1038,7 @@ main {
   cursor: pointer;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-out;
-  /* はみでた文字を隠す */
+  /* 縺ｯ縺ｿ縺ｧ縺滓枚蟄励ｒ髫�縺� */
   overflow: hidden;
 }
 
@@ -1091,7 +1091,7 @@ main {
   text-decoration: underline;
 }
 
-/* 仕事 */
+/* 莉穂ｺ� */
 .profile-experience-item {
   border-radius: 1rem;
   overflow: hidden;
@@ -1170,7 +1170,7 @@ main {
   padding-right: .5rem;
 }
 
-/* 画像スライダー */
+/* 逕ｻ蜒上せ繝ｩ繧､繝繝ｼ */
 .profile-photoSlides {
   max-width: 1100px;
   width: 100%;
@@ -1179,7 +1179,7 @@ main {
   position: relative;
 }
 
-/* 左右矢印 */
+/* 蟾ｦ蜿ｳ遏｢蜊ｰ */
 .profile-photoSlides .profile-photoSlides-prevImage,
 .profile-photoSlides .profile-photoSlides-nextImage {
   position: absolute;
@@ -1193,7 +1193,7 @@ main {
 
 .profile-photoSlides .profile-photoSlides-prevImage {
   left: 0;
-  /* background-image: url(../image/20240721034805_リザードン.png) */
+  /* background-image: url(../image/20240721034805_繝ｪ繧ｶ繝ｼ繝峨Φ.png) */
 }
 
 .profile-photoSlides .profile-photoSlides-nextImage {
@@ -1226,9 +1226,9 @@ main {
   margin: 0 auto 40px;
   display: flex;
   flex-wrap: wrap;
-  /* 上下左右の余白を調整 */
-  /* 縦方向は30px、横方向は100％-(liの幅31%*3)=7% 
-  そして7%/2=(3.5%)にすると横の二つの幅が決まる */
+  /* 荳贋ｸ句ｷｦ蜿ｳ縺ｮ菴咏區繧定ｪｿ謨ｴ */
+  /* 邵ｦ譁ｹ蜷代�ｯ30px縲∵ｨｪ譁ｹ蜷代�ｯ100�ｼ�-(li縺ｮ蟷�31%*3)=7% 
+  縺昴＠縺ｦ7%/2=(3.5%)縺ｫ縺吶ｋ縺ｨ讓ｪ縺ｮ莠後▽縺ｮ蟷�縺梧ｱｺ縺ｾ繧� */
   gap: 30px 3.5%;
 }
 
@@ -1290,27 +1290,27 @@ main {
 }
 
 .profile-photoSlides-imageList li:nth-of-type(1)::after {
-  content: "読書";
+  content: "隱ｭ譖ｸ";
 }
 
 .profile-photoSlides-imageList li:nth-of-type(2)::after {
-  content: "ウォーキング";
+  content: "繧ｦ繧ｩ繝ｼ繧ｭ繝ｳ繧ｰ";
 }
 
 .profile-photoSlides-imageList li:nth-of-type(3)::after {
-  content: "筋トレ";
+  content: "遲九ヨ繝ｬ";
 }
 
 .profile-photoSlides-imageList li:nth-of-type(4)::after {
-  content: "サウナ";
+  content: "繧ｵ繧ｦ繝�";
 }
 
 .profile-photoSlides-imageList li:nth-of-type(5)::after {
-  content: "整理整頓";
+  content: "謨ｴ逅�謨ｴ鬆�";
 }
 
 .profile-photoSlides-imageList li:nth-of-type(6)::after {
-  content: "初めての体験経験";
+  content: "蛻昴ａ縺ｦ縺ｮ菴馴ｨ鍋ｵ碁ｨ�";
 }
 
 .profile-photoSlides-imageList li:hover::after {
@@ -1327,7 +1327,7 @@ main {
   margin-top: 20px;
 }
 
-/* アコーディオン */
+/* 繧｢繧ｳ繝ｼ繝�繧｣繧ｪ繝ｳ */
 .profile-accordion {
   padding: 10px;
 }
@@ -1410,7 +1410,7 @@ main {
   margin-bottom: 20px;
 }
 
-/* レスポンス */
+/* 繝ｬ繧ｹ繝昴Φ繧ｹ */
 /* ============================================ */
 
 @media screen and (max-width: 768px) {
@@ -1440,7 +1440,7 @@ main {
     margin: 0 auto;
   }
 
-  /*フォーム*/
+  /*繝輔か繝ｼ繝�*/
   input[type="text"],
   input[type="email"],
   textarea {
@@ -1506,7 +1506,7 @@ main {
     height: 300px;
   }
 
-  /* 左右矢印 */
+  /* 蟾ｦ蜿ｳ遏｢蜊ｰ */
   .profile-photoSlides .profile-photoSlides-prevImage,
   .profile-photoSlides .profile-photoSlides-nextImage {
     top: 45%;

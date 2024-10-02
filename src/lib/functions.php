@@ -363,20 +363,5 @@ function uploadImage($savePath)
     return $savePath;
 }
 
-
-
-function setCategoryName($category)
-{
-    if ($category === 1) {
-        return '日常';
-    } else if ($category === 2) {
-        return 'プログラミン';
-    } else {
-        var_dump($category);
-        return 'その他';
-    }
-}
-
-
 ?>
 

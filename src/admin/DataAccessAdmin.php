@@ -427,6 +427,7 @@ class Admin
 
         // メール送信
         $isSent = mb_send_mail($email, $subject, $message, $headers);
+        
         return $isSent;
     }
 }
