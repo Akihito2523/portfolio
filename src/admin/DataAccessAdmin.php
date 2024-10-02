@@ -10,9 +10,13 @@ class Admin
     {
         $this->table_name = preg_replace('/[^a-zA-Z0-9_]/', '', 'admin');
     }
-    //============================================
-    // 1.DBへ接続
-    //============================================
+
+    /**
+     * データベースに接続します。
+     *
+     * @return PDO データベース接続オブジェクト
+     * @throws Exception データベース接続に失敗した場合
+     */
     public function AdminDbConnect()
     {
         $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
@@ -32,12 +36,15 @@ class Admin
         }
     }
 
-    //============================================
-    // WHERE文（ログイン認証、メールアドレス）
-    //============================================
+    /**
+     * メールアドレスとパスワードを使用してユーザーを認証します。
+     *
+     * @param string $email メールアドレス
+     * @param string $password パスワード
+     * @return array|false 認証されたユーザー情報。認証に失敗した場合はfalseを返す。
+     */
     private function authenticateUser($email, $password)
     {
-
         $sql = "SELECT * FROM $this->table_name WHERE email = :email";
         $dbh = $this->AdminDbConnect();
 
@@ -49,11 +56,15 @@ class Admin
         if ($admin && password_verify($password, $admin['password'])) {
             return $admin;
         }
+        return false;
     }
 
-    //============================================
-    // WHERE文（ログイン認証）
-    //============================================
+    /**
+     * ログイン処理を行います。
+     *
+     * @param array $data メールアドレスとパスワードを含む連想配列
+     * @return bool ログイン成功ならtrue、失敗ならfalse
+     */
     public function AdminDbLogin($data)
     {
         try {
@@ -89,12 +100,14 @@ class Admin
         }
     }
 
-    //============================================
-    // UPDATE文（退会日時更新）
-    //============================================
+    /**
+     * ユーザーの退会日時を更新します。
+     *
+     * @param array $data メールアドレス、パスワード、ユーザーIDを含む連想配列
+     * @return bool 退会処理が成功した場合はtrue、失敗した場合はfalse
+     */
     public function AdminDbUpdateDeleted($data)
     {
-
         try {
             $admin = $this->authenticateUser($data['email'], $data['password']);
 
@@ -124,9 +137,12 @@ class Admin
         }
     }
 
-    //============================================
-    // INSERT文（データ追加）
-    //============================================
+    /**
+     * 新しいユーザーをデータベースに追加します。
+     *
+     * @param array $data ユーザーの名前、メールアドレス、パスワード、ユーザーエージェント、IPアドレスを含む連想配列
+     * @return bool データ追加が成功した場合はtrue、失敗した場合はfalse
+     */
     public function AdminDbCreate($data)
     {
         $sql = "INSERT INTO $this->table_name (name, email, password, user_agent, ip_address) VALUES (:name, :email, :password, :user_agent, :ip_address)";
@@ -147,9 +163,12 @@ class Admin
         }
     }
 
-    //============================================
-    // UPDATE文（会員情報変更）
-    //============================================
+    /**
+     * ユーザーの情報を更新します。
+     *
+     * @param array $data 更新するユーザーの情報（ID、名前、メールアドレス）を含む連想配列
+     * @return bool 更新が成功した場合はtrue、失敗した場合はfalse
+     */
     public function AdminDbUpdate($data)
     {
         $sql = "UPDATE $this->table_name SET
@@ -163,27 +182,32 @@ class Admin
             $stmt->bindValue(':email', $data['email'], PDO::PARAM_STR);
             $stmt->bindValue(':updated_at', getDateTime(), PDO::PARAM_STR);
             $stmt->execute();
-            // $_SESSION['message'] = 'ユーザー登録更新完了しました。';
             return true;
         } catch (PDOException $e) {
             $_SESSION['error'] = ($e->getCode() == 23000) ? 'このメールアドレスは既に登録されています。' : '登録に失敗しました: ' . $e->getMessage();
-            error_log('AdminDbCreateエラー: ' . $e->getMessage());
+            error_log('AdminDbUpdateエラー: ' . $e->getMessage());
         }
     }
 
-    //============================================
-    // SELECT文（データ詳細）
-    //============================================
+    /**
+     * 特定のユーザーの詳細情報を取得します。
+     *
+     * @param int $id ユーザーのID
+     * @return array ユーザーの詳細情報
+     * @throws Exception IDが不正またはデータが見つからない場合
+     */
     public function AdminDbDetail($id)
     {
         if (empty($id)) {
             throw new Exception('IDが不正です');
+            header('Location: admin_top.php');
         }
 
         $dbh = $this->AdminDbConnect();
         $stmt = $dbh->prepare("SELECT * FROM $this->table_name where id = :id Limit 1");
         $stmt->bindValue(':id', (int)$id, \PDO::PARAM_INT);
         $stmt->execute();
+
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         $dbh = null;
         if (!$result) {
@@ -194,10 +218,11 @@ class Admin
     }
 
     /**
-     * パスワードリセットのトークンを生成し、データベースに保存します
+     * パスワードリセットのトークンを生成し、データベースに保存します。
      *
      * @param string $email メールアドレス
      * @return string|false トークンを返す。メールアドレスが存在しない場合はfalseを返す
+     * @throws Exception パスワードリセット処理に失敗した場合
      */
     public function AdminDbPassReset($email)
     {
@@ -248,7 +273,7 @@ class Admin
     }
 
     /**
-     * パスワードリセット用のメールを送信します
+     * パスワードリセット用のメールを送信します。
      *
      * @param string $email メール送信先のメールアドレス
      * @param string $token トークン（パスワードリセット用の一意の識別子）
@@ -292,7 +317,7 @@ class Admin
     }
 
     /**
-     * トークンの検証
+     * トークンの検証を行います。
      *
      * @param string $token パスワードリセットトークン
      * @return bool トークンが有効な場合はtrue、無効な場合はfalse
@@ -315,10 +340,10 @@ class Admin
     }
 
     /**
-     * パスワードを更新します
+     * パスワードを更新します。
      *
-     * @param array $data 更新するパスワードとメールアドレスを含む連想配列
-     * @param string $token パスワードリセットトークン
+     * @param array $data 更新するパスワードを含む連想配列
+     * @param string $url_token パスワードリセットトークン
      * @return bool 更新が成功した場合はtrue、失敗した場合はfalse
      */
     public function AdminDbPasswordUpdate($data, $url_token)
@@ -342,7 +367,7 @@ class Admin
         }
 
         // トークンに一致するメールアドレスを取得
-        $email = $admin['email']; 
+        $email = $admin['email'];
 
         // トークンが有効な場合はパスワードを更新
         $sql = "UPDATE $this->table_name SET
@@ -376,7 +401,7 @@ class Admin
     }
 
     /**
-     * パスワード再設定メールを送信します
+     * パスワード再設定の成功を通知するメールを送信します。
      *
      * @param string $email メール送信先のメールアドレス
      * @return bool 送信が成功した場合はtrue、失敗した場合はfalse
@@ -402,6 +427,7 @@ class Admin
 
         // メール送信
         $isSent = mb_send_mail($email, $subject, $message, $headers);
+        
         return $isSent;
     }
 }

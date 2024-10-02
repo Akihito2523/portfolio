@@ -48,8 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 } else {
-  // $admin = new Admin();
-  // $result = $admin->AdminDbDetail($id);
   // セッションがセットされている場合その値を、セットされていない場合は空の値を持つ連想配列を$dataに代入
   $data = isset($_SESSION['data']) ? $_SESSION['data'] : [
     'id' => $name,
@@ -61,8 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<?php //echo h($id); 
-?>
 <main class="">
   <h2 class="contents-title">会員情報変更</h2>
 

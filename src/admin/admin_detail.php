@@ -6,10 +6,16 @@ require_once("DataAccessAdmin.php");
 require_once("../includes/admin_header.php");
 
 // セッションから会員idを取得
-$id = $_SESSION['id'];
+// $id = $_SESSION['id'];
 
 $admin = new Admin();
 $result = $admin->AdminDbDetail($id);
+
+// ユーザーがログインしているか確認
+if (!$_SESSION['id']) {
+    header('Location: admin_top.php');
+    exit();
+}
 
 $_SESSION['data'] = $result;
 ?>
